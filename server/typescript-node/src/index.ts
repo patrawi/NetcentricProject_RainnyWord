@@ -1,11 +1,20 @@
-import express, { Application, Request, Response} from 'express';
-
+const express = require("express");
 const app = express();
-
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
 const PORT = 8000;
 
-app.get('/', (req: Request, res: Response) => res.send('Express + TypeScript Server'));
+app.get("/", (req: any, res: any) => {
+  res.sendFile(__dirname + "/index.html");
+});
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
+io.on("connection", function (socket: any) {
+  console.log("a user connected");
+  socket.on("message", function (message: any) {
+    console.log(message);
+  });
+});
+
+const server = http.listen(PORT, () => {
+  console.log(`Listening to port ${PORT}`);
 });
