@@ -1,4 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
+import { startCountdown } from "./lib/timer";
 import { Player } from "./interfaces/player.interface";
 
 const app = express();
@@ -12,6 +14,9 @@ let players: Player[] = [];
 app.get("/", (req: Request, res: Response) => {
   res.sendFile(__dirname + "/index.html");
 });
+
+// Admin Login
+// app
 
 app.post("/addplayer/:name", (req: Request, res: Response) => {
   const name = req.params.name;
@@ -28,16 +33,21 @@ app.post("/addplayer/:name", (req: Request, res: Response) => {
 
   //TODO: Check user name if it's duplicated.
   // Add new player.
-  const newPlayer: Player = { name: name, score: 0 };
+  const newPlayer: Player = { name: name, score: 0, id: uuidv4() };
   players.push(newPlayer);
   res.status(200).json(players);
 });
 
+app.get("/randomwords", (req: Request, res: Response) => {
+  let words: string[] = [];
+  res.status(200).send(words);
+  // TODO: Punlee's words randomizer
+  // 100 words each round
+});
+
 io.on("connection", (socket: any) => {
   console.log("a user connected");
-  socket.on("message", function (message: any) {
-    console.log(message);
-  });
+  // Start waiting room timer.
 });
 
 http.listen(PORT, () => {
