@@ -4,11 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Home from './components/Home';
-import Lobby from './components/Lobby';
-import Game from './components/Game';
-import End from './components/End';
-import Eliminated from './components/Eliminated';
+import Home from './views/Home';
+import Lobby from './views/Lobby';
+import Game from './views/Game';
+import End from './views/End';
+import Eliminated from './views/Eliminated';
 
 ReactDOM.render(
   <BrowserRouter>
