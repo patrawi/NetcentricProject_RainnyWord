@@ -35,38 +35,47 @@ app.post("/login", (req: Request<{}, {}, Admin>, res: Response) => {
 app.post("/adminauth", (req: Request, res: Response, next: NextFunction) => {
   const header = req.headers.authorization;
   const token = header && header.split(" ")[1];
-
   if (!token || !header)
     return res.status(401).send({
       status: "unauthorized",
       message: "Please provide bearer token.",
     });
-  const isAdmin = authenticateToken(token);
-  if (isAdmin === true) {
-    res.status(200).send({ status: "success", message: "You are admin!" });
-    next();
-  } else {
-    return res
-      .status(401)
-      .send({ status: "unauthorized", message: "You aren't admin!" });
+
+  try {
+    const isAdmin = authenticateToken(token);
+    if (isAdmin === true) {
+      res.status(200).send({ status: "success", message: "You are admin!" });
+      next();
+    } else {
+      return res
+        .status(401)
+        .send({ status: "unauthorized", message: "You aren't admin!" });
+    }
+  } catch (err) {
+    res.status(400).send({ status: "bad request", message: "Invalid token." });
   }
 });
 
-// Reset the game
+// Admin: Reset the game
 app.post("/reset", (req: Request, res: Response) => {
   const header = req.headers.authorization;
   const token = header && header.split(" ")[1];
-
   if (!token || !header)
     return res.status(401).send({
       status: "unauthorized",
       message: "Please provide bearer token.",
     });
 
-  const isAdmin = authenticateToken(token);
-  if (isAdmin) {
-    players = [];
-    return res.status(200).send({ status: "success", message: players });
+  try {
+    const isAdmin = authenticateToken(token);
+    if (isAdmin) {
+      players = [];
+      return res.status(200).send({ status: "success", message: players });
+    }
+  } catch (err) {
+    return res
+      .status(400)
+      .send({ status: "bad request", message: "Invalid token." });
   }
 });
 
