@@ -1,20 +1,128 @@
-const express = require("express");
+import express, { NextFunction, Request, Response } from "express";
+import { v4 as uuidv4 } from "uuid";
+import { startCountdown } from "./lib/timer";
+import { Admin, Player } from "./interfaces/player.interface";
+import { authenticateToken, generateJWT } from "./lib/admin";
+
+const env = require("dotenv").config();
+if (env.error) {
+  throw env.error;
+}
+
 const app = express();
+const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-const PORT = 8000;
 
-app.get("/", (req: any, res: any) => {
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+const MAX_PLAYERS = 5;
+let players: Player[] = [];
+
+app.get("/", (req: Request, res: Response) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-io.on("connection", function (socket: any) {
-  console.log("a user connected");
-  socket.on("message", function (message: any) {
-    console.log(message);
+// Admin Login
+app.post("/login", (req: Request<{}, {}, Admin>, res: Response) => {
+  const token = generateJWT();
+  return res.status(200).json({ status: "success", token: token });
+  // TODO: Send Admin Front-end
+});
+
+// Authentication of Admin with jwt.
+app.post("/adminauth", (req: Request, res: Response, next: NextFunction) => {
+  const header = req.headers.authorization;
+  const token = header && header.split(" ")[1];
+  if (!token || !header)
+    return res.status(401).send({
+      status: "unauthorized",
+      message: "Please provide bearer token.",
+    });
+
+  try {
+    const isAdmin = authenticateToken(token);
+    if (isAdmin === true) {
+      res.status(200).send({ status: "success", message: "You are admin!" });
+      next();
+    } else {
+      return res
+        .status(401)
+        .send({ status: "unauthorized", message: "You aren't admin!" });
+    }
+  } catch (err) {
+    res.status(400).send({ status: "bad request", message: "Invalid token." });
+  }
+});
+
+// Admin: Reset the game
+app.post("/reset", (req: Request, res: Response) => {
+  const header = req.headers.authorization;
+  const token = header && header.split(" ")[1];
+  if (!token || !header)
+    return res.status(401).send({
+      status: "unauthorized",
+      message: "Please provide bearer token.",
+    });
+
+  try {
+    const isAdmin = authenticateToken(token);
+    if (isAdmin) {
+      players = [];
+      return res.status(200).send({ status: "success", message: players });
+    }
+  } catch (err) {
+    return res
+      .status(400)
+      .send({ status: "bad request", message: "Invalid token." });
+  }
+});
+
+io.on("connection", (socket: any) => {
+  socket.on("adminEnter", () => {
+    console.log("Hello, Admin.");
   });
 });
 
-const server = http.listen(PORT, () => {
-  console.log(`Listening to port ${PORT}`);
+app.post("/addplayer/:name", (req: Request, res: Response) => {
+  const name = req.params.name;
+  if (!name)
+    return res
+      .status(400)
+      .json({ status: "error", error: "Name cannot be blank." });
+
+  if (players.length >= MAX_PLAYERS)
+    return res.status(400).json({
+      status: "error",
+      message: `Players are full. Maximum is ${MAX_PLAYERS}.`,
+    });
+
+  //TODO: Check user name if it's duplicated.
+  // Add new player.
+  const newPlayer: Player = { name: name, score: 0, id: uuidv4() };
+  players.push(newPlayer);
+  res.status(200).json(players);
+});
+
+app.get("/randomwords", (req: Request, res: Response) => {
+  let words: string[] = [];
+  res.status(200).send({ status: "success", message: words });
+  // TODO: Punlee's words randomizer
+  // 100 words each round
+});
+
+io.on("connection", (socket: any) => {
+  console.log("a user connected");
+  // Start waiting room timer.
+
+  socket.on("startTimer", (req: Request, res: Response) => {
+    const time = 30;
+    setInterval(() => startCountdown(time), 3000);
+    res.status(200).json({ status: "success", timer: time });
+  });
+});
+
+http.listen(process.env.PORT, () => {
+  console.log(`Listening to port ${process.env.PORT}`);
 });
