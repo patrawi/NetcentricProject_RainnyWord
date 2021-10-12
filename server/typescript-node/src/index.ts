@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { startCountdown } from "./lib/timer";
 import { Admin, Player } from "./interfaces/player.interface";
-import { generateJWT } from "./lib/admin";
+import { authenticateToken, generateJWT } from "./lib/admin";
 
 const env = require("dotenv").config();
 if (env.error) {
@@ -13,7 +13,6 @@ const app = express();
 const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-const jwt = require("jsonwebtoken");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -27,26 +26,48 @@ app.get("/", (req: Request, res: Response) => {
 
 // Admin Login
 app.post("/login", (req: Request<{}, {}, Admin>, res: Response) => {
-  console.log(req.body);
   const token = generateJWT();
   return res.status(200).json({ status: "success", token: token });
   // TODO: Send Admin Front-end
 });
 
+// Authentication of Admin with jwt.
 app.post("/adminauth", (req: Request, res: Response, next: NextFunction) => {
   const header = req.headers.authorization;
   const token = header && header.split(" ")[1];
-  if (token == null) return res.sendStatus(401);
 
-  jwt.verify(token, process.env.TOKEN_SECRET, (err: any, user: Admin) => {
-    if (err) return res.sendStatus(403);
-    else {
-      res
-        .status(200)
-        .send({ status: "success", message: "Admin login successful!" });
-      next();
-    }
-  });
+  if (!token || !header)
+    return res.status(401).send({
+      status: "unauthorized",
+      message: "Please provide bearer token.",
+    });
+  const isAdmin = authenticateToken(token);
+  if (isAdmin === true) {
+    res.status(200).send({ status: "success", message: "You are admin!" });
+    next();
+  } else {
+    return res
+      .status(401)
+      .send({ status: "unauthorized", message: "You aren't admin!" });
+  }
+});
+
+// Reset the game
+app.post("/reset", (req: Request, res: Response) => {
+  const header = req.headers.authorization;
+  const token = header && header.split(" ")[1];
+
+  if (!token || !header)
+    return res.status(401).send({
+      status: "unauthorized",
+      message: "Please provide bearer token.",
+    });
+
+  const isAdmin = authenticateToken(token);
+  if (isAdmin) {
+    players = [];
+    return res.status(200).send({ status: "success", message: players });
+  }
 });
 
 io.on("connection", (socket: any) => {
