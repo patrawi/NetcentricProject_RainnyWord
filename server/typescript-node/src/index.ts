@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
+import { Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
-import { startCountdown } from "./lib/timer";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
 
@@ -13,6 +13,8 @@ const app = express();
 const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
+
+let TIME = 10;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -69,6 +71,7 @@ app.post("/reset", (req: Request, res: Response) => {
   try {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
+      TIME = 30;
       players = [];
       return res.status(200).send({ status: "success", message: players });
     }
@@ -79,10 +82,37 @@ app.post("/reset", (req: Request, res: Response) => {
   }
 });
 
-io.on("connection", (socket: any) => {
-  socket.on("adminEnter", () => {
-    console.log("Hello, Admin.");
-  });
+// Admin: Press start button, all player will receive countdown message.
+// 30s countdown signal will be emitted. Front-end display the countdown.
+// Prepare words during the countdown.
+app.post("/startgame", (req: Request, res: Response) => {
+  const header = req.headers.authorization;
+  const token = header && header.split(" ")[1];
+  if (!token || !header)
+    return res.status(401).send({
+      status: "unauthorized",
+      message: "Please provide bearer token.",
+    });
+
+  try {
+    const isAdmin = authenticateToken(token);
+    if (isAdmin) {
+      io.emit("startWaitingRoomTimer");
+      //TODO: add Punlee's random words
+      console.log("Countdown starts...");
+      let words: string[] = [];
+      console.log(words);
+
+      return res.status(200).send({
+        status: "success",
+        message: "Game will start after countdown.",
+      });
+    }
+  } catch (err) {
+    return res
+      .status(400)
+      .send({ status: "bad request", message: "Invalid token." });
+  }
 });
 
 app.post("/addplayer/:name", (req: Request, res: Response) => {
@@ -105,23 +135,24 @@ app.post("/addplayer/:name", (req: Request, res: Response) => {
   res.status(200).json(players);
 });
 
-app.get("/randomwords", (req: Request, res: Response) => {
-  let words: string[] = [];
-  res.status(200).send({ status: "success", message: words });
-  // TODO: Punlee's words randomizer
-  // 100 words each round
-});
-
-io.on("connection", (socket: any) => {
+io.on("connection", (socket: Socket) => {
   console.log("a user connected");
-  // Start waiting room timer.
-
-  socket.on("startTimer", (req: Request, res: Response) => {
-    const time = 30;
-    setInterval(() => startCountdown(time), 3000);
-    res.status(200).json({ status: "success", timer: time });
-  });
+  // Game is not start until admin press start.
+  io.emit("gameStart", false);
 });
+
+// Start waiting room timer.
+// socket.on("startWaitingRoomTimer", (socket: Socket) => {
+//   setInterval(() => {
+//     TIME--;
+//     io.emit("waitingRoomTimer", TIME);
+//     if (TIME <= 0) {
+//       io.emit("gameStart", true);
+//     }
+//   }, 1000);
+//   clearInterval();
+//   TIME = 10;
+// });
 
 http.listen(process.env.PORT, () => {
   console.log(`Listening to port ${process.env.PORT}`);
