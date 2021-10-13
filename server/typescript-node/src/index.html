@@ -1,5 +1,29 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
-  socket.emit("startTimer");
+  let timeLeft = 30;
+  let gameStart = false;
+
+  // Test function for startWaitingRoomTimer
+  socket.on("startWaitingRoomTimer", function (isGameStart) {
+    const timer = setInterval(() => {
+      document.getElementById("gameStart").innerHTML =
+        "gameStart: " + gameStart;
+      timeLeft--;
+      document.getElementById("timer").innerHTML = timeLeft;
+
+      if (timeLeft <= 0) {
+        gameStart = true;
+        socket.emit("gameStart", gameStart);
+        document.getElementById("gameStart").innerHTML =
+          "gameStart: " + gameStart;
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    timeLeft = 30;
+  });
 </script>
+
+<h1 id="timer">Timer</h1>
+<h1 id="gameStart"></h1>
