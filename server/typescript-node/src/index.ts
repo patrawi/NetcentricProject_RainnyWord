@@ -3,6 +3,7 @@ import { Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
+var randomWords = require('random-words')
 
 const env = require("dotenv").config();
 if (env.error) {
@@ -98,9 +99,12 @@ app.post("/startgame", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       io.emit("startWaitingRoomTimer");
-      //TODO: add Punlee's random words
       console.log("Countdown starts...");
       let words: string[] = [];
+      function getWord(amount: number){
+        words = randomWords(amount);
+      }
+      getWord(100);
       console.log(words);
 
       return res.status(200).send({
