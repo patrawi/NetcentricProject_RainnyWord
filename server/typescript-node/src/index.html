@@ -23,7 +23,20 @@
 
     timeLeft = 30;
   });
+
+  socket.on("wordsFirstRound", function (words) {
+    console.log(words);
+    document.getElementById("1stRoundWord").innerHTML = words;
+  });
+
+  socket.on("wordsSecondRound", function (words) {
+    console.log(words);
+    document.getElementById("2ndRoundWord").innerHTML = words;
+  });
 </script>
 
 <h1 id="timer">Timer</h1>
 <h1 id="gameStart"></h1>
+
+<p id="1stRoundWord"></p>
+<p id="2ndRoundWord"></p>
