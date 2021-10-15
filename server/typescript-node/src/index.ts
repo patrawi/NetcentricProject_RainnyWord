@@ -3,7 +3,8 @@ import { Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
-var randomWords = require('random-words')
+import { randomWordsFirstRound, randomWordsSecondRound } from "./lib/words";
+var randomWords = require("random-words");
 
 const env = require("dotenv").config();
 if (env.error) {
@@ -15,13 +16,12 @@ const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
 
-let TIME = 10;
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const MAX_PLAYERS = 5;
 let players: Player[] = [];
+let ROUND = 0;
 
 app.get("/", (req: Request, res: Response) => {
   res.sendFile(__dirname + "/index.html");
@@ -72,8 +72,8 @@ app.post("/reset", (req: Request, res: Response) => {
   try {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
-      TIME = 30;
       players = [];
+      ROUND = 0;
       return res.status(200).send({ status: "success", message: players });
     }
   } catch (err) {
@@ -99,13 +99,19 @@ app.post("/startgame", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       io.emit("startWaitingRoomTimer");
+      ROUND++;
       console.log("Countdown starts...");
+      console.log(`Round ${ROUND}`);
       let words: string[] = [];
-      function getWord(amount: number){
-        words = randomWords(amount);
+
+      io.emit("round", ROUND);
+      if (ROUND === 1) {
+        words = randomWordsFirstRound(100);
+        io.emit("wordsFirstRound", words);
+      } else if (ROUND === 2) {
+        words = randomWordsSecondRound(150);
+        io.emit("wordsSecondRound", words);
       }
-      getWord(100);
-      console.log(words);
 
       return res.status(200).send({
         status: "success",
@@ -144,19 +150,6 @@ io.on("connection", (socket: Socket) => {
   // Game is not start until admin press start.
   io.emit("gameStart", false);
 });
-
-// Start waiting room timer.
-// socket.on("startWaitingRoomTimer", (socket: Socket) => {
-//   setInterval(() => {
-//     TIME--;
-//     io.emit("waitingRoomTimer", TIME);
-//     if (TIME <= 0) {
-//       io.emit("gameStart", true);
-//     }
-//   }, 1000);
-//   clearInterval();
-//   TIME = 10;
-// });
 
 http.listen(process.env.PORT, () => {
   console.log(`Listening to port ${process.env.PORT}`);
