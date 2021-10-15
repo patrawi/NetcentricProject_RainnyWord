@@ -104,6 +104,7 @@ app.post("/startgame", (req: Request, res: Response) => {
       console.log(`Round ${ROUND}`);
       let words: string[] = [];
 
+      io.emit("round", ROUND);
       if (ROUND === 1) {
         words = randomWordsFirstRound(100);
         io.emit("wordsFirstRound", words);
@@ -111,8 +112,6 @@ app.post("/startgame", (req: Request, res: Response) => {
         words = randomWordsSecondRound(150);
         io.emit("wordsSecondRound", words);
       }
-
-      console.log(words);
 
       return res.status(200).send({
         status: "success",
