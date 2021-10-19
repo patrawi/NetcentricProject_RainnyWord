@@ -1,14 +1,15 @@
 import { Player } from "../interfaces/player.interface";
 import { v4 as uuidv4 } from "uuid";
 
-export function addPlayer(players: Player[], name: string) {
-  players.push({
+export function addPlayer(updatedPlayers: Player[], name: string) {
+  const id = uuidv4();
+  updatedPlayers.push({
     name: name,
     score: 0,
-    id: uuidv4(),
+    id: id,
   });
-  console.log(`${name} is connected. Total of ${players.length}`);
-  return players;
+  console.log(`${name} is connected. Total of ${updatedPlayers.length}`);
+  return updatedPlayers;
 }
 
 export function updatePlayers(players: Player[], id: string) {
@@ -22,26 +23,27 @@ export function updatePlayers(players: Player[], id: string) {
   return updatedPlayers;
 }
 
-export function updateScore(players: Player[], id: string, score: number) {
-  const updatedScores = players.forEach((player) => {
-    if (player.id === id) player.score += score;
+export function getClientById(players: Player[], id: string) {
+  const player = players.forEach((player) => {
+    if (player.id === id) return player;
   });
-
-  return updatedScores;
+  return player;
 }
 
-export function getLeaderboard(players: Player[]) {
-  var lb = players.slice(0);
-  lb.sort(function (a, b) {
+export function updateLeaderboard(players: Player[], targetPlayer: Player) {
+  players.forEach((player) => {
+    if (player.id === targetPlayer.id) player.score += targetPlayer.score;
+  });
+
+  const updatedLeaderboard = sortLeaderboard(players);
+  return updatedLeaderboard;
+}
+
+export function sortLeaderboard(players: Player[]) {
+  var leaderboard = players.slice(0);
+  leaderboard.sort(function (a, b) {
     return a.score - b.score;
   });
-  console.log("leaderBoard:");
-  console.log(lb);
-  // for (var player in players){
-  //   lb.push([player,players.player]);
-  // }
-  // lb.sort(function(a, b) {
-  //   return a[1] - b[1];
-  //       players.forEach((player) => {
-  //       })
+
+  return leaderboard;
 }

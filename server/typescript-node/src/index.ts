@@ -1,9 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import { Socket } from "socket.io";
-import { v4 as uuidv4 } from "uuid";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
-import { updatePlayers, addPlayer } from "./lib/players";
+import { updatePlayers, addPlayer, updateLeaderboard } from "./lib/players";
 import { randomWordsPerRound } from "./lib/words";
 
 const env = require("dotenv").config();
@@ -147,18 +146,28 @@ app.post("/startgame", (req: Request, res: Response) => {
 
 io.on("connection", (socket: Socket) => {
   console.log("a user connected");
+
+  // Update players, send updated players to client and the client info.
   socket.on("onAddPlayer", function (name: string) {
-    console.log(`${name} connected!`);
-    players = addPlayer(players, name);
-    io.emit("updatePlayerList", players);
+    if (players.length < MAX_PLAYERS) {
+      console.log(`${name} connected!`);
+      players = addPlayer(players, name);
+      console.log(players);
+      io.emit("updatePlayerList", players);
+    }
   });
+  // Remove player using id.
   socket.on("onRemovePlayer", function (id: string) {
     players = updatePlayers(players, id);
     io.emit("updatePlayerList", players);
   });
   // Game is not start until admin press start.
+
   io.emit("gameStart", false);
-  io.emit("players", players);
+
+  // socket.on("updateLeaderboard", function (player: Player) {
+  //   players = updateLeaderboard(players, player);
+  // });
 
   socket.on("disconnect", function () {
     console.log("a user disconnected");
