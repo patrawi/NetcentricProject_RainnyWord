@@ -1,3 +1,4 @@
+i
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
@@ -37,11 +38,37 @@
     // console.log(words);
     document.getElementById("2ndRoundWord").innerHTML = words;
   });
+
+  socket.on("updatePlayerList", function (players) {
+    document.getElementById("players").innerHTML = JSON.stringify(players);
+  });
+
+  function onAddPlayer() {
+    const name = document.getElementById("onAddPlayer").value;
+    socket.emit("onAddPlayer", name);
+  }
+
+  function onRemovePLayer() {
+    const id = document.getElementById("onRemovePlayer").value;
+    socket.emit("onRemovePlayer", id);
+  }
+
+  // io.on("disconnect", function () {
+  //   const id = document.getElementById("disconnectPlayer").innerHTML;
+  //   io.emit("onPlayerDisconnect", id);
+  // });
+
+  // io.on('disconnect', function())
 </script>
 
 <h1 id="timer">Timer</h1>
 <h1 id="gameStart"></h1>
 
 <h1 id="round">Round 0</h1>
+<p id="players">Players</p>
 <p id="1stRoundWord"></p>
 <p id="2ndRoundWord"></p>
+<input id="onAddPlayer" placeholder="Add new Player" />
+<button onclick="onAddPlayer()">Add player</button>
+<input id="onRemovePlayer" placeholder="Remove Player with id" />
+<button onclick="onRemovePLayer()">Remove player by id</button>
