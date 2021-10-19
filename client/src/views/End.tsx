@@ -8,16 +8,16 @@ interface EndProp {
 
 
 const Endpage : React.FC<EndProp> = () => {
-    let first_name = "punlee";
-    let first_score = 900;
+    const first_name = "punlee";
+    const first_score = 900;
 
-    let second_name = "pp";
-    let second_score = 500;
+    const second_name = "pp";
+    const second_score = 500;
 
-    let third_name = "mk";
-    let third_score = 300;
+    const third_name = "mk";
+    const third_score = 300;
 
-    let your_score = 555;
+    const your_score = 555;
 
     return (
         <React.Fragment>
