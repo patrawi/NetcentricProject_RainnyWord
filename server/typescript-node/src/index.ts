@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { Socket } from "socket.io";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
-import { updatePlayers, addPlayer, updateLeaderboard } from "./lib/players";
+import { removePlayers, addPlayer, updateLeaderboard } from "./lib/players";
 import { randomWordsPerRound } from "./lib/words";
 
 const env = require("dotenv").config();
@@ -124,26 +124,6 @@ app.post("/startgame", (req: Request, res: Response) => {
   }
 });
 
-// app.post("/addplayer/:name", (req: Request, res: Response) => {
-//   const name = req.params.name;
-//   if (!name)
-//     return res
-//       .status(400)
-//       .json({ status: "error", error: "Name cannot be blank." });
-
-//   if (players.length >= MAX_PLAYERS)
-//     return res.status(400).json({
-//       status: "error",
-//       message: `Players are full. Maximum is ${MAX_PLAYERS}.`,
-//     });
-
-//   //TODO: Check user name if it's duplicated.
-//   // Add new player.
-//   const newPlayer: Player = { name: name, score: 0, id: uuidv4() };
-//   players.push(newPlayer);
-//   res.status(200).json(players);
-// });
-
 io.on("connection", (socket: Socket) => {
   console.log("a user connected");
 
@@ -151,26 +131,29 @@ io.on("connection", (socket: Socket) => {
   socket.on("onAddPlayer", function (name: string) {
     if (players.length < MAX_PLAYERS) {
       console.log(`${name} connected!`);
-      players = addPlayer(players, name);
-      console.log(players);
+      players = addPlayer(players, name, socket.id);
       io.emit("updatePlayerList", players);
     }
   });
   // Remove player using id.
   socket.on("onRemovePlayer", function (id: string) {
-    players = updatePlayers(players, id);
+    players = removePlayers(players, id);
     io.emit("updatePlayerList", players);
   });
   // Game is not start until admin press start.
-
   io.emit("gameStart", false);
 
-  // socket.on("updateLeaderboard", function (player: Player) {
-  //   players = updateLeaderboard(players, player);
-  // });
+  socket.on(
+    "updateLeaderboard",
+    function (data: { id: string; score: number }) {
+      players = updateLeaderboard(players, data.id, data.score);
+      io.emit("updatePlayerList", players);
+    }
+  );
 
   socket.on("disconnect", function () {
     console.log("a user disconnected");
+    console.log(JSON.stringify(players));
   });
 });
 

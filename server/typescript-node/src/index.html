@@ -4,6 +4,9 @@
   let timeLeft = 30;
   let gameStart = false;
 
+  socket.on("connect", function () {
+    document.getElementById("myId").innerHTML = `Id: ${socket.id}`;
+  });
   // Test function for startWaitingRoomTimer
   socket.on("startWaitingRoomTimer", function (isGameStart) {
     const timer = setInterval(() => {
@@ -50,13 +53,14 @@
     socket.emit("onRemovePlayer", id);
   }
 
-  // function updateScoreById() {
-  //   const id = document.getElementById("updateScoreTarget").value;
-  //   const score = document.getElementById("scoreAmount").value;
-  //   socket.emit("updateLeaderboard", {id: id, score: score})
-  // }
+  function updateScoreById() {
+    const id = document.getElementById("updateScoreTarget").value;
+    const score = parseInt(document.getElementById("scoreAmount").value);
+    socket.emit("updateLeaderboard", { id: id, score: score });
+  }
 </script>
 
+<h1 id="myId">ID:</h1>
 <h1 id="timer">Timer</h1>
 <h1 id="gameStart"></h1>
 
@@ -72,5 +76,5 @@
 <h1>Leader Board</h1>
 <p id="players">Players</p>
 <input id="updateScoreTarget" placeholder="Target ID" />
-<input id="scoreAmount" placeholder="Score" />
+<input id="scoreAmount" type="number" placeholder="Score" />
 <button onclick="updateScoreById()">Update player's score by ID</button>
