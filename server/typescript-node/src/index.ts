@@ -166,7 +166,6 @@ app.post("/addplayer/:name", (req: Request, res: Response) => {
 
 io.on("connection", (socket: Socket) => {
   console.log(`a user with id : ${socket.id} connected`);
-
   // Game is not start until admin press start.
   io.emit("gameStart", false);
 });
