@@ -3,7 +3,7 @@ import { Socket } from "socket.io";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
 import { removePlayers, addPlayer, updateLeaderboard } from "./lib/players";
-import { randomWordsPerRound } from "./lib/words";
+import { randomWordsPerRound, WordObject } from "./lib/words";
 
 const env = require("dotenv").config();
 if (env.error) {
@@ -101,7 +101,7 @@ app.post("/startgame", (req: Request, res: Response) => {
       ROUND++;
       console.log("Countdown starts...");
       console.log(`Round ${ROUND}`);
-      let words: string[] = [];
+      let words: WordObject[] = [];
 
       io.emit("round", ROUND);
       if (ROUND === 1) {

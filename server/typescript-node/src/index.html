@@ -32,7 +32,7 @@
   });
 
   socket.on("wordsFirstRound", function (words) {
-    document.getElementById("1stRoundWord").innerHTML = words;
+    document.getElementById("1stRoundWord").innerHTML = JSON.stringify(words);
   });
 
   socket.on("wordsSecondRound", function (words) {
