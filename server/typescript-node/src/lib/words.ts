@@ -1,9 +1,17 @@
 const randomWords = require("random-words");
 
-export function randomWordsFirstRound(amount: number) {
-  return randomWords(amount);
+export interface WordObject {
+  word: string;
+  key: number;
 }
 
-export function randomWordsSecondRound(amount: number) {
-  return randomWords(amount);
+export function randomWordsPerRound(amount: number) {
+  const words: string[] = randomWords(amount);
+  let wordData: WordObject[] = [];
+  let count = 0;
+  words.forEach((word) => {
+    wordData.push({ word: word, key: count });
+    count++;
+  });
+  return wordData;
 }

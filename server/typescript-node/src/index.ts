@@ -1,11 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import { SocketAddress } from "net";
 import { Socket } from "socket.io";
-import { v4 as uuidv4 } from "uuid";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
-import { randomWordsFirstRound, randomWordsSecondRound } from "./lib/words";
-var randomWords = require("random-words");
+import { removePlayers, addPlayer, updateLeaderboard } from "./lib/players";
+import { randomWordsPerRound, WordObject } from "./lib/words";
 
 const env = require("dotenv").config();
 if (env.error) {
@@ -117,14 +116,14 @@ app.post("/startgame", (req: Request, res: Response) => {
       ROUND++;
       console.log("Countdown starts...");
       console.log(`Round ${ROUND}`);
-      let words: string[] = [];
+      let words: WordObject[] = [];
 
       io.emit("round", ROUND);
       if (ROUND === 1) {
-        words = randomWordsFirstRound(100);
+        words = randomWordsPerRound(100);
         io.emit("wordsFirstRound", words);
       } else if (ROUND === 2) {
-        words = randomWordsSecondRound(150);
+        words = randomWordsPerRound(150);
         io.emit("wordsSecondRound", words);
       }
 
@@ -140,35 +139,37 @@ app.post("/startgame", (req: Request, res: Response) => {
   }
 });
 
-app.post("/addplayer/:name", (req: Request, res: Response) => {
-
-  const name = req.params.name;
-  console.log(name);
-  if (!name)
-    return res
-      .status(400)
-      .json({ status: "error", error: "Name cannot be blank." });
-
-  if (players.length >= MAX_PLAYERS)
-    return res.status(400).json({
-      status: "error",
-      message: `Players are full. Maximum is ${MAX_PLAYERS}.`,
-    });
-
-  //TODO: Check user name if it's duplicated.
-  // Add new player.
-  const newPlayer: Player = { name: name, score: 0, id: uuidv4() };
-  players.push(newPlayer);
-  res.status(200).json(players);
-});
-
-
-
 io.on("connection", (socket: Socket) => {
-  console.log(`a user with id : ${socket.id} connected`);
+  console.log("a user connected");
 
+  // Update players, send updated players to client and the client info.
+  socket.on("onAddPlayer", function (name: string) {
+    if (players.length < MAX_PLAYERS) {
+      console.log(`${name} connected!`);
+      players = addPlayer(players, name, socket.id);
+      io.emit("updatePlayerList", players);
+    }
+  });
+  // Remove player using id.
+  socket.on("onRemovePlayer", function (id: string) {
+    players = removePlayers(players, id);
+    io.emit("updatePlayerList", players);
+  });
   // Game is not start until admin press start.
   io.emit("gameStart", false);
+
+  socket.on(
+    "updateLeaderboard",
+    function (data: { id: string; score: number }) {
+      players = updateLeaderboard(players, data.id, data.score);
+      io.emit("updatePlayerList", players);
+    }
+  );
+
+  socket.on("disconnect", function () {
+    console.log("a user disconnected");
+    console.log(JSON.stringify(players));
+  });
 });
 
 http.listen(process.env.PORT, () => {
