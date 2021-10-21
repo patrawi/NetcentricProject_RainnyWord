@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import { SocketAddress } from "net";
 import { Socket } from "socket.io";
 import { v4 as uuidv4 } from "uuid";
 import { Admin, Player } from "./interfaces/player.interface";
@@ -14,16 +15,30 @@ if (env.error) {
 const app = express();
 const bodyParser = require("body-parser");
 const http = require("http").Server(app);
-const io = require("socket.io")(http);
+const io = require("socket.io")(http, {
+  cors : {
+    origin : "http://localhost:3000",
+    methods : ["GET", "POST"],
+    allowedHeaders : ["rainy-word"],
+    credentials : true
+
+  }
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 const MAX_PLAYERS = 5;
 let players: Player[] = [];
 let ROUND = 0;
 
 app.get("/", (req: Request, res: Response) => {
+
   res.sendFile(__dirname + "/index.html");
 });
 
@@ -126,7 +141,9 @@ app.post("/startgame", (req: Request, res: Response) => {
 });
 
 app.post("/addplayer/:name", (req: Request, res: Response) => {
+
   const name = req.params.name;
+  console.log(name);
   if (!name)
     return res
       .status(400)
@@ -145,8 +162,11 @@ app.post("/addplayer/:name", (req: Request, res: Response) => {
   res.status(200).json(players);
 });
 
+
+
 io.on("connection", (socket: Socket) => {
-  console.log("a user connected");
+  console.log(`a user with id : ${socket.id} connected`);
+
   // Game is not start until admin press start.
   io.emit("gameStart", false);
 });
@@ -154,3 +174,5 @@ io.on("connection", (socket: Socket) => {
 http.listen(process.env.PORT, () => {
   console.log(`Listening to port ${process.env.PORT}`);
 });
+
+

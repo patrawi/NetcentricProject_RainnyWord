@@ -18,7 +18,6 @@ const LoginForm : React.FC<AdminProp> = ({ Login, error }) => {
 
     const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(details);
         Login(details);
     }
 
