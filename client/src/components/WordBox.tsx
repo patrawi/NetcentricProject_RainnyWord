@@ -6,6 +6,8 @@ interface WordBoxProp {
     word : string
     location : string
     destroyed : boolean
+    onDropped : () => void
+
 
 }
 
@@ -30,23 +32,18 @@ const useStyles = makeStyles<Theme>((theme) => ({
 
 }));
 
-const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed}) => {
+const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropped}) => {
     const classes = useStyles();
     const boxRef = useRef<HTMLDivElement>(null);
-    const [hide, setHide] = useState(true);
     useEffect(() => {
-        let height = boxRef.current?.getBoundingClientRect().y || 0
-        const loop = setInterval(() => {
-            height = boxRef.current?.getBoundingClientRect().y
-            if (height > window.innerHeight) {
-                setHide(false);
-            }
-        }, 3000)
+          setTimeout(() => {
+            onDropped();
+    },3000)
 
-    },[hide])
+    })
     return (
         <>
-            {!destroyed && hide  ? 
+            {!destroyed ? 
                 <div ref = {boxRef} className = {classes.rain} style= {{left : location}}>
                     <Typography variant = "h6">{word}</Typography>
                 </div> : 

@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client" 
 
-export const  SocketService = () => {
+const  SocketService = () => {
     const socket = io("http://localhost:8000/", {
         withCredentials : true, 
         extraHeaders : {
@@ -10,3 +10,6 @@ export const  SocketService = () => {
     return socket;
 
 }
+
+
+export const socket = SocketService();

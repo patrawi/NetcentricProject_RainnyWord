@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {Box, Container, makeStyles, TextField, Typography} from '@material-ui/core';
 import Rainpage from '../components/rain';
 import TimerPage, {TimerProp} from '../components/countdown';
+import { socket } from '../services/Socket';
 // import {TimerProp} from '../components/countdown';
 
 
@@ -37,10 +38,14 @@ const Gamepage : React.FC<GameProp> = () => {
     const [score, setScore] = useState(0);
     const classes = useStyles();
 
+    
+
+
     const increasePoint = () => {
         console.log(score);
         setScore(score + 1)
     }
+
     return (
         <>
             <Container>

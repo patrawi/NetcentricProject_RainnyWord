@@ -46,21 +46,23 @@ const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
     const [wordToRender, setWordToRender] = useState<wordToRender[]>([]);
     const [showGame, setShowGame] = useState(true);
     const [answer, setAnswer] = useState('');
+    const [check, setCheck] = useState(true);
+
     const classes = useStyles();
     let inputRef : HTMLDivElement;
     let counter = 0;
 
     const handleAnswer = (e : React.ChangeEvent<HTMLInputElement>) => {
-        
         setAnswer(e.target.value);
     }
-
+    
+    
     const handleSubmit = (e : React.FormEvent) => {
-        console.log(answer);
+ 
         setWordToRender((oldwordToRender) => {
             const newWordToRender : wordToRender[] = []
             for (let oldword of oldwordToRender) {
-                if (!oldword.destroyed) {
+                if (!oldword.destroyed ) {
                     if (oldword.word !== answer) {
                         newWordToRender.push(oldword);
                     } else {
@@ -82,6 +84,7 @@ const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
 
     //Create array of object 
     useEffect(() => {
+
         if (showGame) {
             const size = words.length;
             const loop = setInterval(() => {
@@ -109,6 +112,9 @@ const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
         <>
             <Box>
                 {wordToRender.map(({word, location, id, destroyed}) => {
+                    const handleWordToRender = () => {
+                        setWordToRender(wordToRender => wordToRender.filter((word) => word.id !== id))
+                    }
                     return (
                         <WordBox
                         
@@ -116,6 +122,7 @@ const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
                             location = {location}
                             key = {id}
                             destroyed = {destroyed} 
+                            onDropped = {handleWordToRender}
                         />
                     )
                 })}

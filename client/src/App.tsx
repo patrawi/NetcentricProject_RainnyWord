@@ -8,7 +8,7 @@ import {BrowserRouter, Route, Switch } from 'react-router-dom';
 import Admin from './views/Admin';
 import Navbarpage from './components/Navbar'
 import Footerpage from './components/Footer';
-import { SocketService } from './services/Socket';
+
 function App() {
   
 

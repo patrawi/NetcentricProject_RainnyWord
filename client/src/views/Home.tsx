@@ -12,7 +12,7 @@ import {
 
   } from '@material-ui/core';
 import Navbarpage from '../components/Navbar'
-import { SocketService } from '../services/Socket';
+import { socket} from '../services/Socket';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +41,7 @@ interface HomepageProp {
 
 const Homepage : React.FC<HomepageProp> = () => {
     const classes = useStyles();
-    const socket = SocketService();
+
     
     const [name, setName ] = useState<string>("")
 
@@ -50,13 +50,7 @@ const Homepage : React.FC<HomepageProp> = () => {
      
     }
     const handleAddPlayer =  async () => {
-
-        const respond = await axios.post(`http://localhost:8000/addplayer/${name}`, {name})
-            .then((res) => {
-
-                return res.data
-            })
-            console.log(respond);
+        socket.emit("onAddPlayer",name);
     }
     
 
