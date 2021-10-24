@@ -67,7 +67,7 @@ const Gamepage : React.FC<GameProp> = () => {
     useEffect(() =>  {
         if (timeout) {
             socket.emit("updateLeaderboard", {id : individual.id , score : score})
-            socket.on("updateLeaderboard", (players) => {
+            socket.on(" ", (players) => {
                 console.log(players)
             })
         }
