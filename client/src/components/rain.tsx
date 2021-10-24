@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Grid, Paper, TextField, Theme, Typography } from '@material-ui/core'
-import { useInterval } from 'usehooks-ts'
-import { makeStyles } from "@material-ui/core/styles";
-import { TimerProp } from './countdown';
-import WordBox from './WordBox';
+import React, { useEffect, useState, useRef } from 'react';
+import { Box,TextField, Theme } from '@material-ui/core'
 
+import { makeStyles } from "@material-ui/core/styles";
+
+import WordBox from './WordBox';
+import {word, Time} from '../views/Game'
 interface RainProp {
-    time : TimerProp
+    time : Time
     handleScore : () => void
+    randomWords : word[]
 }
 
 
-const randomWords:string[] = ["ant", "bird", "cat", "dog", "egg", "fish" ];
+
 
 type wordToRender = {
     id : number
@@ -20,38 +21,14 @@ type wordToRender = {
     destroyed : boolean
 }
 
-const useStyles = makeStyles<Theme>((theme) => ({
-    root : {
-        
-    },
-    rain : {
-        position : 'fixed',
-        top : "0vh",
-        transform : "translateY(0)",
-        animation :  `$fall 3s linear`,
-        color : "black",
 
-    },
-    "@keyframes fall" : {
-        "to" : {
-            transform : "translateY(105vh)"
-        }
-    },
-
-
-}));
   
-const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
-    const [words, setWords] = useState<string[]>(randomWords);
-    const [wordToRender, setWordToRender] = useState<wordToRender[]>([]);
-    const [showGame, setShowGame] = useState(true);
-    const [answer, setAnswer] = useState('');
-    const [check, setCheck] = useState(true);
-
-    const classes = useStyles();
-    let inputRef : HTMLDivElement;
-    let counter = 0;
-
+const Rainpage : React.FC<RainProp> = ({ time, handleScore, randomWords}) => {
+    const [words, setWords] = useState<word[]>(randomWords);
+    const [wordToRender, setWordToRender] = useState<wordToRender[]>([{id : 0, word : '', location : '' , destroyed : true}]);
+    const [answer, setAnswer] = useState('');    
+    const Inputref = useRef() as React.MutableRefObject<HTMLDivElement>;
+    let counter = 0
     const handleAnswer = (e : React.ChangeEvent<HTMLInputElement>) => {
         setAnswer(e.target.value);
     }
@@ -75,39 +52,42 @@ const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
                
                 
             }
-            console.log(newWordToRender);
             setAnswer("");
             e.preventDefault();
             return newWordToRender;
         })
     }
 
-    //Create array of object 
+
+
     useEffect(() => {
-
-        if (showGame) {
-            const size = words.length;
-            const loop = setInterval(() => {
-                const delay = Math.floor(Math.random() * 100) + 100;
-                const n = counter++;
-                setTimeout(() => {
-                    setWordToRender((setWordToRender) => [...setWordToRender, {
-                        id : n,
-                        word : words.shift() || '',
-                        location : Math.floor(Math.random() * 60) + 20 + "vw",
-                        destroyed : false,
-                    }])
-                },delay)
-            },1000)
-            if (inputRef) {
-                inputRef.focus()
-            }
-            return () => clearInterval(loop);
+        console.log("hello from rainComponent");
+        const size = words.length
+        const loop = setInterval(() => {
+            const delay = Math.floor(Math.random() * 100)  +  100;
+            const n = counter++;
+            
+            setTimeout(() => {
+                setWordToRender((WordToRender) => {
+                        return [...WordToRender, {
+                            id : n,
+                            word : words[n % size].word ,
+                            location : Math.floor(Math.random() * 60) + 20 + "vw",
+                            destroyed : false,
+                        } ]
+                    
+     
+                }
+                 
+                )
+            },delay)
+        },200)
+        if (Inputref) {
+            Inputref.current.focus();
         }
+        return () => clearInterval(loop);
+    }, [words])
 
-    },[words]);
-
-  
     return (
         <>
             <Box>
@@ -134,13 +114,15 @@ const Rainpage : React.FC<RainProp> = ({time, handleScore}) => {
                     label = "Answer" 
                     variant = 'filled' 
                     onChange = {(e : React.ChangeEvent<HTMLInputElement>) => {handleAnswer(e)}}  
-                    ref = {(input : HTMLDivElement) => inputRef = input} 
+                    ref = {Inputref} 
                     onKeyPress = {(e) => {
                         if (e.key === 'Enter') {
                             handleSubmit(e);
                         }
                     }}
-                    fullWidth/>
+                    fullWidth
+                    autoFocus
+                    />
             </form>
         </>
 

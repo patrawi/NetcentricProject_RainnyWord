@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     makeStyles,
     Container,
@@ -11,9 +11,9 @@ import {
     TextField,
 
   } from '@material-ui/core';
-import Navbarpage from '../components/Navbar'
+
 import { socket} from '../services/Socket';
-import axios from 'axios';
+
 import { Link } from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
     root:{
@@ -72,7 +72,12 @@ const Homepage : React.FC<HomepageProp> = () => {
                         <TextField id = "name" label = "John Doe" variant = "outlined" onChange = {(e : React.ChangeEvent<HTMLInputElement>) => {changeNameHandle(e)}} fullWidth />
                     </CardActions>
                 </Card>
-                <Link to = "/Lobby.tsx">
+                <Link to = {{
+                    pathname : "/Lobby",
+                    state : {
+                        name : name
+                    }
+                }}>
                     <Box className  = {classes.activeBtn}>
                         <Button  variant = "contained" color = "secondary"  size = "large" onClick = {handleAddPlayer}>Connect</Button>
                     </Box>

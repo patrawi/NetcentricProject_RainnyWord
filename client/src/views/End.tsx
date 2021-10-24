@@ -1,6 +1,9 @@
-import * as React from 'react';
+import React , {useState} from 'react';
 import { Container, Typography, Box } from '@material-ui/core';
-
+import {useLocation} from 'react-router-dom'
+import { useEffect } from 'react';
+import {Player} from '../views/Lobby';
+import { socket} from '../services/Socket';
 
 interface EndProp {
     
@@ -8,6 +11,13 @@ interface EndProp {
 
 
 const Endpage : React.FC<EndProp> = () => {
+    const location = useLocation<{
+        id : string
+        score : number
+    }>();
+    
+    const {id, score} = location.state
+    const [players, setPlayers] = useState<Player[]>([]);
     const first_name = "punlee";
     const first_score = 900;
 
@@ -19,6 +29,17 @@ const Endpage : React.FC<EndProp> = () => {
 
     const your_score = 555;
 
+    const handlePlayer = async () => {
+        const newPlayers = await socket.on("updatePlayerList", (players) => {
+            setPlayers(players);
+        })
+        console.log(newPlayers);
+        console.log(players);
+    }
+    useEffect(() => {
+        console.log(id, score);
+        handlePlayer();
+    },[])
     return (
         <React.Fragment>
             <Container maxWidth="sm"> 

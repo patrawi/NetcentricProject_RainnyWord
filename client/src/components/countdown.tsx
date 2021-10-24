@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 export interface TimerProp {
     initialMinute : number
     initialSeconds : number
+    handleTimeout : () => void;
 }
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -18,7 +19,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
 
 }));
   
-const TimerPage :React.FC<TimerProp> = ({initialMinute, initialSeconds}) => {
+const TimerPage :React.FC<TimerProp> = ({initialMinute, initialSeconds, handleTimeout}) => {
     const classes = useStyles();
     const [ minutes, setMinutes ] = useState(initialMinute);
     const [seconds, setSeconds ] =  useState(initialSeconds);
@@ -36,10 +37,13 @@ const TimerPage :React.FC<TimerProp> = ({initialMinute, initialSeconds}) => {
                 }
             } 
         }, 1000)
+        if (minutes === 0 && seconds === 0) {
+            handleTimeout();
+        }
         return ()=> {
             clearInterval(myInterval);
           };
-    });
+    },[minutes, seconds]);
 
     return (
         <Box className = {classes.center}>

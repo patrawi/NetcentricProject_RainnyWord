@@ -1,4 +1,4 @@
-import { io, Socket } from "socket.io-client" 
+import { io } from "socket.io-client" 
 
 const  SocketService = () => {
     const socket = io("http://localhost:8000/", {

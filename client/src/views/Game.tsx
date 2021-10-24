@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {Box, Container, makeStyles, TextField, Typography} from '@material-ui/core';
+import {Box, Container, makeStyles,  Typography} from '@material-ui/core';
 import Rainpage from '../components/rain';
-import TimerPage, {TimerProp} from '../components/countdown';
+import TimerPage  from '../components/countdown';
 import { socket } from '../services/Socket';
-// import {TimerProp} from '../components/countdown';
 
+import { wordRand, Player } from '../views/Lobby'
 
-
+import {Redirect, useLocation} from 'react-router-dom';
+import { SportsHockeyTwoTone } from '@material-ui/icons';
 
 interface GameProp {
-    
+
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -28,16 +29,25 @@ const useStyles = makeStyles((theme) => ({
 }))
 //mock data 
 
-
-type time = {}
+export type Time = {
+    initialMinute : number 
+    initialSeconds : number
+}
+export type word = {
+    word : string;
+    key : number;
+}
 
 const Gamepage : React.FC<GameProp> = () => {
-    const [time, setTime] = useState<TimerProp>({initialMinute : 0, initialSeconds : 10});
-    const [end, setEnd] = useState(false);
-    const [answer, setAnswer] = useState('');
+    const location = useLocation<{
+        randWords : wordRand[]
+        individual : Player
+    }>();
+    const {randWords, individual} = location.state
+    const [time, setTime] = useState<Time>({initialMinute :  0, initialSeconds : 20});
+    const [timeout, setTimeout] = useState(false);
     const [score, setScore] = useState(0);
-    const classes = useStyles();
-
+    const [randomWords, setRandomWords] = useState<word[]>(randWords);
     
 
 
@@ -45,18 +55,44 @@ const Gamepage : React.FC<GameProp> = () => {
         console.log(score);
         setScore(score + 1)
     }
+    const handleRandWord = async () => {
+  
+        console.log('hello');
+    }
 
+    const handleTimeout = () => {
+        setTimeout(true);
+    }
+
+    useEffect(() =>  {
+        if (timeout) {
+            socket.emit("updateLeaderboard", {id : individual.id , score : score})
+            socket.on("updateLeaderboard", (players) => {
+                console.log(players)
+            })
+        }
+        handleRandWord();
+    },[randomWords])
     return (
-        <>
+        <>  
+            {timeout ? <Redirect to = {{
+                pathname : "/End",
+                state : {
+                    id : individual.id,
+                    score : score
+                }
+            }} /> : 
             <Container>
-                <Box display = "flex" justifyContent = "space-between" alignItems = "center">
-                    <TimerPage initialMinute = {time.initialMinute} initialSeconds = {time.initialSeconds} />
-                    <Typography align = "center">{score}</Typography>
-                </Box>
-                
-                <Rainpage time = {time}  handleScore = {increasePoint} />
-               
-            </Container>
+            <Box display = "flex" justifyContent = "space-between" alignItems = "center">
+                <TimerPage initialMinute = {time.initialMinute} initialSeconds = {time.initialSeconds} handleTimeout = {handleTimeout} />
+                <Typography align = "center">{individual.name}: {score}</Typography>
+            </Box>
+ 
+            <Rainpage time = {time}  handleScore = {increasePoint} randomWords = {randomWords} />
+           
+        </Container>
+            }
+  
         </>
     )
     

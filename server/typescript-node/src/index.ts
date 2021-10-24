@@ -112,7 +112,7 @@ app.post("/startgame", (req: Request, res: Response) => {
   try {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
-      io.emit("startWaitingRoomTimer");
+      io.emit("startWaitingRoomTimer",true);
       ROUND++;
       console.log("Countdown starts...");
       console.log(`Round ${ROUND}`);

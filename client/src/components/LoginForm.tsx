@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Login from '../views/Admin';
+
 import { AdminProp } from '../views/Admin';
 
 export interface LoginProps {

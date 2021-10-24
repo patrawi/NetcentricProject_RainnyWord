@@ -17,9 +17,9 @@ const useStyles = makeStyles<Theme>((theme) => ({
     },
     rain : {
         position : 'fixed',
-        top : "0vh",
-        transform : "translateY(0)",
-        animation :  `$fall 3s linear`,
+        top : "20vh",
+        transform : "translateY(0vh)",
+        animation :  `$fall 4s linear`,
         color : "black",
 
     },
@@ -28,27 +28,33 @@ const useStyles = makeStyles<Theme>((theme) => ({
             transform : "translateY(105vh)"
         }
     },
-
+    hidden : {
+        opacity : 0
+    }
 
 }));
 
 const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropped}) => {
     const classes = useStyles();
+    const [destroy, setDestroyed] = useState(destroyed);
     const boxRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-          setTimeout(() => {
+       
+          setTimeout(() => {    
+            setDestroyed(true);
             onDropped();
-    },3000)
+    },4000)
 
-    })
+    },[destroy])
     return (
-        <>
-            {!destroyed ? 
-                <div ref = {boxRef} className = {classes.rain} style= {{left : location}}>
-                    <Typography variant = "h6">{word}</Typography>
-                </div> : 
-                null
-        }
+        <>  
+            {!destroyed? 
+              <div ref = {boxRef} className = {!destroy ?  classes.rain : classes.hidden } style= {{left : location}}>
+              <Typography variant = "h6">{word}</Typography>
+          </div> : null
+            }
+              
+        
             
         </>
     )
