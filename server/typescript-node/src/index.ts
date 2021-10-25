@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
-import { SocketAddress } from "net";
 import { Socket } from "socket.io";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
+import { Chat } from "./lib/chat";
 import { removePlayers, addPlayer, updateLeaderboard } from "./lib/players";
 import { randomWordsPerRound, WordObject } from "./lib/words";
 
@@ -15,13 +15,12 @@ const app = express();
 const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http, {
-  cors : {
-    origin : "http://localhost:3000",
-    methods : ["GET", "POST"],
-    allowedHeaders : ["rainy-word"],
-    credentials : true
-
-  }
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["rainy-word"],
+    credentials: true,
+  },
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,7 +36,6 @@ let players: Player[] = [];
 let ROUND = 0;
 
 app.get("/", (req: Request, res: Response) => {
-
   res.sendFile(__dirname + "/index.html");
 });
 
@@ -112,7 +110,7 @@ app.post("/startgame", (req: Request, res: Response) => {
   try {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
-      io.emit("startWaitingRoomTimer",true);
+      io.emit("startWaitingRoomTimer", true);
       ROUND++;
       console.log("Countdown starts...");
       console.log(`Round ${ROUND}`);
@@ -141,7 +139,6 @@ app.post("/startgame", (req: Request, res: Response) => {
 
 io.on("connection", (socket: Socket) => {
   console.log("a user connected");
-
   // Update players, send updated players to client and the client info.
   socket.on("onAddPlayer", function (name: string) {
     if (players.length < MAX_PLAYERS) {
@@ -166,6 +163,17 @@ io.on("connection", (socket: Socket) => {
     }
   );
 
+  socket.on("publicChat", function (data: Chat) {
+    // Emit, then setState in Front-end.
+    socket.emit("publicChat", data);
+  });
+
+  socket.on("privateChat", function (socketDestId, data: Chat) {
+    // Save in front-end, backend will only send the message.
+    // Emit, then setState in Front-end.
+    socket.to(socketDestId).emit("privateChat", socket.id, data);
+  });
+
   socket.on("disconnect", function () {
     console.log("a user disconnected");
     console.log(JSON.stringify(players));
@@ -175,5 +183,3 @@ io.on("connection", (socket: Socket) => {
 http.listen(process.env.PORT, () => {
   console.log(`Listening to port ${process.env.PORT}`);
 });
-
-
