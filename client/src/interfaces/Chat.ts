@@ -7,8 +7,8 @@ export interface Chat {
 }
 
 export interface ChatContextData {
-  pubChat: Chat[] | undefined;
+  pubChat: Chat[];
   setPubChat: Dispatch<SetStateAction<Chat[]>> | undefined;
-  privChat: Chat[] | undefined;
+  privChat: Chat[];
   setPrivChat: Dispatch<SetStateAction<Chat[]>> | undefined;
 }

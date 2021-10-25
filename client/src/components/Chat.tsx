@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   CardContent,
   Card,
@@ -8,15 +8,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { ChatContext } from "./../context/ChatContext";
 import { socket } from "../services/Socket";
+import { AppContext } from "./../context/AppContext";
 
 const Chat = () => {
-  const { privChat, setPrivChat, pubChat, setPubChat } =
-    useContext(ChatContext);
+  const { user, pubChat, setPubChat, privChat, setPrivChat } =
+    useContext(AppContext);
   const [chatMode, setChatMode] = useState(true);
   const [message, setMessage] = useState("");
 
+  useEffect(() => {}, [setPrivChat, setPubChat]);
   const renderChat = () => {
     if (chatMode === true) {
       //Public Chat
@@ -25,7 +26,8 @@ const Chat = () => {
           {pubChat?.map((chat, index) => {
             return (
               <div key={index}>
-                <p>{chat.message}</p>
+                <p>{chat?.time.toLocaleString()}</p>
+                <p>{chat?.message}</p>
               </div>
             );
           })}
@@ -37,7 +39,8 @@ const Chat = () => {
         {privChat?.map((chat, index) => {
           return (
             <div key={index}>
-              <p>{chat.message}</p>
+              <p>{chat?.time.toLocaleString()}</p>
+              <p>{chat?.message}</p>
             </div>
           );
         })}
@@ -45,19 +48,35 @@ const Chat = () => {
     }
   };
 
-  const handleTextChange = (val: string) => {
-    if (val) {
-      if (chatMode === true) {
-        // const newChat = privChat?.push({
-        // })
-        // setPrivChat()
-        // socket.emit()
-      }
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    if (val && setPubChat && setPrivChat) {
+      setMessage(val);
     }
   };
   const handleButtonClick = () => {
-    if (message !== "") {
-      console.log(message);
+    if (user) {
+      if (chatMode === true) {
+        const newChat = pubChat;
+        newChat.push({
+          name: user?.name,
+          message: message,
+          time: new Date(),
+        });
+
+        setPubChat(newChat);
+        setMessage("");
+        // socket.emit()
+      } else {
+        const newChat = privChat;
+        newChat.push({
+          name: user.name,
+          message: message,
+          time: new Date(),
+        });
+        setPrivChat(newChat);
+        setMessage("");
+      }
     }
   };
 
@@ -77,20 +96,24 @@ const Chat = () => {
         <Typography variant="h6">
           {chatMode ? "Public Chat" : "Private Chat"}
         </Typography>
-        <CardContent style={{ backgroundColor: "#eeffff" }}>
-          {renderChat}
-          <div style={{ display: "flex", flexDirection: "row", gap: 20 }}>
-            <Input
-              placeholder={
-                chatMode ? "Public chat message" : "Private chat message"
-              }
-              //   onChange={(val: string) => handleTextChange(val)}
-            />
-            <Button variant="contained" onClick={() => handleButtonClick}>
-              SEND
-            </Button>
-          </div>
+        <CardContent className={useStyle().chatBox}>
+          <div>{renderChat()}</div>
         </CardContent>
+        <div>
+          <Input
+            placeholder={
+              chatMode ? "Public chat message" : "Private chat message"
+            }
+            onChange={handleTextChange}
+          />
+          <Button
+            variant="contained"
+            onClick={handleButtonClick}
+            className={useStyle().button}
+          >
+            SEND
+          </Button>
+        </div>
       </Card>
     </div>
   );
@@ -98,4 +121,16 @@ const Chat = () => {
 
 export default Chat;
 
-const styles = makeStyles({});
+const useStyle = makeStyles((theme) => ({
+  chatBox: {
+    flex: 1,
+    width: "20vw",
+    height: "45vh",
+    overflowY: "scroll",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  button: {
+    width: "90%",
+  },
+}));

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Home from "./views/Home";
 import Lobby from "./views/Lobby";
 import End from "./views/End";
@@ -8,19 +8,13 @@ import Admin from "./views/Admin";
 import Navbarpage from "./components/Navbar";
 import Footerpage from "./components/Footer";
 import Gamepage from "./views/Game";
-import { ChatContext } from "./context/ChatContext";
-import { Chat } from "./interfaces/Chat";
+import AppContextProvider from "./context/AppContext";
 
 function App() {
-  const [pubChat, setPubChat] = useState<Chat[]>([]);
-  const [privChat, setPrivChat] = useState<Chat[]>([]);
-
   return (
     <>
       <BrowserRouter>
-        <ChatContext.Provider
-          value={{ pubChat, setPubChat, privChat, setPrivChat }}
-        >
+        <AppContextProvider>
           <Navbarpage />
           <Switch>
             <Route path="/" component={Home} exact />
@@ -31,9 +25,8 @@ function App() {
             <Route path="/admin" component={Admin} />
           </Switch>
           <Footerpage />
-        </ChatContext.Provider>
+        </AppContextProvider>
       </BrowserRouter>
-      {/* <div>learn react</div> */}
     </>
   );
 }
