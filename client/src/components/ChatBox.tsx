@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { CardContent, Card, Button, Switch, Input } from "@material-ui/core";
+import { Card, Button, Switch, Input } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { socket } from "../services/Socket";
 import { AppContext } from "../context/AppContext";
@@ -14,22 +14,16 @@ const ChatBox = () => {
 
   useEffect(() => {
     socket.on("publicChat", function (chat: Chat) {
-      const newPubChat = pubChat;
-      newPubChat.push(chat);
-      setPubChat(newPubChat);
+      setPubChat([...pubChat, chat]);
     });
     socket.on("privateChat", function (targetSocket, chat: Chat) {
-      const newPubChat = pubChat;
-      newPubChat.push(chat);
-      setPubChat(newPubChat);
+      setPrivChat([...privChat, chat]);
     });
-  }, []);
+  }, [pubChat, setPubChat, privChat, setPrivChat, user]);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    if (val && setPubChat && setPrivChat) {
-      setMessage(val);
-    }
+    setMessage(val);
   };
 
   const ChatMessage = () => {
@@ -44,14 +38,19 @@ const ChatBox = () => {
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      gap: 2,
                     }}
                   >
-                    <span style={{ fontSize: 12 }}>
+                    <span style={{ fontSize: 12, color: "#9e9e9e" }}>
                       {moment(chat.time).format("h:mm:ss a")}
                     </span>
                   </div>
-                  <span style={{ fontWeight: "bold", marginRight: 4 }}>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      marginRight: 4,
+                      color: "#455a64",
+                    }}
+                  >
                     {chat.name}:
                   </span>
                   <span>{chat?.message}</span>
@@ -107,7 +106,7 @@ const ChatBox = () => {
         flex: 1,
       }}
     >
-      <Card style={{ padding: 20, backgroundColor: "#8aacc8" }}>
+      <Card style={{ padding: 20, backgroundColor: "#ffe082" }}>
         <div
           style={{
             display: "flex",
@@ -120,9 +119,9 @@ const ChatBox = () => {
           <Switch onChange={() => setChatMode(!chatMode)} />
         </div>
         <span>{chatMode ? "Public Chat" : "Private Chat"}</span>
-        <CardContent className={useStyle().chatBox}>
+        <div className={useStyle().chatBox}>
           <ChatMessage />
-        </CardContent>
+        </div>
         <div>
           <Input
             placeholder={
@@ -130,6 +129,7 @@ const ChatBox = () => {
             }
             onChange={handleTextChange}
             value={message}
+            style={{ width: "100%" }}
           />
           <Button
             variant="contained"
@@ -153,10 +153,12 @@ const useStyle = makeStyles((theme) => ({
     height: "45vh",
   },
   button: {
-    width: "90%",
+    width: "100%",
+    backgroundColor: "#ffca28",
+    marginTop: 10,
   },
   chatMsg: {
-    flex: 1,
+    height: "100%",
     borderRadius: 6,
     backgroundColor: "#fff",
   },
