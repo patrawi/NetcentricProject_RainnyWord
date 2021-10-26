@@ -23,16 +23,19 @@ const useStyles = makeStyles((theme) => ({
         fontSize : '3em',
     },
     inputBox : {
-        backgroundColor : "#FFB800",
+        backgroundColor : "#D2A677",
         width : "50%",
         margin : "0 auto",
         padding : "2em"
     },
     activeBtn : {
         margin : "5em auto",
-        textAlign : "center"
+        textAlign : "center",
+        textDecoration : "none",
     },
-
+    link : {
+        textDecoration : "none",
+    }
   }));
 
 interface HomepageProp {
@@ -56,20 +59,20 @@ const Homepage : React.FC<HomepageProp> = () => {
 
     return (
         <>
- 
+  
           <Container  >
             <Box >
-                <Typography className = {classes.title} variant = "h1" align = "center">Rainy Word</Typography>
+                <Typography className = {classes.title} variant = "h1" align = "center" >Rainy Word</Typography>
             </Box>
             <Box mt = {3} />
-                <Card className = {classes.inputBox}>
+                <Card className = {classes.inputBox} >
                     <CardContent>
                         <Typography variant = "h5">
                             Please Enter Your Name
                         </Typography>
                     </CardContent>
                     <CardActions>
-                        <TextField id = "name" label = "John Doe" variant = "outlined" onChange = {(e : React.ChangeEvent<HTMLInputElement>) => {changeNameHandle(e)}} fullWidth />
+                        <TextField color = "primary" id = "name" label = "John Doe" variant = "outlined" onChange = {(e : React.ChangeEvent<HTMLInputElement>) => {changeNameHandle(e)}} fullWidth />
                     </CardActions>
                 </Card>
                 <Link to = {{
@@ -77,11 +80,15 @@ const Homepage : React.FC<HomepageProp> = () => {
                     state : {
                         name : name
                     }
-                }}>
+                 
+                }}
+                style={{ textDecoration: 'none' }}
+                >
                     <Box className  = {classes.activeBtn}>
-                        <Button  variant = "contained" color = "secondary"  size = "large" onClick = {handleAddPlayer}>Connect</Button>
+                        <Button  variant = "contained" color = "primary" size = "large" onClick = {handleAddPlayer}>Connect</Button>
                     </Box>
                 </Link>
+          
               
 
         

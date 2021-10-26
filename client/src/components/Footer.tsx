@@ -31,7 +31,7 @@ const Footerpage : React.FC<FooterProp> = () => {
     const classes = useStyles();
 return (
    <>
-       <AppBar position="fixed" className = {classes.footer}>
+       <AppBar position="fixed" className = {classes.footer} color = "secondary">
            <Toolbar />
        </AppBar>
    </>

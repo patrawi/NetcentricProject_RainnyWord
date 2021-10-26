@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Home from "./views/Home";
 import Lobby from "./views/Lobby";
 import End from "./views/End";
@@ -9,13 +9,53 @@ import Navbarpage from "./components/Navbar";
 import Footerpage from "./components/Footer";
 import Gamepage from "./views/Game";
 import AppContextProvider from "./context/AppContext";
+import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
+
+
 
 function App() {
+  const [toggleDark, setToggleDark] = useState(false);
+
+  const themeLight = createTheme({
+    palette : {
+      background: {
+        default: "#DDDAE1",
+        
+
+      },
+      secondary : {
+        main : "#465FB6"
+      }
+
+    }
+  })
+  const themeDark = createTheme({
+    palette : {
+      background : {
+        default: "#242B2C"
+      },
+      text : {
+        primary : "#ffffff"
+      },
+      secondary : {
+        main : "#465FB6"
+      },
+      primary : {
+        main : "#E02B31"
+      }
+
+    }
+  })
+  const handleToggleDark = () => {
+    setToggleDark(!toggleDark);
+  }
   return (
     <>
-      <BrowserRouter>
+    <ThemeProvider theme = {toggleDark ?  themeDark : themeLight}>
+    <CssBaseline />
+    <BrowserRouter>
         <AppContextProvider>
-          <Navbarpage />
+          <Navbarpage  handleToggleDark = {handleToggleDark}/>
           <Switch>
             <Route path="/" component={Home} exact />
             <Route path="/lobby" component={Lobby} />
@@ -27,6 +67,8 @@ function App() {
           <Footerpage />
         </AppContextProvider>
       </BrowserRouter>
+    </ThemeProvider>
+     
     </>
   );
 }
