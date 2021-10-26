@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   makeStyles,
   Container,
@@ -17,38 +17,25 @@ import { HowToPlayModal } from "../components/HowToPlayModal";
 import { socket } from "../services/Socket";
 
 import { Link } from "react-router-dom";
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  title: {
-    fontSize: "5em",
-    fontWeight: "bold",
-  },
-  inputBox: {
-    backgroundColor: "#ffd54f",
-    margin: "0 auto",
-    padding: "1em",
-    marginBottom: "2em",
-    borderRadius: 20,
-  },
-  activeBtn: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-}));
+import { AppContext } from "../context/AppContext";
 
 interface HomepageProp {}
 
 const Homepage: React.FC<HomepageProp> = () => {
   const classes = useStyles();
-
+  const { setUser } = useContext(AppContext);
   const [name, setName] = useState<string>("");
-  const [openHowToPlay, setOpenHowToPlay] = useState(true);
+  const [openHowToPlay, setOpenHowToPlay] = useState(false);
 
   const changeNameHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
   const handleAddPlayer = async () => {
+    setUser({
+      name: name,
+      id: socket.id,
+      score: 0,
+    });
     socket.emit("onAddPlayer", name);
   };
 
@@ -129,3 +116,23 @@ const Homepage: React.FC<HomepageProp> = () => {
 };
 
 export default Homepage;
+
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  title: {
+    fontSize: "5em",
+    fontWeight: "bold",
+  },
+  inputBox: {
+    backgroundColor: "#ffd54f",
+    margin: "0 auto",
+    padding: "1em",
+    marginBottom: "2em",
+    borderRadius: 20,
+  },
+  activeBtn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+}));
