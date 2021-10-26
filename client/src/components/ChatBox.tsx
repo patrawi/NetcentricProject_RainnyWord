@@ -13,13 +13,14 @@ const ChatBox = () => {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    socket.on("publicChat", function (chat: Chat) {
-      setPubChat([...pubChat, chat]);
+    socket.on("onUpdatePublicChat", function (chats: Chat[]) {
+      console.log(chats);
+      setPubChat(chats);
     });
-    socket.on("privateChat", function (targetSocket, chat: Chat) {
-      setPrivChat([...privChat, chat]);
-    });
-  }, [pubChat, setPubChat, privChat, setPrivChat, user]);
+    // socket.on("privateChat", function (targetSocket, chat: Chat) {
+    //   setPrivChat([...privChat, chat]);
+    // });
+  }, []);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -77,7 +78,7 @@ const ChatBox = () => {
     );
   };
 
-  const handleButtonClick = async () => {
+  const handleButtonClick = () => {
     if (user && message !== "") {
       if (chatMode === true) {
         socket.emit("publicChat", {
@@ -86,26 +87,18 @@ const ChatBox = () => {
           message: message,
         });
       } else {
-        socket.emit("privateChat", {
-          name: user?.name,
-          time: new Date(),
-          message: message,
-        });
+        // socket.emit("privateChat", {
+        //   name: user?.name,
+        //   time: new Date(),
+        //   message: message,
+        // });
       }
       setMessage("");
     }
   };
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        right: 20,
-        bottom: 100,
-        width: "20%",
-        flex: 1,
-      }}
-    >
+    <div className={useStyle().container}>
       <Card style={{ padding: 20, backgroundColor: "#ffe082" }}>
         <div
           style={{
@@ -115,10 +108,11 @@ const ChatBox = () => {
             alignItems: "center",
           }}
         >
-          <span>Chat Mode</span>
+          <span style={{ fontSize: 24, fontWeight: "bold" }}>
+            {chatMode ? "Public Chat" : "Private Chat"}
+          </span>
           <Switch onChange={() => setChatMode(!chatMode)} />
         </div>
-        <span>{chatMode ? "Public Chat" : "Private Chat"}</span>
         <div className={useStyle().chatBox}>
           <ChatMessage />
         </div>
@@ -147,10 +141,19 @@ const ChatBox = () => {
 export default ChatBox;
 
 const useStyle = makeStyles((theme) => ({
+  container: {
+    flex: 1,
+    width: "23%",
+    height: "100%",
+  },
   chatBox: {
     flex: 1,
     overflowY: "scroll",
-    height: "45vh",
+    whiteSpace: "pre-wrap",
+    overflowWrap: "break-word",
+    height: "60vh",
+    marginBottom: "1em",
+    backgroundColor: "#fff",
   },
   button: {
     width: "100%",

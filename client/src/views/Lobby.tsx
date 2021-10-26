@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import TimerPage from "../components/countdown";
 import { socket } from "../services/Socket";
 import { Redirect, useLocation } from "react-router-dom";
-import ChatBox from "../components/ChatBox";
+import ChatBox from "./../components/ChatBox";
 interface LobbyProp {}
 
 export type wordRand = {
@@ -64,7 +64,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
     });
   }, [players]);
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "row" }}>
       {redirectNow ? (
         <Redirect
           to={{
@@ -81,10 +81,10 @@ const Lobbypage: React.FC<LobbyProp> = () => {
           {players.map((player) => {
             return <div key={player.id}>{player.name}</div>;
           })}
-          <ChatBox />
         </Container>
       )}
-    </>
+      <ChatBox />
+    </div>
   );
 };
 
