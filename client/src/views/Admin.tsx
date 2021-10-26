@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { stringify } from 'querystring';
 import React, { useState } from 'react';
-import LoginForm, { LoginProps, form } from '../components/LoginForm';
+import LoginForm, { LoginProps } from '../components/LoginForm';
+
+import {form} from '../types/type';
 
 
 export interface AdminProp {
