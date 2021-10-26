@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 
 import { AdminProp } from '../views/Admin';
-
+import { form } from '../types/type';
 export interface LoginProps {
 }
 
-export type form = {
-    username: string;
-    password: string;
-}
+
 
 const LoginForm : React.FC<AdminProp> = ({ Login, error }) => {
     const [details, setDetails] = useState<form>({

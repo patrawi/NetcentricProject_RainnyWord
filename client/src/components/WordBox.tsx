@@ -7,8 +7,6 @@ interface WordBoxProp {
     location : string
     destroyed : boolean
     onDropped : () => void
-
-
 }
 
 const useStyles = makeStyles<Theme>((theme) => ({
