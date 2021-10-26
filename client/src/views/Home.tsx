@@ -14,42 +14,39 @@ import {
 } from "@material-ui/core";
 import { HowToPlayModal } from "../components/HowToPlayModal";
 
-import { socket } from "../services/Socket";
 
 import { Link } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
-
-const useStyles = makeStyles((theme) => ({
-    root:{
-
-    },
-    title : {
-        fontSize: "5em",
-        fontWeight: "bold",
-    },
-    inputBox : {
-        backgroundColor : "#D2A677",
-        width : "50%",
-        margin : "0 auto",
-        padding : "2em",
-        borderRadius: 20,
-    },
-    activeBtn : {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-    },
-
-  }));
-
+import { SocketContext } from '../context/SocketContext';
 
 interface HomepageProp {
     
 }
 
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  title: {
+    fontSize: "5em",
+    fontWeight: "bold",
+  },
+  inputBox: {
+    backgroundColor: "#ffb300",
+    margin: "0 auto",
+    padding: "1em",
+    marginBottom: "2em",
+    borderRadius: 20,
+  },
+  activeBtn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+}));
+
 const Homepage: React.FC<HomepageProp> = () => {
   const classes = useStyles();
   const { setUser } = useContext(AppContext);
+  const {socket, addPlayer} = useContext(SocketContext)
   const [name, setName] = useState<string>("");
   const [openHowToPlay, setOpenHowToPlay] = useState(false);
 
@@ -57,20 +54,22 @@ const Homepage: React.FC<HomepageProp> = () => {
     setName(e.target.value);
   };
   const handleAddPlayer = async () => {
-    setUser({
-      name: name,
-      id: socket.id,
-      score: 0,
-    });
-    socket.emit("onAddPlayer", name);
-  };
+    console.log("hello from addplayer")
+        // setUser({
+        //     name: name,
+        //     id: socket?.id,
+        //     score: 0,
+        //   });
+        addPlayer(name);
+    }
+  
 
   return (
     <>
       <Container style={{ width: "50%" }}>
         <Box>
           <Typography className={classes.title} variant="h1" align="center">
-            Rainy Word
+            Rainy Word {socket?.id}
           </Typography>
         </Box>
         <Box mt={3} />

@@ -1,9 +1,10 @@
 import { Container } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import TimerPage from "../components/countdown";
-import { socket } from "../services/Socket";
+import { SocketContext } from '../context/SocketContext';
 import { Redirect, useLocation } from "react-router-dom";
-import ChatBox from "./../components/ChatBox";
+import ChatBox from "../components/ChatBox";
+import {User} from '../interfaces/User'
 interface LobbyProp {}
 
 export type wordRand = {
@@ -11,40 +12,43 @@ export type wordRand = {
   key: number;
 };
 
-export type Player = {
-  name: string;
-  score: number;
-  id: string;
-};
-let Arrplayers: Player[] = [];
+
+let Arrplayers: User[] = [];
 const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
   const [randWords, setRandWords] = useState<wordRand[]>([]);
-  const [players, setPlayers] = useState<Player[]>(Arrplayers);
+  const [players, setPlayers] = useState<User[]>(Arrplayers);
   const [redirectNow, setRedirectNow] = useState(false);
   const location = useLocation<{ name: string }>();
-  const [individual, setIndividual] = useState<Player>();
+  const [individual, setIndividual] = useState<User>();
   const [time, setTime] = useState(false);
   const { name } = location.state;
-  const handlePlayer = async () => {
-    const newPlayers = await socket.on("updatePlayerList", (players) => {
-      setPlayers(players);
-      setIndividual(() => {
-        return players.find((player: Player) => player.name === name);
+  const {socket} = useContext(SocketContext)
+  const handlePlayer =  () => {
+    if (socket) {
+      const newPlayers =  socket.on("updatePlayerList", (players) => {
+        setPlayers(players);
+        setIndividual(() => {
+          return players.find((player: User) => player.name === name);
+        });
       });
-    });
+    }
+
   };
   const handleTimeout = () => {
     setTime(true);
   };
   const countdownTimer = () => {
-    socket.on("round", (ROUND) => {
-      if (ROUND === 1) {
-        socket.on("wordsFirstRound", (words) => {
-          setRandWords(words);
-        });
-      }
-    });
+    if(socket) {
+      socket.on("round", (ROUND) => {
+        if (ROUND === 1) {
+          socket.on("wordsFirstRound", (words) => {
+            setRandWords(words);
+          });
+        }
+      });
+    }
+
     setTimeout(() => {
       setRedirectNow(true);
     }, 10000);
@@ -59,9 +63,11 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   };
   useEffect(() => {
     handlePlayer();
-    socket.on("startWaitingRoomTimer", function (isGameStart) {
-      setCheck(true);
-    });
+    if(socket) {
+      socket.on("startWaitingRoomTimer", function (isGameStart) {
+        setCheck(true);
+      });
+    }
   }, [players]);
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>

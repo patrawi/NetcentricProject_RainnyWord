@@ -10,7 +10,7 @@ import Footerpage from "./components/Footer";
 import Gamepage from "./views/Game";
 import AppContextProvider from "./context/AppContext";
 import { createTheme, CssBaseline, ThemeProvider } from "@material-ui/core";
-
+import SocketContextProvider from './context/SocketContext'
 
 
 function App() {
@@ -53,20 +53,23 @@ function App() {
     <>
     <ThemeProvider theme = {toggleDark ?  themeDark : themeLight}>
     <CssBaseline />
-    <BrowserRouter>
-        <AppContextProvider>
-          <Navbarpage  handleToggleDark = {handleToggleDark}/>
-          <Switch>
-            <Route path="/" component={Home} exact />
-            <Route path="/lobby" component={Lobby} />
-            <Route path="/Game" component={Gamepage} />
-            <Route path="/end" component={End} />
-            <Route path="/eliminated" component={Eliminated} />
-            <Route path="/admin" component={Admin} />
-          </Switch>
-          <Footerpage />
-        </AppContextProvider>
-      </BrowserRouter>
+    <SocketContextProvider>
+        <BrowserRouter>
+      <AppContextProvider>
+            <Navbarpage  handleToggleDark = {handleToggleDark}/>
+            <Switch>
+              <Route path="/" component={Home} exact />
+              <Route path="/lobby" component={Lobby} />
+              <Route path="/Game" component={Gamepage} />
+              <Route path="/end" component={End} />
+              <Route path="/eliminated" component={Eliminated} />
+              <Route path="/admin" component={Admin} />
+            </Switch>
+            <Footerpage />
+          </AppContextProvider>
+        </BrowserRouter>
+    </SocketContextProvider>
+
     </ThemeProvider>
      
     </>
