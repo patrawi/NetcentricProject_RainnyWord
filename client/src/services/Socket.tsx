@@ -1,37 +1,27 @@
-import React, { useContext, useEffect } from 'react'
-import socketIOClient  from 'socket.io-client'
-import { SocketContext } from '../context/SocketContext'
+import React, { useContext, useEffect } from "react";
+import socketIOClient from "socket.io-client";
+import { SocketContext } from "../context/SocketContext";
 
-interface SocketProp {
+interface SocketProp {}
 
-}
+const Socket: React.FC<SocketProp> = ({ children }: any) => {
+  const { socket, setSocket } = useContext(SocketContext);
 
-const Socket : React.FC<SocketProp> = ({children} : any) => {
-    const {
-        socket,
-        setSocket,
-        socketOpen,
-        setSocketOpen,
-        
-    } = useContext(SocketContext);
-
-    useEffect(() => {
-        if(!socket) {
-            const newSocket = socketIOClient('http://localhost:8000')
-            setSocket(newSocket);
-        }else{
-            socket.on('connection', function(){
-                console.log(socket.id);
-        });
-        socket.on("connect_error", (err) => {
-            console.log(`connect_error due to ${err.message}`);
-          });
+  useEffect(() => {
+    if (!socket) {
+      const newSocket = socketIOClient("http://localhost:8000");
+      setSocket(newSocket);
+    } else {
+      socket.on("connection", function () {
+        console.log(socket.id);
+      });
+      socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
+      });
     }
-    },[socket]);
+  }, [socket]);
 
-    return <>
-        {children}
-    </>
-}
+  return <>{children}</>;
+};
 
 export default Socket;

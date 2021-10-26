@@ -5,14 +5,12 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import WordBox from "./WordBox";
 import { word, Time } from "../views/Game";
-import { wordToRender } from "../types/type"
+import { wordToRender } from "../types/type";
 interface RainProp {
   time: Time;
   handleScore: () => void;
   randomWords: word[];
 }
-
-
 
 const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
   const [words, setWords] = useState<word[]>(randomWords);
@@ -67,7 +65,7 @@ const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
           ];
         });
       }, delay);
-    }, 1000);
+    }, 800);
     if (Inputref) {
       Inputref.current.focus();
     }
