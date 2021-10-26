@@ -34,6 +34,7 @@ app.use((req, res, next) => {
 const MAX_PLAYERS = 5;
 let players: Player[] = [];
 let ROUND = 0;
+const pubChats: Chat[] = [];
 
 app.get("/", (req: Request, res: Response) => {
   res.sendFile(__dirname + "/index.html");
@@ -164,8 +165,9 @@ io.on("connection", (socket: Socket) => {
   );
 
   socket.on("publicChat", function (data: Chat) {
+    if (data) pubChats.push(data);
     // Emit, then setState in Front-end.
-    socket.emit("publicChat", data);
+    socket.emit("onUpdatePublicChat", pubChats);
   });
 
   socket.on("privateChat", function (socketDestId, data: Chat) {

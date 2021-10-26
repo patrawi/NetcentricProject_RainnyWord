@@ -13,13 +13,14 @@ const ChatBox = () => {
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    socket.on("publicChat", function (chat: Chat) {
-      setPubChat([...pubChat, chat]);
+    socket.on("onUpdatePublicChat", function (chats: Chat[]) {
+      console.log(chats);
+      setPubChat(chats);
     });
-    socket.on("privateChat", function (targetSocket, chat: Chat) {
-      setPrivChat([...privChat, chat]);
-    });
-  }, [pubChat, setPubChat, privChat, setPrivChat, user]);
+    // socket.on("privateChat", function (targetSocket, chat: Chat) {
+    //   setPrivChat([...privChat, chat]);
+    // });
+  }, []);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -77,7 +78,7 @@ const ChatBox = () => {
     );
   };
 
-  const handleButtonClick = async () => {
+  const handleButtonClick = () => {
     if (user && message !== "") {
       if (chatMode === true) {
         socket.emit("publicChat", {
@@ -86,11 +87,11 @@ const ChatBox = () => {
           message: message,
         });
       } else {
-        socket.emit("privateChat", {
-          name: user?.name,
-          time: new Date(),
-          message: message,
-        });
+        // socket.emit("privateChat", {
+        //   name: user?.name,
+        //   time: new Date(),
+        //   message: message,
+        // });
       }
       setMessage("");
     }
