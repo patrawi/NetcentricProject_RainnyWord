@@ -167,7 +167,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("publicChat", function (data: Chat) {
     if (data) pubChats.push(data);
     // Emit, then setState in Front-end.
-    socket.emit("onUpdatePublicChat", pubChats);
+    io.emit("onUpdatePublicChat", pubChats);
   });
 
   socket.on("privateChat", function (socketDestId, data: Chat) {

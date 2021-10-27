@@ -14,14 +14,11 @@ import {
 } from "@material-ui/core";
 import { HowToPlayModal } from "../components/HowToPlayModal";
 
-
 import { Link } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
-import { SocketContext } from '../context/SocketContext';
+import { SocketContext } from "../context/SocketContext";
 
-interface HomepageProp {
-    
-}
+interface HomepageProp {}
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -46,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const Homepage: React.FC<HomepageProp> = () => {
   const classes = useStyles();
   const { setUser } = useContext(AppContext);
-  const {socket, addPlayer} = useContext(SocketContext)
+  const { socket, addPlayer } = useContext(SocketContext);
   const [name, setName] = useState<string>("");
   const [openHowToPlay, setOpenHowToPlay] = useState(false);
 
@@ -54,22 +51,21 @@ const Homepage: React.FC<HomepageProp> = () => {
     setName(e.target.value);
   };
   const handleAddPlayer = async () => {
-    console.log("hello from addplayer")
-        // setUser({
-        //     name: name,
-        //     id: socket?.id,
-        //     score: 0,
-        //   });
-        addPlayer(name);
-    }
-  
+    console.log("hello from addplayer");
+    // setUser({
+    //     name: name,
+    //     id: socket?.id,
+    //     score: 0,
+    //   });
+    addPlayer(name);
+  };
 
   return (
     <>
       <Container style={{ width: "50%" }}>
         <Box>
-          <Typography className={classes.title} variant="h1" align="center" >
-            Rainy Word {socket?.id}
+          <Typography className={classes.title} variant="h1" align="center">
+            Rainy Word
           </Typography>
         </Box>
         <Box mt={3} />
@@ -98,7 +94,7 @@ const Homepage: React.FC<HomepageProp> = () => {
                 name: name,
               },
             }}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: "none" }}
           >
             <Button
               variant="contained"
@@ -115,7 +111,6 @@ const Homepage: React.FC<HomepageProp> = () => {
             color="primary"
             size="large"
             onClick={() => setOpenHowToPlay(true)}
-
           >
             How to Play?
           </Button>
@@ -143,5 +138,3 @@ const Homepage: React.FC<HomepageProp> = () => {
 };
 
 export default Homepage;
-
-

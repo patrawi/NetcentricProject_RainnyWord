@@ -9,6 +9,10 @@ export interface AppContextInterface {
   setPubChat: (chat: Chat[]) => void;
   privChat: Chat[];
   setPrivChat: (chat: Chat[]) => void;
+  onBgm: boolean;
+  setOnBgm: (val: boolean) => void;
+  onSfx: boolean;
+  setOnSfx: (val: boolean) => void;
 }
 
 export const AppContext = createContext({} as AppContextInterface);
@@ -20,7 +24,20 @@ const AppContextProvider = ({ ...props }) => {
   });
   const [privChat, setPrivChat] = useState<Chat[]>([]);
   const [pubChat, setPubChat] = useState<Chat[]>([]);
-  const value = { user, setUser, pubChat, setPubChat, privChat, setPrivChat };
+  const [onBgm, setOnBgm] = useState<boolean>(true);
+  const [onSfx, setOnSfx] = useState<boolean>(true);
+  const value = {
+    user,
+    setUser,
+    pubChat,
+    setPubChat,
+    privChat,
+    setPrivChat,
+    onBgm,
+    setOnBgm,
+    onSfx,
+    setOnSfx,
+  };
 
   return <AppContext.Provider value={value} {...props} />;
 };
