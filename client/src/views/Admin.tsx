@@ -1,3 +1,4 @@
+import { Box, Button, Container, CssBaseline, makeStyles, Typography } from '@material-ui/core';
 import axios from 'axios';
 import { stringify } from 'querystring';
 import React, { useState } from 'react';
@@ -5,6 +6,25 @@ import LoginForm, { LoginProps } from '../components/LoginForm';
 
 import {form} from '../types/type';
 
+const useStyles = makeStyles((theme) => ({
+    paper: {
+        marginTop: theme.spacing(8),
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main
+    },
+    form: {
+        width: "100%", // Fix IE 11 issue.
+        marginTop: theme.spacing(3)
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2)
+    }
+}));
 
 export interface AdminProp {
     Login: (details: form) => void;
@@ -17,6 +37,7 @@ const Adminpage : React.FC<AdminProp> = () => {
     const [auth, setAuth] = useState<any>({message: "", status: ""});
     const [start, setStart] = useState<any>({message: "", status: ""})
     const [reset, setReset] = useState<any>({message: "", status: ""})
+    const classes = useStyles();
 
     const adminUser = {
         username: "admin",
@@ -86,12 +107,44 @@ const Adminpage : React.FC<AdminProp> = () => {
     return(
         <div className="Adminpage">
             {(user.username != "") ? (
-                <div className="welcome">
-                    <h2>Welcome, Admin</h2>
-                    <button onClick={Start}> Start</button>
-                    <button onClick={Reset}> Reset</button>
-                    <button onClick={Logout} >Logout</button>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <div className={classes.paper}>
+                    <Typography component="h1" variant="h5">
+                    Admin Sign in
+                    </Typography>
+                    <Box mt={5}>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            onClick={Start}
+                        >
+                            Start
+                        </Button>
+                    </Box>
+                    <Box mt={5}>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            onClick={Reset}
+                        >
+                            Reset
+                        </Button>
+                    </Box>
+                    <Box mt={5}>
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            onClick={Logout}
+                        >
+                            Sign out
+                        </Button>
+                    </Box>
                 </div>
+                </Container>
             ) : (
                 <LoginForm Login={Login} error={error} />
             )}
