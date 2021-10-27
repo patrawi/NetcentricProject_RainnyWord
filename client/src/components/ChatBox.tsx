@@ -1,22 +1,26 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Card, Button, Switch, Input } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { socket } from "../services/Socket";
+import React, { useState, useContext, useEffect, } from "react";
+import { Card, Button, Switch, Input, makeStyles } from "@material-ui/core";
+
 import { AppContext } from "../context/AppContext";
 import { Chat } from "../interfaces/Chat";
 import moment from "moment";
+import { SocketContext } from "../context/SocketContext";
 
 const ChatBox = () => {
   const { user, pubChat, setPubChat, privChat, setPrivChat } =
     useContext(AppContext);
+  const {socket, publicChat} = useContext(SocketContext)
   const [chatMode, setChatMode] = useState(true);
   const [message, setMessage] = useState<string>("");
-
+ 
   useEffect(() => {
-    socket.on("onUpdatePublicChat", function (chats: Chat[]) {
-      console.log(chats);
-      setPubChat(chats);
-    });
+    if(socket) {
+      socket.on("onUpdatePublicChat", function (chats: Chat[]) {
+        console.log(chats);
+        setPubChat(chats);
+      });
+    }
+
     // socket.on("privateChat", function (targetSocket, chat: Chat) {
     //   setPrivChat([...privChat, chat]);
     // });
@@ -79,14 +83,11 @@ const ChatBox = () => {
   };
 
   const handleButtonClick = () => {
-    if (user && message !== "") {
-      if (chatMode === true) {
-        socket.emit("publicChat", {
-          name: user?.name,
-          time: new Date(),
-          message: message,
-        });
-      } else {
+    if (user && message !== "" && socket) {
+      if (chatMode === true) 
+        publicChat(user, message);
+        
+       else {
         // socket.emit("privateChat", {
         //   name: user?.name,
         //   time: new Date(),

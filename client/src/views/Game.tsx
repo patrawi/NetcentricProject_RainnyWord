@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Box, Container, makeStyles, Typography } from "@material-ui/core";
 import Rainpage from "../components/rain";
 import TimerPage from "../components/countdown";
-import { socket } from "../services/Socket";
+ 
 
-import { wordRand, Player } from "../views/Lobby";
+import { wordRand } from "../views/Lobby";
 
 import { Redirect, useLocation } from "react-router-dom";
-import { SportsHockeyTwoTone } from "@material-ui/icons";
-
+import { SocketContext } from '../context/SocketContext';
+import { User } from "../interfaces/User"
 interface GameProp {}
 
 const useStyles = makeStyles((theme) => ({
@@ -35,7 +35,7 @@ export type word = {
 const Gamepage: React.FC<GameProp> = () => {
   const location = useLocation<{
     randWords: wordRand[];
-    individual: Player;
+    individual: User;
   }>();
   const { randWords, individual } = location.state;
   const [time, setTime] = useState<Time>({
@@ -45,7 +45,7 @@ const Gamepage: React.FC<GameProp> = () => {
   const [timeout, setTimeout] = useState(false);
   const [score, setScore] = useState(0);
   const [randomWords, setRandomWords] = useState<word[]>(randWords);
-
+  const {socket, updateLeaderboard} = useContext(SocketContext)
   const increasePoint = () => {
     console.log(score);
     setScore(score + 1);
@@ -59,11 +59,11 @@ const Gamepage: React.FC<GameProp> = () => {
   };
 
   useEffect(() => {
-    if (timeout) {
-      socket.emit("updateLeaderboard", { id: individual.id, score: score });
-      socket.on(" ", (players) => {
-        console.log(players);
-      });
+    if (timeout && socket) {
+      updateLeaderboard(individual)
+      // socket.on(" ", (players) => {
+      //   console.log(players);
+      // });
     }
     handleRandWord();
   }, [randomWords]);

@@ -1,9 +1,9 @@
-import React , {useState} from 'react';
+import React , {useState,  useContext} from 'react';
 import { Container, Typography, Box } from '@material-ui/core';
 import {useLocation} from 'react-router-dom'
 import { useEffect } from 'react';
-import {Player} from '../views/Lobby';
-import { socket} from '../services/Socket';
+import { User } from '../interfaces/User'
+import { SocketContext } from '../context/SocketContext';
 
 interface EndProp {
     
@@ -15,9 +15,9 @@ const Endpage : React.FC<EndProp> = () => {
         id : string
         score : number
     }>();
-    
+    const {socket} = useContext(SocketContext)
     const {id, score} = location.state
-    const [players, setPlayers] = useState<Player[]>([]);
+    const [players, setPlayers] = useState<User[]>([]);
     const first_name = "punlee";
     const first_score = 900;
 
@@ -30,11 +30,7 @@ const Endpage : React.FC<EndProp> = () => {
     const your_score = 555;
 
     const handlePlayer = async () => {
-        const newPlayers = await socket.on("updatePlayerList", (players) => {
-            setPlayers(players);
-        })
-        console.log(newPlayers);
-        console.log(players);
+
     }
     useEffect(() => {
         console.log(id, score);
