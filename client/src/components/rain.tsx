@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { Box, TextField, Theme } from "@material-ui/core";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -6,6 +6,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import WordBox from "./WordBox";
 import { word, Time } from "../views/Game";
 import { wordToRender } from "../types/type";
+import { AppContext } from "../context/AppContext";
+import { useSound } from "use-sound";
+//@ts-ignore
+import PopSfx from "../asset/sfx/sfx_pop.mp3";
 interface RainProp {
   time: Time;
   handleScore: (length: number) => void;
@@ -20,6 +24,9 @@ const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
   const [answer, setAnswer] = useState("");
   const Inputref = useRef() as React.MutableRefObject<HTMLDivElement>;
   let counter = 0;
+  const { onSfx } = useContext(AppContext);
+  const [play] = useSound(PopSfx);
+
   const handleAnswer = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswer(e.target.value);
   };
@@ -72,6 +79,13 @@ const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
     return () => clearInterval(loop);
   }, [words]);
 
+  const handleKeyboardPress = (e: React.KeyboardEvent) => {
+    if (onSfx === true) play();
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   return (
     <>
       <Box>
@@ -102,11 +116,14 @@ const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
             handleAnswer(e);
           }}
           ref={Inputref}
-          onKeyPress={(e) => {
-            if (e.key === "Enter") {
-              handleSubmit(e);
-            }
-          }}
+          onKeyPress={
+            (e) => handleKeyboardPress(e)
+            //   (e) => {
+            //   if (e.key === "Enter") {
+            //     handleSubmit(e);
+            //   }
+            // }
+          }
           fullWidth
           autoFocus
         />

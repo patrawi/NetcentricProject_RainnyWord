@@ -8,14 +8,11 @@ import {
 } from "@material-ui/core";
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { AppContext } from "../context/AppContext";
-//@ts-ignore
-import LobbySfx from "../asset/bgm/bgm_lobby.mp3";
-import useSound from "use-sound";
 import MusicNoteIcon from "@material-ui/icons/MusicNote";
 import MusicOffIcon from "@material-ui/icons/MusicOff";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
+import { AppContext } from "../context/AppContext";
 interface NavbarProp {
   handleToggleDark: () => void;
 }
@@ -56,7 +53,6 @@ const Navbarpage: React.FC<NavbarProp> = ({ handleToggleDark }) => {
           >
             {isDarkMode ? <Brightness2Icon /> : <Brightness7Icon />}
           </IconButton>
-          {/* <Button onClick={handleToggleDark}>Dark mode</Button> */}
           <IconButton
             aria-label="Toggle Background Music"
             className={classes.button}

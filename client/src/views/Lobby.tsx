@@ -1,11 +1,15 @@
-import { Container } from "@material-ui/core";
 import React, { useEffect, useState, useContext } from "react";
+import { Container } from "@material-ui/core";
 import TimerPage from "../components/countdown";
 import { SocketContext } from "../context/SocketContext";
 import { Redirect, useLocation } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
 import { User } from "../interfaces/User";
-import {AppContext} from '../context/AppContext';
+//@ts-ignore
+import LobbyBgm from "../asset/bgm/bgm_lobby.mp3";
+import { useSound } from "use-sound";
+import { AppContext } from "../context/AppContext";
+
 interface LobbyProp {}
 
 export type wordRand = {
@@ -23,6 +27,8 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   const [individual, setIndividual] = useState<User>();
   const [time, setTime] = useState(false);
   const { name } = location.state;
+  const { onBgm } = useContext(AppContext);
+  const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
 
   const { socket } = useContext(SocketContext);
   const handlePlayer = () => {
@@ -75,6 +81,12 @@ const Lobbypage: React.FC<LobbyProp> = () => {
       });
     }
   }, [players]);
+
+  useEffect(() => {
+    console.log(onBgm);
+    if (onBgm) play();
+    else stop();
+  }, [onBgm, play, stop]);
 
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
