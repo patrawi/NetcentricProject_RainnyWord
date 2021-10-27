@@ -68,7 +68,7 @@ const Homepage: React.FC<HomepageProp> = () => {
     <>
       <Container style={{ width: "50%" }}>
         <Box>
-          <Typography className={classes.title} variant="h1" align="center">
+          <Typography className={classes.title} variant="h1" align="center" >
             Rainy Word {socket?.id}
           </Typography>
         </Box>

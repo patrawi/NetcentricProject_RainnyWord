@@ -10,8 +10,7 @@ const Socket : React.FC<SocketProp> = ({children} : any) => {
     const {
         socket,
         setSocket,
-        socketOpen,
-        setSocketOpen,
+
         
     } = useContext(SocketContext);
 

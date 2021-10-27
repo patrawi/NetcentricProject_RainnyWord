@@ -25,7 +25,7 @@ function App() {
       },
       secondary : {
         main : "#465FB6"
-      }
+      },
 
     }
   })
@@ -35,10 +35,11 @@ function App() {
         default: "#242B2C"
       },
       text : {
-        primary : "#ffffff"
+        primary : "#ffffff",
       },
       secondary : {
         main : "#465FB6"
+
       },
       primary : {
         main : "#E02B31"
