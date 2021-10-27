@@ -5,7 +5,7 @@ import { SocketContext } from "../context/SocketContext";
 import { Redirect, useLocation } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
 import { User } from "../interfaces/User";
-
+import {AppContext} from '../context/AppContext';
 interface LobbyProp {}
 
 export type wordRand = {
@@ -17,7 +17,7 @@ let Arrplayers: User[] = [];
 const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
   const [randWords, setRandWords] = useState<wordRand[]>([]);
-  const [players, setPlayers] = useState<User[]>(Arrplayers);
+  const {setPlayers, players} = useContext(AppContext)
   const [redirectNow, setRedirectNow] = useState(false);
   const location = useLocation<{ name: string }>();
   const [individual, setIndividual] = useState<User>();
@@ -28,10 +28,15 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   const handlePlayer = () => {
     if (socket) {
       socket.on("updatePlayerList", (players) => {
-        setPlayers(players);
-        setIndividual(() => {
-          return players.find((player: User) => player.name === name);
-        });
+        if(players) {
+          setPlayers(players);
+          console.log(players);
+          setIndividual(() => {
+            return players.find((player: User) => player.name === name);
+          });
+        }
+  
+     
       });
     }
   };

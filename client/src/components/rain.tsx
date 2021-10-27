@@ -8,7 +8,7 @@ import { word, Time } from "../views/Game";
 import { wordToRender } from "../types/type";
 interface RainProp {
   time: Time;
-  handleScore: () => void;
+  handleScore: (length: number) => void;
   randomWords: word[];
 }
 
@@ -33,7 +33,7 @@ const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
             newWordToRender.push(oldword);
           } else {
             newWordToRender.push({ ...oldword, destroyed: true });
-            handleScore();
+            handleScore(oldword.word.length);
           }
         } else {
           newWordToRender.push(oldword);
@@ -46,7 +46,7 @@ const Rainpage: React.FC<RainProp> = ({ time, handleScore, randomWords }) => {
   };
 
   useEffect(() => {
-    console.log("hello from rainComponent");
+
     const size = words.length;
     const loop = setInterval(() => {
       const delay = Math.floor(Math.random() * 100) + 100;

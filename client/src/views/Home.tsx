@@ -46,17 +46,20 @@ const Homepage: React.FC<HomepageProp> = () => {
   const { socket, addPlayer } = useContext(SocketContext);
   const [name, setName] = useState<string>("");
   const [openHowToPlay, setOpenHowToPlay] = useState(false);
-
+  
   const changeNameHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
   const handleAddPlayer = async () => {
     console.log("hello from addplayer");
-    // setUser({
-    //     name: name,
-    //     id: socket?.id,
-    //     score: 0,
-    //   });
+    if(socket) {
+      setUser({
+        name: name,
+        id: socket.id,
+        score: 0,
+      });
+    }
+
     addPlayer(name);
   };
 

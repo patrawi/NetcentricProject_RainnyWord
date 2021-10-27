@@ -164,6 +164,10 @@ io.on("connection", (socket: Socket) => {
     }
   );
 
+  socket.on("leaderboardEnd", function() {
+    io.emit("updateLeaderboardEnd", players)
+  });
+
   socket.on("publicChat", function (data: Chat) {
     if (data) pubChats.push(data);
     // Emit, then setState in Front-end.
