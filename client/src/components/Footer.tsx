@@ -1,6 +1,5 @@
-import { Toolbar, AppBar, makeStyles } from "@material-ui/core";
-
 import React from "react";
+import { Toolbar, AppBar, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -11,23 +10,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Footerpage = () => {
+  const classes = useStyles();
 
-
-interface FooterProp {
-
-}
-
-const Footerpage : React.FC<FooterProp> = () => {
-    const classes = useStyles();
-return (
-   <>
-       <AppBar position="fixed" className = {classes.footer} color = "secondary">
-           <Toolbar />
-       </AppBar>
-   </>
-)
-
-}
-
+  return (
+    <>
+      <AppBar position="fixed" className={classes.footer} color="secondary">
+        <Toolbar />
+      </AppBar>
+    </>
+  );
+};
 
 export default Footerpage;

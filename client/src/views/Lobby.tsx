@@ -5,6 +5,7 @@ import { SocketContext } from "../context/SocketContext";
 import { Redirect, useLocation } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
 import { User } from "../interfaces/User";
+
 interface LobbyProp {}
 
 export type wordRand = {
@@ -22,6 +23,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   const [individual, setIndividual] = useState<User>();
   const [time, setTime] = useState(false);
   const { name } = location.state;
+
   const { socket } = useContext(SocketContext);
   const handlePlayer = () => {
     if (socket) {
@@ -59,6 +61,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
       />
     );
   };
+
   useEffect(() => {
     handlePlayer();
     if (socket) {
@@ -67,6 +70,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
       });
     }
   }, [players]);
+
   return (
     <div style={{ display: "flex", flexDirection: "row" }}>
       {redirectNow ? (
