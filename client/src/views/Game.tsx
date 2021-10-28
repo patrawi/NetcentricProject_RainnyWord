@@ -37,7 +37,7 @@ const Gamepage = () => {
   const location = useLocation<{
     randWords: wordRand[];
   }>();
-  const { user, setUser, setPlayers, players } = useContext(AppContext);
+  const { user, setUser, setPlayers, players, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
   const [time, setTime] = useState<Time>({
     initialMinute: 0,
@@ -61,13 +61,13 @@ const Gamepage = () => {
   }, [user]);
 
   const increasePoint = (length: number) => {
-    playCombo();
+    if (onSfx) playCombo();
     setUser({ ...user, score: user.score + length * 100 });
     setCorrectPitch(correctPitch + 0.1);
   };
 
   const decreasePoint = (length: number) => {
-    playBoom();
+    if (onSfx) playBoom();
     setUser({ ...user, score: user.score - length * 100 });
   };
   const handleTimeout = () => {
