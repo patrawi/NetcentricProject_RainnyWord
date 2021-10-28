@@ -11,6 +11,7 @@ import useSound from "use-sound";
 import BoomSfx from "../asset/sfx/sfx_boom.mp3";
 //@ts-ignore
 import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
+import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -53,6 +54,9 @@ const Gamepage = () => {
     volume: 0.1,
     playbackRate: correctPitch,
   });
+  const [playStreak] = useSound(StreakSfx, {
+    volume: 0.1,
+  });
 
   useEffect(() => {
     if (user) {
@@ -64,6 +68,7 @@ const Gamepage = () => {
     if (onSfx) playCombo();
     setUser({ ...user, score: user.score + length * 100 });
     setCorrectPitch(correctPitch + 0.1);
+    console.log(correctPitch);
   };
 
   const decreasePoint = (length: number) => {
