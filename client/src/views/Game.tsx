@@ -6,6 +6,11 @@ import { AppContext } from "../context/AppContext";
 import { wordRand } from "../views/Lobby";
 import { Redirect, useLocation } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
+import useSound from "use-sound";
+//@ts-ignore
+import BoomSfx from "../asset/sfx/sfx_boom.mp3";
+//@ts-ignore
+import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -42,6 +47,13 @@ const Gamepage = () => {
   const [randomWords, setRandomWords] = useState<word[]>(randWords);
   const { socket, updateLeaderboard } = useContext(SocketContext);
 
+  const [correctPitch, setCorrectPitch] = useState(0);
+  const [playBoom] = useSound(BoomSfx);
+  const [playCombo] = useSound(CorrectSfx, {
+    volume: 0.1,
+    playbackRate: correctPitch,
+  });
+
   useEffect(() => {
     if (user) {
       updateLeaderboard(user);
@@ -49,10 +61,13 @@ const Gamepage = () => {
   }, [user]);
 
   const increasePoint = (length: number) => {
+    playCombo();
     setUser({ ...user, score: user.score + length * 100 });
+    setCorrectPitch(correctPitch + 0.1);
   };
 
   const decreasePoint = (length: number) => {
+    playBoom();
     setUser({ ...user, score: user.score - length * 100 });
   };
   const handleTimeout = () => {
