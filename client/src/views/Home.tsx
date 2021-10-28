@@ -14,7 +14,7 @@ import {
 } from "@material-ui/core";
 import { HowToPlayModal } from "../components/HowToPlayModal";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
 
@@ -42,26 +42,40 @@ const useStyles = makeStyles((theme) => ({
 
 const Homepage: React.FC<HomepageProp> = () => {
   const classes = useStyles();
-  const { setUser } = useContext(AppContext);
-  const { socket, addPlayer } = useContext(SocketContext);
+  const { setUser, players } = useContext(AppContext);
+  const { socket, addPlayer, updatePlayerlist } = useContext(SocketContext);
   const [name, setName] = useState<string>("");
   const [openHowToPlay, setOpenHowToPlay] = useState(false);
-
+  const [helperText, setHelperText] = useState('');
+  let history = useHistory();
   const changeNameHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
-  const handleAddPlayer = async () => {
+  const handleAddPlayer =  () => {
+    if(name === '') {
+       setHelperText('Please enter your name')
+    } 
+      
     if (socket) {
-      setUser({
-        name: name,
-        id: socket.id,
-        score: 0,
-      });
+        setUser({
+          name: name,
+          id: socket.id,
+          score: 0,
+        });
+      }
+  
+      addPlayer(name);
+    
+      history.push({
+        pathname : '/lobby',
+        state : {
+          name
+        }
+      })
     }
-
-    addPlayer(name);
-  };
-
+  
+  
+  
   return (
     <>
       <Container style={{ width: "50%" }}>
@@ -83,21 +97,14 @@ const Homepage: React.FC<HomepageProp> = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 changeNameHandle(e);
               }}
+              helperText = {helperText}
               fullWidth
             />
           </CardActions>
         </Card>
 
         <Box className={classes.activeBtn}>
-          <Link
-            to={{
-              pathname: "/Lobby",
-              state: {
-                name: name,
-              },
-            }}
-            style={{ textDecoration: "none" }}
-          >
+ 
             <Button
               variant="contained"
               color="primary"
@@ -106,7 +113,7 @@ const Homepage: React.FC<HomepageProp> = () => {
             >
               Connect
             </Button>
-          </Link>
+        
 
           <Button
             variant="contained"

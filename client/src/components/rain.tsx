@@ -101,6 +101,7 @@ const Rainpage: React.FC<RainProp> = ({
 
   return (
     <>
+      
       <Box>
         {wordToRender.map(({ word, location, id, destroyed, dangerWord }) => {
           const handleWordToRender = () => {

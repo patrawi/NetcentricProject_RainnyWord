@@ -17,7 +17,6 @@ const useStyles = makeStyles<Theme>((theme) => ({
     rain : {
         position : 'fixed',
         top : "20vh",
-        transform : "translateY(0vh)",
         animation :  `$fall 4s linear`,
         color : "black",
 
@@ -25,16 +24,19 @@ const useStyles = makeStyles<Theme>((theme) => ({
     dangerWord : {
         position : 'fixed',
         top : "20vh",
-        transform : "translateY(0vh)",
         animation :  `$fall 4s linear`,
         color : "red",
     },
     "@keyframes fall" : {
+        "from" :{
+            transform : "translateY(0vh)",
+        },
         "to" : {
-            transform : "translateY(105vh)"
+            transform : "translateY(70vh)"
         }
     },
     hidden : {
+        display : 'none',
         opacity : 0
     }
 
@@ -42,25 +44,24 @@ const useStyles = makeStyles<Theme>((theme) => ({
 
 const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropped, dangerWord}) => {
     const classes = useStyles();
-    const [destroy, setDestroyed] = useState(destroyed);
     const boxRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
        
           setTimeout(() => {    
-            setDestroyed(true);
+          
             onDropped();
     },4000)
 
-    },[destroy])
+    },[])
 
     if(dangerWord) {
         return (
             <>  
-            {!destroyed? 
-              <div ref = {boxRef} className = {!destroy ?  classes.dangerWord : classes.hidden } style= {{left : location}}>
+          
+              <div ref = {boxRef} className = {!destroyed ?  classes.dangerWord : classes.hidden } style= {{left : location}}>
               <Typography variant = "h6">{word}</Typography>
-          </div> : null
-            }
+          </div>
+            
               
         
             
@@ -69,11 +70,11 @@ const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropp
     }
     return (
         <>  
-            {!destroyed? 
-              <div ref = {boxRef} className = {!destroy ?  classes.rain : classes.hidden } style= {{left : location}}>
+            
+              <div ref = {boxRef} className = {!destroyed ?  classes.rain : classes.hidden } style= {{left : location}}>
               <Typography variant = "h6">{word}</Typography>
-          </div> : null
-            }
+          </div> 
+            
               
         
             

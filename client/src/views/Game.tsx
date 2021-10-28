@@ -12,6 +12,7 @@ import BoomSfx from "../asset/sfx/sfx_boom.mp3";
 //@ts-ignore
 import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 
+
 const useStyles = makeStyles((theme) => ({
   root: {},
   answerBox: {
@@ -75,13 +76,7 @@ const Gamepage = () => {
   };
 
   const handleRedirect = () => {
-    if (socket) {
-      socket.emit("leaderboardEnd", () => {
-        socket.on("updateLeaderboardEnd", (players) => {
-          // setPlayers(players);
-        });
-      });
-    }
+
     return (
       <Redirect
         to={{
@@ -101,6 +96,7 @@ const Gamepage = () => {
         handleRedirect()
       ) : ( */}
       <Container>
+   
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <TimerPage
             initialMinute={time.initialMinute}
@@ -119,6 +115,7 @@ const Gamepage = () => {
           handleDecreaseScore={decreasePoint}
         />
       </Container>
+      {/* )}; */}
     </>
   );
 };
