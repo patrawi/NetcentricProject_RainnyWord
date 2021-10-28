@@ -134,7 +134,7 @@ const Adminpage: React.FC<AdminProp> = () => {
           <CssBaseline />
           <div className={classes.paper}>
             <Typography component="h1" variant="h5">
-              Admin Sign in
+              Welcome, Admin
             </Typography>
             <Box mt={5}>
               <Button
