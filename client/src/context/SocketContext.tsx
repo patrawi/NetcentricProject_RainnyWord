@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react'
-import { Socket } from 'socket.io-client';
+import { Socket, io} from 'socket.io-client';
 import { Chat } from '../interfaces/Chat';
 import {User} from '../interfaces/User'
 
@@ -26,6 +26,7 @@ const SocketContextProvider = ({ ...props }) => {
     
   };
   const updateLeaderboard = (user: User) => {
+    console.log(user);
     if(socket)  socket.emit("updateLeaderboard", { id: user.id, score: user.score });
   }
 

@@ -39,7 +39,7 @@ const Gamepage: React.FC<GameProp> = () => {
   } = location.state;
   const [time, setTime] = useState<Time>({
     initialMinute: 0,
-    initialSeconds: 20,
+    initialSeconds: 10,
   });
   const [timeout, setTimeout] = useState(false);
   const [randomWords, setRandomWords] = useState<word[]>(randWords);
@@ -54,7 +54,14 @@ const Gamepage: React.FC<GameProp> = () => {
     };
     
 
-
+  const decreasePoint = (length : number) => {
+    const scoredUser = {
+      name: user.name,
+      id: user.id,
+      score: user.score - length * 100
+    }
+    setUser(scoredUser)
+  }
   const handleTimeout = () => {
     setTimeout(true);
   };
@@ -62,11 +69,12 @@ const Gamepage: React.FC<GameProp> = () => {
   const handleRedirect = () => {
     if(socket) {
       socket.emit("leaderboardEnd", () => {
-        const players = socket.on("updateLeaderboardEnd",(players) => {
-            setPlayers(players);
+      socket.on("updateLeaderboardEnd",(players) => {
+            console.log(players);
+            // setPlayers(players);
         })
       })
-      console.log(players)
+      
     }
     return (
        
@@ -84,15 +92,15 @@ const Gamepage: React.FC<GameProp> = () => {
 
   useEffect(() => {
     if (timeout && socket) {
-      updateLeaderboard(user)
+      // updateLeaderboard(user)
     }
  
   }, [randomWords]);
   return (
     <>
-      {timeout ? (
+      {/* {timeout ? (
         handleRedirect()
-      ) : (
+      ) : ( */}
         <Container>
           <Box
             display="flex"
@@ -113,9 +121,10 @@ const Gamepage: React.FC<GameProp> = () => {
             time={time}
             handleScore={increasePoint}
             randomWords={randomWords}
+            handleDecreaseScore = {decreasePoint}
           />
         </Container>
-      )}
+      
     </>
   );
 };

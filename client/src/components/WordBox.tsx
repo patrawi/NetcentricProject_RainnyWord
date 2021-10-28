@@ -7,6 +7,7 @@ interface WordBoxProp {
     location : string
     destroyed : boolean
     onDropped : () => void
+    dangerWord : boolean
 }
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -21,6 +22,13 @@ const useStyles = makeStyles<Theme>((theme) => ({
         color : "black",
 
     },
+    dangerWord : {
+        position : 'fixed',
+        top : "20vh",
+        transform : "translateY(0vh)",
+        animation :  `$fall 4s linear`,
+        color : "red",
+    },
     "@keyframes fall" : {
         "to" : {
             transform : "translateY(105vh)"
@@ -32,7 +40,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
 
 }));
 
-const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropped}) => {
+const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropped, dangerWord}) => {
     const classes = useStyles();
     const [destroy, setDestroyed] = useState(destroyed);
     const boxRef = useRef<HTMLDivElement>(null);
@@ -44,6 +52,21 @@ const WordBoxPage : React.FC<WordBoxProp> = ({word, location, destroyed, onDropp
     },4000)
 
     },[destroy])
+
+    if(dangerWord) {
+        return (
+            <>  
+            {!destroyed? 
+              <div ref = {boxRef} className = {!destroy ?  classes.dangerWord : classes.hidden } style= {{left : location}}>
+              <Typography variant = "h6">{word}</Typography>
+          </div> : null
+            }
+              
+        
+            
+        </>
+        )
+    }
     return (
         <>  
             {!destroyed? 

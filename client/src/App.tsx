@@ -17,6 +17,13 @@ function App() {
   const [toggleDark, setToggleDark] = useState(false);
 
   const themeLight = createTheme({
+    typography : {
+      fontFamily : [
+        'Bebas Neue',
+        'cursive',
+      ].join(',')
+    },
+
     palette: {
       background: {
         default: "#DDDAE1",
@@ -24,10 +31,19 @@ function App() {
       secondary : {
         main : "#465FB6"
       },
+     
 
+
+      
     }
   })
   const themeDark = createTheme({
+    typography : {
+      fontFamily :  [
+        'Zen Kurenaido',
+        'sans-serif',
+      ].join(',')
+    },
     palette: {
       background: {
         default: "#242B2C",

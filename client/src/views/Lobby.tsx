@@ -61,7 +61,9 @@ const Lobbypage: React.FC<LobbyProp> = () => {
     }
 
     setTimeout(() => {
+
       setRedirectNow(true);
+      stop();
     }, 10000);
 
     return (

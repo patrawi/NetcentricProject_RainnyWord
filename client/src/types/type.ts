@@ -3,6 +3,7 @@ export type wordToRender = {
     word: string;
     location: string;
     destroyed: boolean;
+    dangerWord : boolean;
   };
 
   export type form = {
