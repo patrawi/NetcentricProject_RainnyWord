@@ -13,6 +13,8 @@ import BoomSfx from "../asset/sfx/sfx_boom.mp3";
 import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 //@ts-ignore
 import StreakSfx from "../asset/sfx/sfx_streak.mp3";
+//@ts-ignore
+import LobbyBgm from "../asset/bgm/bgm_game.mp3";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -48,8 +50,9 @@ const Gamepage = () => {
   const [timeout, setTimeout] = useState(false);
   const [randomWords, setRandomWords] = useState<word[]>(randWords);
   const { socket, updateLeaderboard } = useContext(SocketContext);
-
   const [correctPitch, setCorrectPitch] = useState(0.8);
+  const { onBgm } = useContext(AppContext);
+  const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
   const [playBoom] = useSound(BoomSfx);
   const [playCombo] = useSound(CorrectSfx, {
     volume: 0.1,
@@ -65,6 +68,11 @@ const Gamepage = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (onBgm) play();
+    else stop();
+  }, [onBgm, play, stop]);
+
   const increasePoint = (length: number) => {
     if (onSfx) {
       if (correctPitch < 1.3) {
@@ -75,7 +83,6 @@ const Gamepage = () => {
     }
     setUser({ ...user, score: user.score + length * 100 });
     setCorrectPitch(correctPitch + 0.1);
-    console.log(correctPitch);
   };
 
   const decreasePoint = (length: number) => {
