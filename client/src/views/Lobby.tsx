@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Container } from "@material-ui/core";
 import TimerPage from "../components/countdown";
 import { SocketContext } from "../context/SocketContext";
 import { Redirect, useLocation } from "react-router-dom";
@@ -9,6 +8,19 @@ import { User } from "../interfaces/User";
 import LobbyBgm from "../asset/bgm/bgm_lobby.mp3";
 import { useSound } from "use-sound";
 import { AppContext } from "../context/AppContext";
+import {
+  makeStyles,
+  Container,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+  TextField,
+  Fade,
+  Modal,
+} from "@material-ui/core";
 
 interface LobbyProp {}
 
@@ -16,6 +28,7 @@ export type wordRand = {
   word: string;
   key: number;
 };
+
 
 let Arrplayers: User[] = [];
 const Lobbypage: React.FC<LobbyProp> = () => {
@@ -86,6 +99,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   }, [onBgm, play, stop]);
 
   return (
+	<>
     <div style={{ display: "flex", flexDirection: "row" }}>
       {redirectNow ? (
         <Redirect
@@ -99,6 +113,15 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         />
       ) : (
         <Container>
+		  <Container maxWidth="xs"> 
+              <Typography variant="h4" style={{ backgroundColor:"#FFB800", padding:"1em" }} align="center" gutterBottom>
+                   Lobby
+              </Typography>
+		  </Container>
+		  <Typography variant="h4" align="center">
+			Welcome "{name}"
+		  </Typography>
+
           {check ? countdownTimer() : null}
           {players.map((player) => {
             return <div key={player.id}>{player.name}</div>;
@@ -107,6 +130,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
       )}
       <ChatBox />
     </div>
+	</>
   );
 };
 
