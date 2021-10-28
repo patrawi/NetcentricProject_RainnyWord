@@ -17,43 +17,32 @@ function App() {
   const [toggleDark, setToggleDark] = useState(false);
 
   const themeLight = createTheme({
-    typography : {
-      fontFamily : [
-        'Bebas Neue',
-        'cursive',
-      ].join(',')
+    typography: {
+      fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
 
     palette: {
       background: {
         default: "#DDDAE1",
       },
-      secondary : {
-        main : "#465FB6"
+      secondary: {
+        main: "#465FB6",
       },
-     
-
-
-      
-    }
-  })
+    },
+  });
   const themeDark = createTheme({
-    typography : {
-      fontFamily :  [
-        'Zen Kurenaido',
-        'sans-serif',
-      ].join(',')
+    typography: {
+      fontFamily: ["Zen Kurenaido", "sans-serif"].join(","),
     },
     palette: {
       background: {
         default: "#242B2C",
       },
-      text : {
-        primary : "#ffffff",
+      text: {
+        primary: "#ffffff",
       },
-      secondary : {
-        main : "#465FB6"
-
+      secondary: {
+        main: "#465FB6",
       },
       primary: {
         main: "#E02B31",

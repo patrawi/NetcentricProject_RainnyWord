@@ -21,7 +21,7 @@ let Arrplayers: User[] = [];
 const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
   const [randWords, setRandWords] = useState<wordRand[]>([]);
-  const {setPlayers, players} = useContext(AppContext)
+  const { setPlayers, players } = useContext(AppContext);
   const [redirectNow, setRedirectNow] = useState(false);
   const location = useLocation<{ name: string }>();
   const [individual, setIndividual] = useState<User>();
@@ -34,15 +34,12 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   const handlePlayer = () => {
     if (socket) {
       socket.on("updatePlayerList", (players) => {
-        if(players) {
+        if (players) {
           setPlayers(players);
-          console.log(players);
           setIndividual(() => {
             return players.find((player: User) => player.name === name);
           });
         }
-  
-     
       });
     }
   };
@@ -61,7 +58,6 @@ const Lobbypage: React.FC<LobbyProp> = () => {
     }
 
     setTimeout(() => {
-
       setRedirectNow(true);
       stop();
     }, 10000);
@@ -85,7 +81,6 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   }, [players]);
 
   useEffect(() => {
-    console.log(onBgm);
     if (onBgm) play();
     else stop();
   }, [onBgm, play, stop]);

@@ -156,18 +156,14 @@ io.on("connection", (socket: Socket) => {
   // Game is not start until admin press start.
   io.emit("gameStart", false);
 
-  //FIXME: Empty array bug.
-  socket.on(
-    "updateLeaderboard",
-    function (data: { id: string; score: number }) {
-      players = updateLeaderboard(players, data.id, data.score);
+  socket.on("updateLeaderboard", function (targetUser: Player) {
+    console.log(targetUser);
+    players = updateLeaderboard(players, targetUser);
+    io.emit("updatePlayerList", players);
+  });
 
-      io.emit("updatePlayerList", players);
-    }
-  );
-
-  socket.on("leaderboardEnd", function() {
-    io.emit("updateLeaderboardEnd", players)
+  socket.on("leaderboardEnd", function () {
+    io.emit("updateLeaderboardEnd", players);
   });
 
   socket.on("publicChat", function (data: Chat) {

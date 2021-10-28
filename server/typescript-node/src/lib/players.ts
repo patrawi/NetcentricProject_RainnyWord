@@ -24,24 +24,15 @@ export function removePlayers(players: Player[], id: string) {
 
   return updatedPlayers;
 }
-export function updateLeaderboard(
-  players: Player[],
-  id: string,
-  score: number
-) {
-  console.log(id, score, players)
-  
+export function updateLeaderboard(players: Player[], targetUser: Player) {
   players.forEach((player) => {
-    if (player.id === id) player.score += score;
+    if (player.id === targetUser.id) player.score = targetUser.score;
   });
-
   const updatedLeaderboard = sortLeaderboard(players);
-
   return updatedLeaderboard;
 }
 
 export function sortLeaderboard(players: Player[]) {
-  
   const leaderboard = players;
   leaderboard
     .sort(function (a, b) {
