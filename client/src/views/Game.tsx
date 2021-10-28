@@ -47,7 +47,7 @@ const Gamepage = () => {
   const [randomWords, setRandomWords] = useState<word[]>(randWords);
   const { socket, updateLeaderboard } = useContext(SocketContext);
 
-  const [correctPitch, setCorrectPitch] = useState(0);
+  const [correctPitch, setCorrectPitch] = useState(0.8);
   const [playBoom] = useSound(BoomSfx);
   const [playCombo] = useSound(CorrectSfx, {
     volume: 0.1,
