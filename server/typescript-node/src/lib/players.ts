@@ -1,19 +1,5 @@
 import { Player } from "../interfaces/player.interface";
 
-export function addPlayer(
-  updatedPlayers: Player[],
-  name: string,
-  socketId: string
-) {
-  updatedPlayers.push({
-    name: name,
-    score: 0,
-    id: socketId,
-  });
-  console.log(`${name} is connected. Total of ${updatedPlayers.length}`);
-  return updatedPlayers;
-}
-
 export function removePlayers(players: Player[], id: string) {
   const updatedPlayers = players.filter((player) => {
     if (player.id !== id) console.log(`${player.name} has been removed.`);

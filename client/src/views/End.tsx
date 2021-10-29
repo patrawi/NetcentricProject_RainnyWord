@@ -1,25 +1,23 @@
-import React , {useState,  useContext} from 'react';
-import { Container, Typography, Box } from '@material-ui/core';
-import {useLocation} from 'react-router-dom'
-import { useEffect } from 'react';
-import { User } from '../interfaces/User'
-import { SocketContext } from '../context/SocketContext';
-import {AppContext} from '../context/AppContext';
+import React, { useState, useContext } from "react";
+import { Container, Typography, Box } from "@material-ui/core";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { User } from "../interfaces/User";
+import { SocketContext } from "../context/SocketContext";
+import { AppContext } from "../context/AppContext";
 
 const Endpage = () => {
-    const {socket, playerList, updatePlayerlist} = useContext(SocketContext)
-    const {user, players} = useContext(AppContext);
+  const { socket, updatePlayerList } = useContext(SocketContext);
+  const { user, players } = useContext(AppContext);
 
-  const handlePlayer = () => {
-
-  };
-    useEffect(() => {
-        handlePlayer();
-    },[])
-    return (
-        <React.Fragment>
-            <div>Yike</div>
-            {/* <Container maxWidth="sm">
+  const handlePlayer = () => {};
+  useEffect(() => {
+    handlePlayer();
+  }, []);
+  return (
+    <React.Fragment>
+      <div>Yike</div>
+      {/* <Container maxWidth="sm">
                 <Box sx={{ mt: 12}}>
                     <span>{players[0]?.score}</span>
                     <Typography variant="h4" component="h1" style={{ backgroundColor:"#FFB800", padding:"1em" }} align="center" gutterBottom>
@@ -51,11 +49,8 @@ const Endpage = () => {
                     </Typography>
                 </Box>
             </Container> */}
-        </React.Fragment>
-
-    )
-
-}
-
+    </React.Fragment>
+  );
+};
 
 export default Endpage;

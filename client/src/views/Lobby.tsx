@@ -1,26 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import TimerPage from "../components/countdown";
 import { SocketContext } from "../context/SocketContext";
-import { Redirect, useLocation } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
-import { User } from "../interfaces/User";
 //@ts-ignore
 import LobbyBgm from "../asset/bgm/bgm_lobby.mp3";
 import { useSound } from "use-sound";
 import { AppContext } from "../context/AppContext";
-import {
-  makeStyles,
-  Container,
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  TextField,
-  Fade,
-  Modal,
-} from "@material-ui/core";
+import { makeStyles, Container, Typography } from "@material-ui/core";
 
 interface LobbyProp {}
 
@@ -29,33 +16,17 @@ export type wordRand = {
   key: number;
 };
 
-
-let Arrplayers: User[] = [];
 const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
   const [randWords, setRandWords] = useState<wordRand[]>([]);
-  const { setPlayers, players } = useContext(AppContext);
+  const { user, players, onBgm } = useContext(AppContext);
   const [redirectNow, setRedirectNow] = useState(false);
-  const location = useLocation<{ name: string }>();
-  const [individual, setIndividual] = useState<User>();
   const [time, setTime] = useState(false);
-  const { name } = location.state;
-  const { onBgm } = useContext(AppContext);
+  const { updatePlayerList } = useContext(SocketContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
 
   const { socket } = useContext(SocketContext);
-  const handlePlayer = () => {
-    if (socket) {
-      socket.on("updatePlayerList", (players) => {
-        if (players) {
-          setPlayers(players);
-          setIndividual(() => {
-            return players.find((player: User) => player.name === name);
-          });
-        }
-      });
-    }
-  };
+
   const handleTimeout = () => {
     setTime(true);
   };
@@ -85,7 +56,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   };
 
   useEffect(() => {
-    handlePlayer();
+    updatePlayerList();
     if (socket) {
       socket.on("startWaitingRoomTimer", function (isGameStart) {
         setCheck(true);
@@ -94,43 +65,47 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   }, [players]);
 
   useEffect(() => {
-    if (onBgm) play();
-    else stop();
+    // if (onBgm) play();
+    // else stop();
   }, [onBgm, play, stop]);
 
   return (
-	<>
-    <div style={{ display: "flex", flexDirection: "row" }}>
-      {redirectNow ? (
-        <Redirect
-          to={{
-            pathname: "/Game",
-            state: {
-              randWords,
-              individual,
-            },
-          }}
-        />
-      ) : (
-        <Container>
-		  <Container maxWidth="xs"> 
-              <Typography variant="h4" style={{ backgroundColor:"#FFB800", padding:"1em" }} align="center" gutterBottom>
-                   Lobby
+    <>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        {redirectNow ? (
+          <Redirect
+            to={{
+              pathname: "/Game",
+              state: {
+                randWords,
+              },
+            }}
+          />
+        ) : (
+          <Container>
+            <Container maxWidth="xs">
+              <Typography
+                variant="h4"
+                style={{ backgroundColor: "#FFB800", padding: "1em" }}
+                align="center"
+                gutterBottom
+              >
+                Lobby
               </Typography>
-		  </Container>
-		  <Typography variant="h4" align="center">
-			Welcome "{name}"
-		  </Typography>
+            </Container>
+            <Typography variant="h4" align="center">
+              Welcome <span style={{ fontWeight: "bold" }}>{user.name}</span>
+            </Typography>
 
-          {check ? countdownTimer() : null}
-          {players.map((player) => {
-            return <div key={player.id}>{player.name}</div>;
-          })}
-        </Container>
-      )}
-      <ChatBox />
-    </div>
-	</>
+            {check ? countdownTimer() : null}
+            {players.map((player) => {
+              return <div key={player.id}>{player.name}</div>;
+            })}
+          </Container>
+        )}
+        <ChatBox />
+      </div>
+    </>
   );
 };
 

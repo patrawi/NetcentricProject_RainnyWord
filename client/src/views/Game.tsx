@@ -16,7 +16,6 @@ import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 //@ts-ignore
 import LobbyBgm from "../asset/bgm/bgm_game.mp3";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {},
   answerBox: {
@@ -70,8 +69,8 @@ const Gamepage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (onBgm) play();
-    else stop();
+    // if (onBgm) play();
+    // else stop();
   }, [onBgm, play, stop]);
 
   const increasePoint = (length: number) => {
@@ -95,7 +94,6 @@ const Gamepage = () => {
   };
 
   const handleRedirect = () => {
-
     return (
       <Redirect
         to={{
@@ -115,7 +113,6 @@ const Gamepage = () => {
         handleRedirect()
       ) : ( */}
       <Container>
-   
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <TimerPage
             initialMinute={time.initialMinute}
