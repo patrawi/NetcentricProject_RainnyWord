@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     top: "auto",
     bottom: 0,
-    zIndex: -100,
+    zIndex: 1,
   },
 }));
 

@@ -69,7 +69,7 @@ const Navbarpage: React.FC<NavbarProp> = ({ handleToggleDark }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Box mb={5} />
+
     </>
   );
 };

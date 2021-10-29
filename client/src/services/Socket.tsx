@@ -1,18 +1,29 @@
 import React, { useContext, useEffect } from "react";
 import socketIOClient from "socket.io-client";
+import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
+import { User } from "../interfaces/User";
 
 interface SocketProp {}
 
 const Socket: React.FC<SocketProp> = ({ children }: any) => {
   const { socket, setSocket, } = useContext(SocketContext);
-
+  const {players, setPlayers} = useContext(AppContext)
   useEffect(() => {
     if (!socket) {
       const newSocket = socketIOClient("http://localhost:8000");
       setSocket(newSocket);
       
     } else {
+      if (socket) {
+        socket.emit("onRetrievePlayers");
+        socket.on("retrievePlayers", function (players: User[]) {
+          if (players) {
+            setPlayers(players);
+          
+          }
+        });
+      }
       socket.on("connection", function () {
         console.log(socket.id);
       });

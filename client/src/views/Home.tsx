@@ -18,8 +18,9 @@ import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
 import { User } from "./../interfaces/User";
 
+import rain from '../asset/image/rain.png';
 const useStyles = makeStyles((theme) => ({
-  root: {},
+
   title: {
     fontSize: "5em",
     fontWeight: "bold",
@@ -29,13 +30,31 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
     padding: "1em",
     marginBottom: "2em",
-    borderRadius: 20,
+    borderRadius : "30px",
   },
   activeBtn: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  textfield : {
+    borderRadius : "30px"
+  },
+  rain : {
+    opacity : 0.8,
+    height : "100vh",
+    backgroundImage : `url(${rain})`,
+    animation : `$rain .9s linear infinite`,
+},
+'@keyframes rain' : {
+    "0%" : {
+        backgroundPosition : '0% 0%',
+    },
+    "100%" : {
+        backgroundPosition : "20% 100%"
+    }
+},
+
 }));
 
 const Homepage = () => {
@@ -50,16 +69,7 @@ const Homepage = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.emit("onRetrievePlayers");
-      socket.on("retrievePlayers", function (players: User[]) {
-        if (players) {
-          setUsedName([]);
-          setPlayers(players);
-          players.forEach((player) => {
-            setUsedName([...usedName, player.name]);
-          });
-        }
-      });
+        console.log(players);
     }
   }, [socket, players]);
 
@@ -70,7 +80,7 @@ const Homepage = () => {
   const handleAddPlayer = async () => {
     if (!name) {
       setHelperText("Please enter your name");
-    } else if (usedName.includes(name)) {
+    } else if (players.find((player) => player.name === name)) {
       setHelperText("Please select other name.");
     } else {
       if (socket) {
@@ -91,7 +101,10 @@ const Homepage = () => {
 
   return (
     <>
-      <Container style={{ width: "50%" }}>
+    <div className = {classes.rain}>
+
+    <Container >
+        
         <Box>
           <Typography className={classes.title} variant="h1" align="center">
             Rainy Word
@@ -110,8 +123,14 @@ const Homepage = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 changeNameHandle(e);
               }}
+              InputProps ={{
+                classes : {
+                  root : classes.textfield
+                }
+              }}
               helperText={helperText}
               fullWidth
+              
               error={helperText ? true : false}
             />
           </CardActions>
@@ -132,6 +151,7 @@ const Homepage = () => {
             color="primary"
             size="large"
             onClick={() => setOpenHowToPlay(true)}
+
           >
             How to Play?
           </Button>
@@ -154,6 +174,8 @@ const Homepage = () => {
           </Fade>
         </Modal>
       </Container>
+    </div>
+     
     </>
   );
 };

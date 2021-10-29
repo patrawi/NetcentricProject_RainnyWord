@@ -109,9 +109,9 @@ const Gamepage = () => {
 
   return (
     <>
-      {/* {timeout ? (
+      {timeout ? (
         handleRedirect()
-      ) : ( */}
+      ) : (
       <Container>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <TimerPage
@@ -131,7 +131,7 @@ const Gamepage = () => {
           handleDecreaseScore={decreasePoint}
         />
       </Container>
-      {/* )}; */}
+      )}; 
     </>
   );
 };
