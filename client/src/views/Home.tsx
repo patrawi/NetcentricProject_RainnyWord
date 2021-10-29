@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   makeStyles,
   Container,
@@ -14,11 +14,9 @@ import {
 } from "@material-ui/core";
 import { HowToPlayModal } from "../components/HowToPlayModal";
 
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
-
-interface HomepageProp {}
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -40,42 +38,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Homepage: React.FC<HomepageProp> = () => {
+const Homepage = () => {
   const classes = useStyles();
-  const { setUser, players } = useContext(AppContext);
-  const { socket, addPlayer, updatePlayerlist } = useContext(SocketContext);
+  const { socket, updatePlayerList } = useContext(SocketContext);
   const [name, setName] = useState<string>("");
   const [openHowToPlay, setOpenHowToPlay] = useState(false);
-  const [helperText, setHelperText] = useState('');
+  const [helperText, setHelperText] = useState("");
+  const [usedName, setUsedName] = useState<string[]>([]);
+  const { setUser, user } = useContext(AppContext);
   let history = useHistory();
+
   const changeNameHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
-  const handleAddPlayer =  () => {
-    if(name === '') {
-       setHelperText('Please enter your name')
-    } 
-      
-    if (socket) {
-        setUser({
+
+  const handleAddPlayer = async () => {
+    if (!name) {
+      setHelperText("Please enter your name");
+      // } else if (usedName.includes(name)) {
+    } else {
+      if (socket) {
+        const newUser = {
           name: name,
           id: socket.id,
           score: 0,
+        };
+        setUser(newUser);
+        socket.emit("onAddPlayer", newUser);
+        history.push({
+          pathname: "/lobby",
         });
       }
-  
-      addPlayer(name);
-    
-      history.push({
-        pathname : '/lobby',
-        state : {
-          name
-        }
-      })
     }
-  
-  
-  
+  };
+
   return (
     <>
       <Container style={{ width: "50%" }}>
@@ -97,23 +93,21 @@ const Homepage: React.FC<HomepageProp> = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 changeNameHandle(e);
               }}
-              helperText = {helperText}
+              helperText={helperText}
               fullWidth
             />
           </CardActions>
         </Card>
 
         <Box className={classes.activeBtn}>
- 
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={handleAddPlayer}
-            >
-              Connect
-            </Button>
-        
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={handleAddPlayer}
+          >
+            Connect
+          </Button>
 
           <Button
             variant="contained"

@@ -3,7 +3,7 @@ import { Socket } from "socket.io";
 import { Admin, Player } from "./interfaces/player.interface";
 import { authenticateToken, generateJWT } from "./lib/admin";
 import { Chat } from "./lib/chat";
-import { removePlayers, addPlayer, updateLeaderboard } from "./lib/players";
+import { removePlayers, updateLeaderboard } from "./lib/players";
 import { randomWordsPerRound, WordObject } from "./lib/words";
 
 const env = require("dotenv").config();
@@ -141,10 +141,13 @@ app.post("/startgame", (req: Request, res: Response) => {
 io.on("connection", (socket: Socket) => {
   console.log("a user connected");
   // Update players, send updated players to client and the client info.
-  socket.on("onAddPlayer", function (name: string) {
+  socket.on("onAddPlayer", function (player: Player) {
+    console.log(player);
     if (players.length < MAX_PLAYERS) {
-      console.log(`${name} connected!`);
-      players = addPlayer(players, name, socket.id);
+      console.log(
+        `${player.name} is connected. Total number of players is ${players.length}`
+      );
+      players.push(player);
       io.emit("updatePlayerList", players);
     }
   });

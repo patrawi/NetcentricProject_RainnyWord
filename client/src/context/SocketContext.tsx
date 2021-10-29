@@ -8,27 +8,22 @@ export interface SocketConstruct {
   setSocket: (value: Socket | undefined) => void;
   socketOpen: boolean;
   setSocketOpen: (value: boolean) => void;
-  addPlayer: (value: string) => void;
   updateLeaderboard: (user: User) => void;
   publicChat: (user: User, message: string) => void;
-  playerList: User[] | undefined;
-  updatePlayerlist: () => void;
+  updatePlayerList: () => void;
 }
 export const SocketContext = createContext({} as SocketConstruct);
 
 const SocketContextProvider = ({ ...props }) => {
   const [socket, setSocket] = useState<Socket>();
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
-  const [playerList, setPlayerlist] = useState<User[]>();
+  const { setPlayers } = useContext(AppContext);
 
-  const addPlayer = (name: string) => {
-    if (socket) socket.emit("onAddPlayer", name);
-  };
-
-  const updatePlayerlist = () => {
+  const updatePlayerList = () => {
     if (socket) {
-      socket.on("updatePlayerlist", (updatePlayers) => {
-        setPlayerlist(updatePlayers);
+      socket.on("updatePlayerList", (updatePlayers: User[]) => {
+        // console.log(updatePlayers);
+        if (updatePlayers) setPlayers(updatePlayers);
       });
     }
   };
@@ -57,11 +52,9 @@ const SocketContextProvider = ({ ...props }) => {
     setSocket,
     socketOpen,
     setSocketOpen,
-    addPlayer,
     updateLeaderboard,
     publicChat,
-    playerList,
-    updatePlayerlist,
+    updatePlayerList,
   };
   return <SocketContext.Provider value={value} {...props} />;
 };

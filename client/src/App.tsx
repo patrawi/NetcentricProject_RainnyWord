@@ -56,11 +56,12 @@ function App() {
     <>
       <ThemeProvider theme={toggleDark ? themeDark : themeLight}>
         <CssBaseline />
-        <SocketContextProvider>
-          <BrowserRouter>
-            <AppContextProvider>
-              <Navbarpage handleToggleDark={handleToggleDark} />
-              <Socket>
+        <AppContextProvider>
+          <SocketContextProvider>
+            <Socket>
+              <BrowserRouter>
+                <Navbarpage handleToggleDark={handleToggleDark} />
+
                 <Switch>
                   <Route path="/" component={Home} exact />
                   <Route path="/lobby" component={Lobby} />
@@ -69,11 +70,12 @@ function App() {
                   <Route path="/eliminated" component={Eliminated} />
                   <Route path="/admin" component={Admin} />
                 </Switch>
-              </Socket>
-              <Footerpage />
-            </AppContextProvider>
-          </BrowserRouter>
-        </SocketContextProvider>
+
+                <Footerpage />
+              </BrowserRouter>
+            </Socket>
+          </SocketContextProvider>
+        </AppContextProvider>
       </ThemeProvider>
     </>
   );
