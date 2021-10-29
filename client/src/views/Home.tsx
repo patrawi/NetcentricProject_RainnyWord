@@ -40,9 +40,9 @@ const useStyles = makeStyles((theme) => ({
   textfield : {
     borderRadius : "30px"
   },
+
   rain : {
     opacity : 0.8,
-    height : "100vh",
     backgroundImage : `url(${rain})`,
     animation : `$rain .9s linear infinite`,
 },
@@ -103,14 +103,13 @@ const Homepage = () => {
     <>
     <div className = {classes.rain}>
 
-    <Container >
-        
-        <Box>
+    <Container>
+      <Box display = "flex" justifyContent = "center" alignItems = "center" flexDirection = "column" style = {{minHeight : "100vh"}}>
+      <Box>
           <Typography className={classes.title} variant="h1" align="center">
             Rainy Word
           </Typography>
-        </Box>
-        <Box mt={3} />
+          <Box mt={3} />
         <Card className={classes.inputBox}>
           <CardContent>
             <Typography variant="h6">Please Enter Your Name</Typography>
@@ -173,6 +172,9 @@ const Homepage = () => {
             </div>
           </Fade>
         </Modal>
+        </Box>
+      </Box>
+        
       </Container>
     </div>
      
