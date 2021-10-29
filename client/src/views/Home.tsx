@@ -107,7 +107,7 @@ const Homepage = () => {
       <Box display = "flex" justifyContent = "center" alignItems = "center" flexDirection = "column" style = {{minHeight : "100vh"}}>
       <Box>
           <Typography className={classes.title} variant="h1" align="center">
-            Rainy Word
+            Rainy Words
           </Typography>
           <Box mt={3} />
         <Card className={classes.inputBox}>
