@@ -90,6 +90,7 @@ const Gamepage = () => {
     setUser({ ...user, score: user.score - length * 100 });
   };
   const handleTimeout = () => {
+    console.log('hello');
     setTimeout(true);
   };
 
