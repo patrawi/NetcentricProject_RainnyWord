@@ -139,10 +139,15 @@ app.post("/startgame", (req: Request, res: Response) => {
 });
 
 io.on("connection", (socket: Socket) => {
-  console.log("a user connected");
+  console.log(`${socket.id} connected`);
+
+  // Send players to client once client connects
+  socket.on("onRetrievePlayers", function () {
+    io.to(socket.id).emit("retrievePlayers", players);
+  });
+
   // Update players, send updated players to client and the client info.
   socket.on("onAddPlayer", function (player: Player) {
-    console.log(player);
     if (players.length < MAX_PLAYERS) {
       console.log(
         `${player.name} is connected. Total number of players is ${players.length}`

@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 import { Socket } from "socket.io-client";
 import { User } from "../interfaces/User";
 import { AppContext } from "./AppContext";
@@ -19,10 +19,14 @@ const SocketContextProvider = ({ ...props }) => {
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
   const { setPlayers } = useContext(AppContext);
 
+  useEffect(() => {
+    updatePlayerList();
+  }, []);
+
   const updatePlayerList = () => {
     if (socket) {
       socket.on("updatePlayerList", (updatePlayers: User[]) => {
-        // console.log(updatePlayers);
+        console.log(updatePlayers);
         if (updatePlayers) setPlayers(updatePlayers);
       });
     }
