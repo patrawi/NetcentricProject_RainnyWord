@@ -20,17 +20,17 @@ function App() {
     typography: {
       fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
-    
+
     palette: {
       background: {
         default: "#DDDAE1",
       },
       secondary: {
-        main:"#6200ea",
+        main: "#ffa000",
       },
-      primary : {
-        main :  "#ffa726"
-      }
+      primary: {
+        main: "#4527a0",
+      },
     },
   });
   const themeDark = createTheme({
@@ -48,7 +48,7 @@ function App() {
         main: "#465FB6",
       },
       primary: {
-        main: "#E02B31",
+        main: "#4527a0",
       },
     },
   });

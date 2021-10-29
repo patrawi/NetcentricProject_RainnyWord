@@ -8,6 +8,7 @@ import LobbyBgm from "../asset/bgm/bgm_lobby.mp3";
 import { useSound } from "use-sound";
 import { AppContext } from "../context/AppContext";
 import { makeStyles, Container, Typography } from "@material-ui/core";
+import { LeaderBoard } from "../components/LeaderBoard";
 
 interface LobbyProp {}
 
@@ -84,23 +85,19 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         ) : (
           <Container>
             <Container maxWidth="xs">
-              <Typography
-                variant="h4"
-                style={{ backgroundColor: "#FFB800", padding: "1em" }}
-                align="center"
-                gutterBottom
-              >
+              <Typography variant="h4" align="center" gutterBottom>
                 Lobby
               </Typography>
             </Container>
-            <Typography variant="h4" align="center">
+            {/* <Typography variant="h4" align="center">
               Welcome <span style={{ fontWeight: "bold" }}>{user.name}</span>
-            </Typography>
+            </Typography> */}
 
             {check ? countdownTimer() : null}
-            {players.map((player) => {
+            <LeaderBoard players={players} />
+            {/* {players.map((player) => {
               return <div key={player.id}>{player.name}</div>;
-            })}
+            })} */}
           </Container>
         )}
         <ChatBox />
