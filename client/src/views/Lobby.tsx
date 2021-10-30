@@ -85,8 +85,15 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         ) : (
           <Container>
             <Container maxWidth="xs">
-              <Typography variant="h4" align="center" gutterBottom>
-                Lobby
+              <Typography variant="h3" align="center" gutterBottom>
+                Waiting Lobby
+              </Typography>
+              <Typography variant="h6" align="center" gutterBottom>
+                Welcome{" "}
+                <span style={{ fontWeight: "bold", color: "#fb8c00" }}>
+                  {user.name}
+                </span>
+                !
               </Typography>
             </Container>
             {/* <Typography variant="h4" align="center">

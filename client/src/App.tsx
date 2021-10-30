@@ -35,7 +35,7 @@ function App() {
   });
   const themeDark = createTheme({
     typography: {
-      fontFamily: ["Zen Kurenaido", "sans-serif"].join(","),
+      fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
     palette: {
       background: {

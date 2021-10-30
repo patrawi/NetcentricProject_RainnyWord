@@ -6,7 +6,7 @@ export interface AppContextInterface {
   user: User;
   setUser: (user: User) => void;
   players: User[];
-  setPlayers: (players: User[]) => void
+  setPlayers: (players: User[]) => void;
   pubChat: Chat[];
   setPubChat: (chat: Chat[]) => void;
   privChat: Chat[];
@@ -23,6 +23,7 @@ const AppContextProvider = ({ ...props }) => {
     name: "Anonymous",
     id: "",
     score: 0,
+    avatar: 0,
   });
   const [players, setPlayers] = useState<User[]>([]);
   const [privChat, setPrivChat] = useState<Chat[]>([]);

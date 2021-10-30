@@ -49,6 +49,7 @@ const Homepage = () => {
           name: name,
           id: socket.id,
           score: 0,
+          avatar: Math.floor(Math.random() * 1000000),
         };
         setUser(newUser);
         socket.emit("onAddPlayer", newUser);
