@@ -2,11 +2,9 @@ import { Player } from "../interfaces/player.interface";
 
 export function removePlayers(players: Player[], id: string) {
   const updatedPlayers = players.filter((player) => {
-    if (player.id !== id) console.log(`${player.name} has been removed.`);
+    if (player.id === id) console.log(`${player.name} has been removed.`);
     return player.id !== id;
   });
-
-  console.log(updatedPlayers);
 
   return updatedPlayers;
 }
