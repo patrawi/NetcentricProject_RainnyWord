@@ -4,8 +4,6 @@ import {
   Container,
   Box,
   Typography,
-  Card,
-  CardContent,
   CardActions,
   Button,
   TextField,
@@ -16,11 +14,12 @@ import { HowToPlayModal } from "../components/HowToPlayModal";
 import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
-import { User } from "./../interfaces/User";
 
 import rain from '../asset/image/rain.png';
 const useStyles = makeStyles((theme) => ({
-
+  container: {
+    width: "30%",
+  },
   title: {
     fontSize: "5em",
     fontWeight: "bold",
@@ -31,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "1em",
     marginBottom: "2em",
     borderRadius : "30px",
+  },
+  button: {
+    borderRadius: "30px",
   },
   activeBtn: {
     display: "flex",
@@ -69,7 +71,7 @@ const Homepage = () => {
 
   useEffect(() => {
     if (socket) {
-        console.log(players);
+      console.log(players);
     }
   }, [socket, players]);
 
@@ -89,6 +91,7 @@ const Homepage = () => {
           name: name,
           id: socket.id,
           score: 0,
+          avatar: Math.floor(Math.random() * 1000000),
         };
         setUser(newUser);
         socket.emit("onAddPlayer", newUser);
@@ -101,19 +104,17 @@ const Homepage = () => {
 
   return (
     <>
-    <div className = {classes.rain}>
-
-    <Container>
-      <Box display = "flex" justifyContent = "center" alignItems = "center" flexDirection = "column" style = {{minHeight : "100vh"}}>
-      <Box>
-          <Typography className={classes.title} variant="h1" align="center">
-            Rainy Words
-          </Typography>
-          <Box mt={3} />
-        <Card className={classes.inputBox}>
-          <CardContent>
-            <Typography variant="h6">Please Enter Your Name</Typography>
-          </CardContent>
+      <div className={classes.rain}>
+        <Container className={classes.container}>
+          <Box>
+            <Typography className={classes.title} variant="h1" align="center">
+              Rainy Word
+            </Typography>
+            <Typography variant="h6" align="center">
+              Type fast to survive!
+            </Typography>
+          </Box>
+          <Box mt={2} />
           <CardActions>
             <TextField
               id="name"
@@ -122,64 +123,63 @@ const Homepage = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 changeNameHandle(e);
               }}
-              InputProps ={{
-                classes : {
-                  root : classes.textfield
-                }
+              InputProps={{
+                classes: {
+                  root: classes.textfield,
+                },
               }}
               helperText={helperText}
               fullWidth
-              
               error={helperText ? true : false}
             />
           </CardActions>
-        </Card>
-
-        <Box className={classes.activeBtn}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={handleAddPlayer}
-          >
-            Connect
-          </Button>
-
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={() => setOpenHowToPlay(true)}
-
-          >
-            How to Play?
-          </Button>
-        </Box>
-        <Modal open={openHowToPlay}>
-          <Fade in={openHowToPlay}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                paddingTop: 50,
+          <Box className={classes.activeBtn}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleAddPlayer}
+              classes={{
+                root: classes.button,
               }}
             >
-              <HowToPlayModal
-                openHowToPlay={openHowToPlay}
-                setOpenHowToPlay={setOpenHowToPlay}
-              />
-            </div>
-          </Fade>
-        </Modal>
-        </Box>
-      </Box>
-        
-      </Container>
-    </div>
-     
+              Connect
+            </Button>
+
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={() => setOpenHowToPlay(true)}
+              classes={{
+                root: classes.button,
+              }}
+            >
+              How to Play?
+            </Button>
+          </Box>
+          <Modal open={openHowToPlay}>
+            <Fade in={openHowToPlay}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingTop: 50,
+                }}
+              >
+                <HowToPlayModal
+                  openHowToPlay={openHowToPlay}
+                  setOpenHowToPlay={setOpenHowToPlay}
+                />
+              </div>
+            </Fade>
+          </Modal>
+        </Container>
+      </div>
     </>
   );
 };
 
 export default Homepage;
+

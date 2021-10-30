@@ -31,7 +31,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-const MAX_PLAYERS = 5;
+const MAX_PLAYERS = 20;
 let players: Player[] = [];
 let ROUND = 0;
 const pubChats: Chat[] = [];
@@ -156,11 +156,7 @@ io.on("connection", (socket: Socket) => {
       io.emit("updatePlayerList", players);
     }
   });
-  // Remove player using id.
-  socket.on("onRemovePlayer", function (id: string) {
-    players = removePlayers(players, id);
-    io.emit("updatePlayerList", players);
-  });
+
   // Game is not start until admin press start.
   io.emit("gameStart", false);
 
@@ -187,8 +183,10 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("disconnect", function () {
-    console.log("a user disconnected");
-    console.log(JSON.stringify(players));
+    console.log(`${socket.id} disconnected`);
+    players = removePlayers(players, socket.id);
+    console.log(players);
+    io.emit("updatePlayerList", players);
   });
 });
 

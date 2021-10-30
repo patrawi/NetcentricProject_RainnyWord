@@ -13,6 +13,8 @@ import MusicOffIcon from "@material-ui/icons/MusicOff";
 import Brightness2Icon from "@material-ui/icons/Brightness2";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
 import { AppContext } from "../context/AppContext";
+import HomeIcon from "@material-ui/icons/Home";
+import SettingsApplicationsIcon from "@material-ui/icons/SettingsApplications";
 interface NavbarProp {
   handleToggleDark: () => void;
 }
@@ -40,10 +42,10 @@ const Navbarpage: React.FC<NavbarProp> = ({ handleToggleDark }) => {
         <Toolbar>
           <Box className={classes.title}>
             <Button component={Link} to="/" className={classes.navButton}>
-              Home
+              <HomeIcon />
             </Button>
             <Button component={Link} to="/admin" className={classes.navButton}>
-              Admin
+              <SettingsApplicationsIcon />
             </Button>
           </Box>
           <IconButton
@@ -69,7 +71,6 @@ const Navbarpage: React.FC<NavbarProp> = ({ handleToggleDark }) => {
           </IconButton>
         </Toolbar>
       </AppBar>
-
     </>
   );
 };
@@ -95,5 +96,6 @@ const useStyles = makeStyles((theme) => ({
   },
   navButton: {
     fontSize: "1em",
+    color: "#fff",
   },
 }));
