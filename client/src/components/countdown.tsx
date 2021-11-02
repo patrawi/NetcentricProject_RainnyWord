@@ -7,6 +7,7 @@ export interface TimerProp {
   initialMinute: number;
   initialSeconds: number;
   handleTimeout: () => void;
+  isGame : boolean 
 }
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -20,6 +21,7 @@ const TimerPage: React.FC<TimerProp> = ({
   initialMinute,
   initialSeconds,
   handleTimeout,
+  isGame
 }) => {
   const classes = useStyles();
   const [minutes, setMinutes] = useState(initialMinute);
@@ -54,7 +56,7 @@ const TimerPage: React.FC<TimerProp> = ({
         // </h1>
 
         <Typography align="center" variant="h4">
-          The Game will start in {minutes * 60 + seconds}...
+          {isGame ? `the Game will end in ${minutes * 60 + seconds} `: ` The Game will start in ${minutes * 60 + seconds}...`}
         </Typography>
       )}
     </Box>

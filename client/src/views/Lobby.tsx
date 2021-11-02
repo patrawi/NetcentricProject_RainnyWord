@@ -52,6 +52,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         initialMinute={0}
         initialSeconds={10}
         handleTimeout={handleTimeout}
+        isGame = {false}
       />
     );
   };

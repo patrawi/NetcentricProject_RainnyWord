@@ -31,7 +31,7 @@ const PlayerCard : React.FC<PlayerCardProp> = ({player, index, color}) => {
         <>  <Box my = {6}/>
             <Grid container spacing = {3} className = {classes.card} style = {{backgroundColor : color}}>
                     <Grid item xs = {2}>
-                            <Typography align = 'center' variant = 'h6' color = "secondary">{index + 1}</Typography>
+                            <Typography align = 'center' variant = 'h6' color = "textPrimary">{index + 1}</Typography>
                     </Grid>      
                     <Grid item xs = {2} alignItems = "center">
                         <Box display = "flex" justifyContent = "center" alignItems = "center">
@@ -39,10 +39,10 @@ const PlayerCard : React.FC<PlayerCardProp> = ({player, index, color}) => {
                         </Box>
                     </Grid>       
                     <Grid item xs = {6}>
-                            <Typography align = 'center' variant = 'h6' color = "secondary">{player.name}</Typography>
+                            <Typography align = 'center' variant = 'h6' color = "textPrimary">{player.name}</Typography>
                     </Grid>     
                     <Grid item xs = {2}>
-                            <Typography align = 'center' variant = 'h6' color = "secondary">{player.score}</Typography>
+                            <Typography align = 'center' variant = 'h6' color = "textPrimary">{player.score}</Typography>
                     </Grid>     
                 </Grid>
         </>

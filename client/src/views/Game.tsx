@@ -45,7 +45,7 @@ const Gamepage = () => {
   const { randWords } = location.state;
   const [time, setTime] = useState<Time>({
     initialMinute: 0,
-    initialSeconds: 10,
+    initialSeconds: 120,
   });
   const [timeout, setTimeout] = useState(false);
   const [randomWords, setRandomWords] = useState<word[]>(randWords);
@@ -119,6 +119,7 @@ const Gamepage = () => {
             initialMinute={time.initialMinute}
             initialSeconds={time.initialSeconds}
             handleTimeout={handleTimeout}
+            isGame = {true}
           />
           <Typography align="center">
             {user.name}: {user.score}

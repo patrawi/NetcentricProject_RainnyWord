@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     topic : {
         padding : "0.5em",
     
+    },
+    container : {
+        paddingBottom : "3em",
+        overFlow : "scroll"
     }
 }))
 
@@ -31,9 +35,10 @@ const Endpage = () => {
   }, []);
   return (
     <React.Fragment>
-        <Container maxWidth = 'md'>
+        <Container maxWidth = 'md' className = {classes.container}>
                 <Box my = {6}>
-                    <Typography align = 'center'>Leaderboard</Typography>
+                    <Typography align = 'center' variant = 'h2' >Leaderboard🏆</Typography>
+                
                 </Box>
                 <Grid container  spacing = {3}>
                     <Grid item xs = {2}>
@@ -58,12 +63,13 @@ const Endpage = () => {
                     </Grid>     
                 </Grid>
                 {players.map((player,index) => {
-                    let color =   ` #${Math.floor(Math.random()*16777215).toString(16)}`
+                    let colors =   ['#EDAE49', '#D1495B', '#00798C', '#30638E', '#003D5B' ]  
+                    const number = index % colors.length ;
                     return (
-                        <PlayerCard key = {player.id} player = {player} index = {index} color = {color} />
+                        <PlayerCard key = {player.id} player = {player} index = {index} color = {colors[number]} />
                     )
                 })}
-                
+                <Box my = {6} p = {6} />
         </Container>
         
         

@@ -7,6 +7,8 @@ const useStyles = makeStyles((theme) => ({
     top: "auto",
     bottom: 0,
     zIndex: 1,
+    overFlow : 'scroll',
+    
   },
 }));
 
