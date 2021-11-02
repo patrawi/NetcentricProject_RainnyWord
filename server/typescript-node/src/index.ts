@@ -174,7 +174,7 @@ io.on("connection", (socket: Socket) => {
   socket.on("disconnect", function () {
     console.log(`${socket.id} disconnected`);
     players = removePlayers(players, socket.id);
-    console.log(players);
+    // console.log(players);
     io.emit("updatePlayerList", players);
   });
 });

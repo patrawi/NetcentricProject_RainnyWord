@@ -63,10 +63,10 @@ function App() {
         primary: "#ffffff",
       },
       secondary: {
-        main: "#465FB6",
+        main: "#b37100",
       },
       primary: {
-        main: "#BC3908",
+        main: "#4527a0",
       },
     },
   });

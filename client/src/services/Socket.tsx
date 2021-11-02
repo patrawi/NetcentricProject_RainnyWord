@@ -7,36 +7,33 @@ import { User } from "../interfaces/User";
 interface SocketProp {}
 
 const Socket: React.FC<SocketProp> = ({ children }: any) => {
-  const { socket, setSocket, } = useContext(SocketContext);
-  const {players, setPlayers} = useContext(AppContext)
+  const { socket, setSocket } = useContext(SocketContext);
+  const { setPlayers } = useContext(AppContext);
   useEffect(() => {
     if (!socket) {
       const newSocket = socketIOClient("http://localhost:8000");
       setSocket(newSocket);
-      
     } else {
       if (socket) {
         socket.emit("onRetrievePlayers");
         socket.on("retrievePlayers", function (players: User[]) {
           if (players) {
             setPlayers(players);
-          
           }
         });
       }
       socket.on("connection", function () {
-        console.log(socket.id);
+        console.log("Connected!");
       });
 
       socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);
       });
-      
-      return () => {
-        socket.off()
-      }
-    }
 
+      return () => {
+        socket.off();
+      };
+    }
   }, [socket]);
 
   return <>{children}</>;
