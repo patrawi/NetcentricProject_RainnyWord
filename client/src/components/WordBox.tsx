@@ -14,15 +14,17 @@ const useStyles = makeStyles<Theme>({
   root: {},
   rain: {
     position: "fixed",
-    top: "20vh",
+    top: "10vh",
     animation: `$fall 4s linear`,
     color: "black",
+    zIndex : -100,
   },
   dangerWord: {
     position: "fixed",
-    top: "20vh",
+    top: "10vh",
     animation: `$fall 4s linear`,
     color: "red",
+    zIndex : -100,
   },
   "@keyframes fall": {
     from: {

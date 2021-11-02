@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Box, TextField } from "@material-ui/core";
+import { Box, makeStyles, TextField } from "@material-ui/core";
 import WordBox from "./WordBox";
 import { word, Time } from "../views/Game";
 import { wordToRender } from "../types/type";
@@ -13,7 +13,20 @@ interface RainProp {
   randomWords: word[];
   handleDecreaseScore: (length: number) => void;
 }
-
+const useStyles = makeStyles(() => ({
+  root : {
+    
+  },
+  content : {
+    top : 'auto',
+    bottom : '10vh',
+    left : 0,
+    position : 'fixed',
+    zIndex : 1,
+  
+  }
+  
+}))
 const Rainpage: React.FC<RainProp> = ({
   handleScore,
   randomWords,
@@ -26,7 +39,7 @@ const Rainpage: React.FC<RainProp> = ({
   const { onSfx } = useContext(AppContext);
   const [play] = useSound(PopSfx);
   const [counter, setCounter] = useState(0);
-
+  const classes = useStyles();
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswer(e.target.value.trim().toLowerCase());
   };
@@ -114,7 +127,8 @@ const Rainpage: React.FC<RainProp> = ({
           );
         })}
       </Box>
-      <form>
+
+      <form >
         <TextField
           type="text"
           value={answer}
@@ -123,11 +137,15 @@ const Rainpage: React.FC<RainProp> = ({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleAnswerChange(e);
           }}
+          className = {classes.content}
           onKeyPress={(e) => handleKeyboardPress(e)}
           fullWidth
+         
           autoFocus
         />
       </form>
+   
+
     </>
   );
 };
