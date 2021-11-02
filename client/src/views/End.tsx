@@ -6,7 +6,9 @@ import { User } from "../interfaces/User";
 import { SocketContext } from "../context/SocketContext";
 import { AppContext } from "../context/AppContext";
 import PlayerCard from "../components/PlayerCard";
-
+import { useSound } from "use-sound";
+//@ts-ignore
+import CongratulationSfx from "../asset/sfx/sfx_congratulation.mp3";
 
 const useStyles = makeStyles((theme) => ({
     root : {
@@ -24,15 +26,21 @@ const useStyles = makeStyles((theme) => ({
 
 const Endpage = () => {
   const { socket, updatePlayerList } = useContext(SocketContext);
-  const { user, players } = useContext(AppContext);
+  const { user, players,onBgm  } = useContext(AppContext);
+  const [play, { stop }] = useSound(CongratulationSfx);
   const classes = useStyles();
 
   const handlePlayer = () => {};
   useEffect(() => {
+  
     updatePlayerList();
     console.log(players) 
     console.log(user);
   }, []);
+  useEffect(() => {
+    if (onBgm) play();
+    else stop();
+  },[onBgm, play, stop])
   return (
     <React.Fragment>
         <Container maxWidth = 'md' className = {classes.container}>

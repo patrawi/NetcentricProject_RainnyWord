@@ -9,8 +9,6 @@ export interface AppContextInterface {
   setPlayers: (players: User[]) => void;
   pubChat: Chat[];
   setPubChat: (chat: Chat[]) => void;
-  privChat: Chat[];
-  setPrivChat: (chat: Chat[]) => void;
   onBgm: boolean;
   setOnBgm: (val: boolean) => void;
   onSfx: boolean;
@@ -26,7 +24,6 @@ const AppContextProvider = ({ ...props }) => {
     avatar: 0,
   });
   const [players, setPlayers] = useState<User[]>([]);
-  const [privChat, setPrivChat] = useState<Chat[]>([]);
   const [pubChat, setPubChat] = useState<Chat[]>([]);
   const [onBgm, setOnBgm] = useState<boolean>(true);
   const [onSfx, setOnSfx] = useState<boolean>(true);
@@ -37,8 +34,6 @@ const AppContextProvider = ({ ...props }) => {
     setPlayers,
     pubChat,
     setPubChat,
-    privChat,
-    setPrivChat,
     onBgm,
     setOnBgm,
     onSfx,

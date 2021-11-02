@@ -1,7 +1,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   var socket = io();
-  let timeLeft = 30;
+  let timeLeft = 10;
   let gameStart = false;
 
   socket.on("connect", function () {
@@ -24,19 +24,11 @@
       }
     }, 1000);
 
-    timeLeft = 30;
+    timeLeft = 10;
   });
 
-  socket.on("round", function (round) {
-    document.getElementById("round").innerHTML = `Round ${round}`;
-  });
-
-  socket.on("wordsFirstRound", function (words) {
-    document.getElementById("1stRoundWord").innerHTML = JSON.stringify(words);
-  });
-
-  socket.on("wordsSecondRound", function (words) {
-    document.getElementById("2ndRoundWord").innerHTML = words;
+  socket.on("words", function (words) {
+    document.getElementById("words").innerHTML = JSON.stringify(words);
   });
 
   socket.on("updatePlayerList", function (players) {
@@ -64,10 +56,8 @@
 <h1 id="timer">Timer</h1>
 <h1 id="gameStart"></h1>
 
-<h1 id="round">Round 0</h1>
 <p id="players">Players</p>
-<p id="1stRoundWord"></p>
-<p id="2ndRoundWord"></p>
+<p id="words"></p>
 <input id="onAddPlayer" placeholder="Add new Player" />
 <button onclick="onAddPlayer()">Add player</button>
 <input id="onRemovePlayer" placeholder="Remove Player with id" />

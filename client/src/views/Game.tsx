@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, Container, makeStyles, Typography } from "@material-ui/core";
 import Rainpage from "../components/rain";
-import TimerPage from "../components/countdown";
+import TimerPage from "../components/TimerPage";
 import { AppContext } from "../context/AppContext";
 import { wordRand } from "../views/Lobby";
 import { Redirect, useLocation } from "react-router-dom";
@@ -15,18 +15,6 @@ import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 //@ts-ignore
 import LobbyBgm from "../asset/bgm/bgm_game.mp3";
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  answerBox: {
-    height: "150px",
-
-    position: "absolute",
-    left: 0,
-    bottom: 0,
-  },
-}));
-//mock data
 
 export type Time = {
   initialMinute: number;
@@ -52,7 +40,7 @@ const Gamepage = () => {
   const { socket, updateLeaderboard } = useContext(SocketContext);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const { onBgm } = useContext(AppContext);
-  const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
+  const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
   const [playBoom] = useSound(BoomSfx);
   const [playCombo] = useSound(CorrectSfx, {
     volume: 0.1,
@@ -69,8 +57,8 @@ const Gamepage = () => {
   }, [user]);
 
   useEffect(() => {
-    // if (onBgm) play();
-    // else stop();
+    if (onBgm) play();
+    else stop();
   }, [onBgm, play, stop]);
 
   const increasePoint = (length: number) => {
@@ -90,7 +78,7 @@ const Gamepage = () => {
     setUser({ ...user, score: user.score - length * 100 });
   };
   const handleTimeout = () => {
-    console.log('hello');
+    console.log("hello");
     setTimeout(true);
   };
 
@@ -126,16 +114,28 @@ const Gamepage = () => {
           </Typography>
         </Box>
 
-        <Rainpage
-          time={time}
-          handleScore={increasePoint}
-          randomWords={randomWords}
-          handleDecreaseScore={decreasePoint}
-        />
-      </Container>
-      )}; 
+          <Rainpage
+            time={time}
+            handleScore={increasePoint}
+            randomWords={randomWords}
+            handleDecreaseScore={decreasePoint}
+          />
+        </Container>
+      )}
+      ;
     </>
   );
 };
 
 export default Gamepage;
+
+const useStyles = makeStyles((theme) => ({
+  root: {},
+  answerBox: {
+    height: "150px",
+
+    position: "absolute",
+    left: 0,
+    bottom: 0,
+  },
+}));

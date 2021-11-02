@@ -21,20 +21,13 @@ const PlayerCard = ({ player }: PlayerCardProps) => {
   const url = `https://avatars.dicebear.com/4.6/api/bottts/${player.avatar}.svg`;
 
   return (
-    //TODO: Random a number when create playerContext
     <Card className={styles.card}>
       <div className={styles.avatarContainer}>
         <Avatar alt="Avatar" src={url} className={styles.avatar} />
       </div>
-      <div>
-        <Typography variant="h5" align="center" className={styles.name}>
-          {player.name}
-        </Typography>
-        <div className={styles.scoreContainer}>
-          <div className={styles.scoreLabel}>Score</div>
-          <div className={styles.score}>{player.score}</div>
-        </div>
-      </div>
+      <Typography variant="h5" align="center" className={styles.name}>
+        {player.name}
+      </Typography>
     </Card>
   );
 };
