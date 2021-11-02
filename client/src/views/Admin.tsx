@@ -128,7 +128,7 @@ const Adminpage: React.FC<AdminProp> = () => {
   };
 
   return (
-    <div className="Adminpage">
+    <Box className="Adminpage" display = "flex" justifyContent ="center" alignItems = "center" minHeight = "90vh">
       {user.username != "" ? (
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -171,7 +171,7 @@ const Adminpage: React.FC<AdminProp> = () => {
       ) : (
         <LoginForm Login={Login} error={error} />
       )}
-    </div>
+    </Box>
   );
 };
 

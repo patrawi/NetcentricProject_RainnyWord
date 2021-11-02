@@ -17,9 +17,7 @@ import { SocketContext } from "../context/SocketContext";
 
 import rain from '../asset/image/rain.png';
 const useStyles = makeStyles((theme) => ({
-  container: {
-    width: "30%",
-  },
+
   title: {
     fontSize: "5em",
     fontWeight: "bold",
@@ -105,11 +103,14 @@ const Homepage = () => {
   return (
     <>
       <div className={classes.rain}>
-        <Container className={classes.container}>
-          <Box>
+        <Container>
+          <Box display = "flex" justifyContent ="center" alignItems = "center" minHeight = "90vh">
+           <Box>
+           <Box>
             <Typography className={classes.title} variant="h1" align="center">
               Rainy Word
             </Typography>
+            <Box m = {2} />
             <Typography variant="h6" align="center">
               Type fast to survive!
             </Typography>
@@ -175,6 +176,11 @@ const Homepage = () => {
               </div>
             </Fade>
           </Modal>
+    
+          </Box> 
+         
+        
+          </Box>
         </Container>
       </div>
     </>

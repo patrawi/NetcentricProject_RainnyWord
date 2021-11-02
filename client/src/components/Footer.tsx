@@ -15,7 +15,7 @@ const Footerpage = () => {
 
   return (
     <>
-      <AppBar position="fixed" className={classes.footer} color="secondary">
+      <AppBar position= "fixed" className={classes.footer} color="secondary">
         <Toolbar />
       </AppBar>
     </>

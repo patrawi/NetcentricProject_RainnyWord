@@ -15,12 +15,22 @@ import Socket from "./services/Socket";
 
 function App() {
   const [toggleDark, setToggleDark] = useState(false);
-
+  
   const themeLight = createTheme({
     typography: {
       fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
+    overrides : {
+      MuiOutlinedInput : {
+        input : {
+          "&::placeholder" : {
+            color : "red"
+          },
+          color : "black",
+        }
 
+      }
+    },
     palette: {
       background: {
         default: "#DDDAE1",
@@ -37,6 +47,17 @@ function App() {
     typography: {
       fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
+    overrides : {
+      MuiOutlinedInput : {
+        input : {
+          "&::placeholder" : {
+            color : "white"
+          },
+          color : "white",
+        }
+
+      }
+    },
     palette: {
       background: {
         default: "#242B2C",
@@ -48,7 +69,7 @@ function App() {
         main: "#465FB6",
       },
       primary: {
-        main: "#4527a0",
+        main: "#BC3908",
       },
     },
   });
