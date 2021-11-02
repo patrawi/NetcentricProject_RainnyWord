@@ -26,7 +26,7 @@ const SocketContextProvider = ({ ...props }) => {
   const updatePlayerList = () => {
     if (socket) {
       socket.on("updatePlayerList", (updatePlayers: User[]) => {
-        console.log(updatePlayers);
+        // console.log(updatePlayers);
         if (updatePlayers) setPlayers(updatePlayers);
       });
     }
@@ -34,12 +34,6 @@ const SocketContextProvider = ({ ...props }) => {
 
   const updateLeaderboard = (user: User) => {
     if (socket) socket.emit("updateLeaderboard", user);
-  };
-
-  const updateLeaderboardEnd = () => {
-    if (socket) {
-      socket.on("updateLeaderboardEnd", () => {});
-    }
   };
 
   const publicChat = (user: User, message: string) => {

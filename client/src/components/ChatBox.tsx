@@ -87,6 +87,9 @@ const ChatBox = () => {
             onChange={handleTextChange}
             value={message}
             style={{ width: "100%" }}
+            onKeyPress={(e) => {
+              if (e.key === "Enter") handleButtonClick();
+            }}
           />
           <Button
             variant="contained"

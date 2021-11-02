@@ -8,30 +8,8 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useState } from "react";
-import LoginForm, { LoginProps } from "../components/LoginForm";
-
+import LoginForm from "../components/LoginForm";
 import { form } from "../types/type";
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.primary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
 export interface AdminProp {
   Login: (details: form) => void;
   error: string;
@@ -59,8 +37,8 @@ const Adminpage: React.FC<AdminProp> = () => {
 
   const Login = (user: form) => {
     if (
-      user.username == adminUser.username &&
-      user.password == adminUser.password
+      user.username === adminUser.username &&
+      user.password === adminUser.password
     ) {
       setUser({
         username: user.username,
@@ -77,14 +55,14 @@ const Adminpage: React.FC<AdminProp> = () => {
         )
         .then((res) => {
           setAuth(res.data);
-          if (auth.status == "success") {
+          if (auth.status === "success") {
             alert(auth.message);
           } else {
             setUser({
               username: "",
               password: "",
             });
-            alert("Unexpected error occured! Please try again.");
+            alert("Unexpected error occurred! Please try again.");
           }
         });
     } else {
@@ -100,7 +78,6 @@ const Adminpage: React.FC<AdminProp> = () => {
   };
 
   const Reset = () => {
-    console.log("Reset game");
     axios
       .post(
         baseURL + "/reset",
@@ -114,7 +91,6 @@ const Adminpage: React.FC<AdminProp> = () => {
   };
 
   const Start = () => {
-    console.log("Start game");
     axios
       .post(
         baseURL + "/startgame",
@@ -128,8 +104,14 @@ const Adminpage: React.FC<AdminProp> = () => {
   };
 
   return (
-    <Box className="Adminpage" display = "flex" justifyContent ="center" alignItems = "center" minHeight = "90vh">
-      {user.username != "" ? (
+    <Box
+      className="Adminpage"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="90vh"
+    >
+      {user.username !== "" ? (
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>
@@ -176,3 +158,23 @@ const Adminpage: React.FC<AdminProp> = () => {
 };
 
 export default Adminpage;
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.primary.main,
+  },
+  form: {
+    width: "100%",
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+}));
