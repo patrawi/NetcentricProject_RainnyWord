@@ -7,7 +7,7 @@ import ChatBox from "../components/ChatBox";
 import LobbyBgm from "../asset/bgm/bgm_lobby.mp3";
 import { useSound } from "use-sound";
 import { AppContext } from "../context/AppContext";
-import { makeStyles, Container, Typography } from "@material-ui/core";
+import { Container, Typography } from "@material-ui/core";
 import { LeaderBoard } from "../components/LeaderBoard";
 
 interface LobbyProp {}
@@ -48,7 +48,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         initialMinute={0}
         initialSeconds={10}
         handleTimeout={handleTimeout}
-        isGame = {false}
+        isGame={false}
       />
     );
   };
@@ -93,15 +93,8 @@ const Lobbypage: React.FC<LobbyProp> = () => {
                 !
               </Typography>
             </Container>
-            {/* <Typography variant="h4" align="center">
-              Welcome <span style={{ fontWeight: "bold" }}>{user.name}</span>
-            </Typography> */}
-
             {check ? countdownTimer() : null}
             <LeaderBoard players={players} />
-            {/* {players.map((player) => {
-              return <div key={player.id}>{player.name}</div>;
-            })} */}
           </Container>
         )}
         <ChatBox />

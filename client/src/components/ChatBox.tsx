@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Card, Button, Input, makeStyles } from "@material-ui/core";
-
 import { AppContext } from "../context/AppContext";
 import { Chat } from "../interfaces/Chat";
 import moment from "moment";
@@ -14,7 +13,6 @@ const ChatBox = () => {
   useEffect(() => {
     if (socket) {
       socket.on("onUpdatePublicChat", function (chats: Chat[]) {
-        console.log(chats);
         setPubChat(chats);
       });
     }

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Home from "./views/Home";
 import Lobby from "./views/Lobby";
 import End from "./views/End";
-import Eliminated from "./views/Eliminated";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Admin from "./views/Admin";
 import Navbarpage from "./components/Navbar";
@@ -15,21 +14,20 @@ import Socket from "./services/Socket";
 
 function App() {
   const [toggleDark, setToggleDark] = useState(false);
-  
+
   const themeLight = createTheme({
     typography: {
       fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
-    overrides : {
-      MuiOutlinedInput : {
-        input : {
-          "&::placeholder" : {
-            color : "red"
+    overrides: {
+      MuiOutlinedInput: {
+        input: {
+          "&::placeholder": {
+            color: "red",
           },
-          color : "black",
-        }
-
-      }
+          color: "black",
+        },
+      },
     },
     palette: {
       background: {
@@ -47,16 +45,15 @@ function App() {
     typography: {
       fontFamily: ["Bebas Neue", "cursive"].join(","),
     },
-    overrides : {
-      MuiOutlinedInput : {
-        input : {
-          "&::placeholder" : {
-            color : "white"
+    overrides: {
+      MuiOutlinedInput: {
+        input: {
+          "&::placeholder": {
+            color: "white",
           },
-          color : "white",
-        }
-
-      }
+          color: "white",
+        },
+      },
     },
     palette: {
       background: {
@@ -91,7 +88,6 @@ function App() {
                   <Route path="/lobby" component={Lobby} />
                   <Route path="/Game" component={Gamepage} />
                   <Route path="/end" component={End} />
-                  <Route path="/eliminated" component={Eliminated} />
                   <Route path="/admin" component={Admin} />
                 </Switch>
 

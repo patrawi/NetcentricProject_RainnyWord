@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Box, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 import WordBox from "./WordBox";
 import { word, Time } from "../views/Game";
 import { wordToRender } from "../types/type";
@@ -16,20 +15,17 @@ interface RainProp {
 }
 
 const Rainpage: React.FC<RainProp> = ({
-  time,
   handleScore,
   randomWords,
   handleDecreaseScore,
 }) => {
-  const [words, setWords] = useState<word[]>(randomWords);
   const [wordToRender, setWordToRender] = useState<wordToRender[]>([
     { id: 0, word: "", location: "", destroyed: true, dangerWord: false },
   ]);
   const [answer, setAnswer] = useState("");
-  const Inputref = useRef() as React.MutableRefObject<HTMLDivElement>;
-  let counter = 0;
-  const { onSfx, user } = useContext(AppContext);
+  const { onSfx } = useContext(AppContext);
   const [play] = useSound(PopSfx);
+  const [counter, setCounter] = useState(0);
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAnswer(e.target.value.trim().toLowerCase());
@@ -65,32 +61,30 @@ const Rainpage: React.FC<RainProp> = ({
   };
 
   useEffect(() => {
-    const size = words.length;
+    const size = randomWords.length;
     const loop = setInterval(() => {
       const delay = Math.floor(Math.random() * 100) + 100;
-      const n = counter++;
+      setCounter(counter + 1);
 
       setTimeout(() => {
         setWordToRender((WordToRender) => {
           return [
             ...WordToRender,
             {
-              id: n,
-              word: words[n % size].word,
+              id: counter,
+              word: randomWords[counter % size].word,
               location: Math.floor(Math.random() * 60) + 20 + "vw",
               destroyed: false,
               dangerWord:
-                Math.floor(Math.random() * 60) % 7 === 0 ? true : false,
+                Math.floor(Math.random() * 70) % 4 === 0 ? true : false,
             },
           ];
         });
       }, delay);
     }, 800);
-    if (Inputref) {
-      Inputref.current.focus();
-    }
+
     return () => clearInterval(loop);
-  }, [words]);
+  }, [randomWords, counter]);
 
   const handleKeyboardPress = (e: React.KeyboardEvent) => {
     if (onSfx === true) play();
@@ -101,7 +95,6 @@ const Rainpage: React.FC<RainProp> = ({
 
   return (
     <>
-      
       <Box>
         {wordToRender.map(({ word, location, id, destroyed, dangerWord }) => {
           const handleWordToRender = () => {
@@ -121,7 +114,7 @@ const Rainpage: React.FC<RainProp> = ({
           );
         })}
       </Box>
-      <form >
+      <form>
         <TextField
           type="text"
           value={answer}
@@ -130,7 +123,6 @@ const Rainpage: React.FC<RainProp> = ({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleAnswerChange(e);
           }}
-          ref={Inputref}
           onKeyPress={(e) => handleKeyboardPress(e)}
           fullWidth
           autoFocus

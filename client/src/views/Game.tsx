@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Box, Container, makeStyles, Typography } from "@material-ui/core";
+import { Box, Container, Typography } from "@material-ui/core";
 import Rainpage from "../components/rain";
 import TimerPage from "../components/TimerPage";
 import { AppContext } from "../context/AppContext";
@@ -29,15 +29,14 @@ const Gamepage = () => {
   const location = useLocation<{
     randWords: wordRand[];
   }>();
-  const { user, setUser, setPlayers, players, onSfx } = useContext(AppContext);
+  const { user, setUser, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
-  const [time, setTime] = useState<Time>({
+  const TIME = {
     initialMinute: 0,
     initialSeconds: 120,
-  });
+  };
   const [timeout, setTimeout] = useState(false);
-  const [randomWords, setRandomWords] = useState<word[]>(randWords);
-  const { socket, updateLeaderboard } = useContext(SocketContext);
+  const { updateLeaderboard } = useContext(SocketContext);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
@@ -54,7 +53,7 @@ const Gamepage = () => {
     if (user) {
       updateLeaderboard(user);
     }
-  }, [user]);
+  }, [user, updateLeaderboard]);
 
   useEffect(() => {
     if (onBgm) play();
@@ -78,7 +77,6 @@ const Gamepage = () => {
     setUser({ ...user, score: user.score - length * 100 });
   };
   const handleTimeout = () => {
-    console.log("hello");
     setTimeout(true);
   };
 
@@ -101,23 +99,27 @@ const Gamepage = () => {
       {timeout ? (
         handleRedirect()
       ) : (
-      <Container>
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <TimerPage
-            initialMinute={time.initialMinute}
-            initialSeconds={time.initialSeconds}
-            handleTimeout={handleTimeout}
-            isGame = {true}
-          />
-          <Typography align="center">
-            {user.name}: {user.score}
-          </Typography>
-        </Box>
+        <Container>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <TimerPage
+              initialMinute={TIME.initialMinute}
+              initialSeconds={TIME.initialSeconds}
+              handleTimeout={handleTimeout}
+              isGame={true}
+            />
+            <Typography align="center">
+              {user.name}: {user.score}
+            </Typography>
+          </Box>
 
           <Rainpage
-            time={time}
+            time={TIME}
             handleScore={increasePoint}
-            randomWords={randomWords}
+            randomWords={randWords}
             handleDecreaseScore={decreasePoint}
           />
         </Container>
@@ -128,14 +130,3 @@ const Gamepage = () => {
 };
 
 export default Gamepage;
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  answerBox: {
-    height: "150px",
-
-    position: "absolute",
-    left: 0,
-    bottom: 0,
-  },
-}));

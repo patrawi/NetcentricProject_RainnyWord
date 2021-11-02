@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import {
   makeStyles,
   Container,
@@ -25,12 +25,6 @@ const Homepage = () => {
   const [helperText, setHelperText] = useState("");
   const { setUser, players } = useContext(AppContext);
   let history = useHistory();
-
-  useEffect(() => {
-    if (socket) {
-      console.log(players);
-    }
-  }, [socket, players]);
 
   const changeNameHandle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);

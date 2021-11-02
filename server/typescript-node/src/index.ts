@@ -16,7 +16,7 @@ const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     allowedHeaders: ["rainy-word"],
     credentials: true,
@@ -151,7 +151,6 @@ io.on("connection", (socket: Socket) => {
   io.emit("gameStart", false);
 
   socket.on("updateLeaderboard", function (targetUser: Player) {
-    console.log(targetUser);
     players = updateLeaderboard(players, targetUser);
     io.emit("updatePlayerList", players);
   });
