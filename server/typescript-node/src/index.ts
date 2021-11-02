@@ -33,7 +33,6 @@ app.use((req, res, next) => {
 });
 const MAX_PLAYERS = 20;
 let players: Player[] = [];
-let ROUND = 0;
 const pubChats: Chat[] = [];
 
 app.get("/", (req: Request, res: Response) => {
@@ -73,6 +72,7 @@ app.post("/adminauth", (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Admin: Reset the game
+// For development only!
 app.post("/reset", (req: Request, res: Response) => {
   const header = req.headers.authorization;
   const token = header && header.split(" ")[1];
@@ -86,7 +86,6 @@ app.post("/reset", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       players = [];
-      ROUND = 0;
       return res.status(200).send({ status: "success", message: players });
     }
   } catch (err) {
@@ -97,7 +96,7 @@ app.post("/reset", (req: Request, res: Response) => {
 });
 
 // Admin: Press start button, all player will receive countdown message.
-// 30s countdown signal will be emitted. Front-end display the countdown.
+// 10s countdown signal will be emitted. Front-end display the countdown.
 // Prepare words during the countdown.
 app.post("/startgame", (req: Request, res: Response) => {
   const header = req.headers.authorization;
@@ -112,19 +111,10 @@ app.post("/startgame", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       io.emit("startWaitingRoomTimer", true);
-      ROUND++;
       console.log("Countdown starts...");
-      console.log(`Round ${ROUND}`);
       let words: WordObject[] = [];
-
-      io.emit("round", ROUND);
-      if (ROUND === 1) {
-        words = randomWordsPerRound(100);
-        io.emit("wordsFirstRound", words);
-      } else if (ROUND === 2) {
-        words = randomWordsPerRound(150);
-        io.emit("wordsSecondRound", words);
-      }
+      words = randomWordsPerRound(200);
+      io.emit("words", words);
 
       return res.status(200).send({
         status: "success",

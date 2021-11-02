@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import TimerPage from "../components/countdown";
+import TimerPage from "../components/TimerPage";
 import { SocketContext } from "../context/SocketContext";
 import { Redirect } from "react-router-dom";
 import ChatBox from "../components/ChatBox";
@@ -33,12 +33,8 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   };
   const countdownTimer = () => {
     if (socket) {
-      socket.on("round", (ROUND) => {
-        if (ROUND === 1) {
-          socket.on("wordsFirstRound", (words) => {
-            setRandWords(words);
-          });
-        }
+      socket.on("words", (words) => {
+        setRandWords(words);
       });
     }
 
@@ -66,8 +62,8 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   }, [players]);
 
   useEffect(() => {
-    // if (onBgm) play();
-    // else stop();
+    if (onBgm) play();
+    else stop();
   }, [onBgm, play, stop]);
 
   return (

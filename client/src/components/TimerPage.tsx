@@ -9,13 +9,6 @@ export interface TimerProp {
   handleTimeout: () => void;
 }
 
-const useStyles = makeStyles<Theme>((theme) => ({
-  root: {},
-  center: {
-    textAlign: "center",
-  },
-}));
-
 const TimerPage: React.FC<TimerProp> = ({
   initialMinute,
   initialSeconds,
@@ -49,10 +42,6 @@ const TimerPage: React.FC<TimerProp> = ({
   return (
     <Box className={classes.center}>
       {minutes === 0 && seconds === 0 ? null : (
-        // <h1>
-        //   {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-        // </h1>
-
         <Typography align="center" variant="h4">
           The Game will start in {minutes * 60 + seconds}...
         </Typography>
@@ -62,3 +51,10 @@ const TimerPage: React.FC<TimerProp> = ({
 };
 
 export default TimerPage;
+
+const useStyles = makeStyles<Theme>((theme) => ({
+  root: {},
+  center: {
+    textAlign: "center",
+  },
+}));

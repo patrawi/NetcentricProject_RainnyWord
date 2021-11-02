@@ -15,9 +15,8 @@ import { useHistory } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
 
-import rain from '../asset/image/rain.png';
+import rain from "../asset/image/rain.png";
 const useStyles = makeStyles((theme) => ({
-
   title: {
     fontSize: "5em",
     fontWeight: "bold",
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "0 auto",
     padding: "1em",
     marginBottom: "2em",
-    borderRadius : "30px",
+    borderRadius: "30px",
   },
   button: {
     borderRadius: "30px",
@@ -37,24 +36,23 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  textfield : {
-    borderRadius : "30px"
+  textfield: {
+    borderRadius: "30px",
   },
 
-  rain : {
-    opacity : 0.8,
-    backgroundImage : `url(${rain})`,
-    animation : `$rain .9s linear infinite`,
-},
-'@keyframes rain' : {
-    "0%" : {
-        backgroundPosition : '0% 0%',
+  rain: {
+    opacity: 0.8,
+    backgroundImage: `url(${rain})`,
+    animation: `$rain .9s linear infinite`,
+  },
+  "@keyframes rain": {
+    "0%": {
+      backgroundPosition: "0% 0%",
     },
-    "100%" : {
-        backgroundPosition : "20% 100%"
-    }
-},
-
+    "100%": {
+      backgroundPosition: "20% 100%",
+    },
+  },
 }));
 
 const Homepage = () => {
@@ -80,8 +78,12 @@ const Homepage = () => {
   const handleAddPlayer = async () => {
     if (!name) {
       setHelperText("Please enter your name");
+    } else if (name.length > 12) {
+      setHelperText("Please enter a shorter name (max length is 12).");
     } else if (players.find((player) => player.name === name)) {
       setHelperText("Please select other name.");
+    } else if (players.length === 20) {
+      setHelperText("Game is full, sorry.");
     } else {
       if (socket) {
         setHelperText("");
@@ -104,82 +106,88 @@ const Homepage = () => {
     <>
       <div className={classes.rain}>
         <Container>
-          <Box display = "flex" justifyContent ="center" alignItems = "center" minHeight = "90vh">
-           <Box>
-           <Box>
-            <Typography className={classes.title} variant="h1" align="center">
-              Rainy Word
-            </Typography>
-            <Box m = {2} />
-            <Typography variant="h6" align="center">
-              Type fast to survive!
-            </Typography>
-          </Box>
-          <Box mt={2} />
-          <CardActions>
-            <TextField
-              id="name"
-              label="Your Name"
-              variant="outlined"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                changeNameHandle(e);
-              }}
-              InputProps={{
-                classes: {
-                  root: classes.textfield,
-                },
-              }}
-              helperText={helperText}
-              fullWidth
-              error={helperText ? true : false}
-            />
-          </CardActions>
-          <Box className={classes.activeBtn}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={handleAddPlayer}
-              classes={{
-                root: classes.button,
-              }}
-            >
-              Connect
-            </Button>
-
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={() => setOpenHowToPlay(true)}
-              classes={{
-                root: classes.button,
-              }}
-            >
-              How to Play?
-            </Button>
-          </Box>
-          <Modal open={openHowToPlay}>
-            <Fade in={openHowToPlay}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  paddingTop: 50,
-                }}
-              >
-                <HowToPlayModal
-                  openHowToPlay={openHowToPlay}
-                  setOpenHowToPlay={setOpenHowToPlay}
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="90vh"
+          >
+            <Box>
+              <Box>
+                <Typography
+                  className={classes.title}
+                  variant="h1"
+                  align="center"
+                >
+                  Rainy Word
+                </Typography>
+                <Box m={2} />
+                <Typography variant="h6" align="center">
+                  Type fast to survive!
+                </Typography>
+              </Box>
+              <Box mt={2} />
+              <CardActions>
+                <TextField
+                  id="name"
+                  label="Your Name"
+                  variant="outlined"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    changeNameHandle(e);
+                  }}
+                  InputProps={{
+                    classes: {
+                      root: classes.textfield,
+                    },
+                  }}
+                  helperText={helperText}
+                  fullWidth
+                  error={helperText ? true : false}
                 />
-              </div>
-            </Fade>
-          </Modal>
-    
-          </Box> 
-         
-        
+              </CardActions>
+              <Box className={classes.activeBtn}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={handleAddPlayer}
+                  classes={{
+                    root: classes.button,
+                  }}
+                >
+                  Connect
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  onClick={() => setOpenHowToPlay(true)}
+                  classes={{
+                    root: classes.button,
+                  }}
+                >
+                  How to Play?
+                </Button>
+              </Box>
+              <Modal open={openHowToPlay}>
+                <Fade in={openHowToPlay}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      paddingTop: 50,
+                    }}
+                  >
+                    <HowToPlayModal
+                      openHowToPlay={openHowToPlay}
+                      setOpenHowToPlay={setOpenHowToPlay}
+                    />
+                  </div>
+                </Fade>
+              </Modal>
+            </Box>
           </Box>
         </Container>
       </div>
@@ -188,4 +196,3 @@ const Homepage = () => {
 };
 
 export default Homepage;
-

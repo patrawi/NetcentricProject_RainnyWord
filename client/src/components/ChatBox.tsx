@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Card, Button, Switch, Input, makeStyles } from "@material-ui/core";
+import { Card, Button, Input, makeStyles } from "@material-ui/core";
 
 import { AppContext } from "../context/AppContext";
 import { Chat } from "../interfaces/Chat";
@@ -7,10 +7,8 @@ import moment from "moment";
 import { SocketContext } from "../context/SocketContext";
 
 const ChatBox = () => {
-  const { user, pubChat, setPubChat, privChat, setPrivChat } =
-    useContext(AppContext);
+  const { user, pubChat, setPubChat } = useContext(AppContext);
   const { socket, publicChat } = useContext(SocketContext);
-  const [chatMode, setChatMode] = useState(true);
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
@@ -20,10 +18,6 @@ const ChatBox = () => {
         setPubChat(chats);
       });
     }
-
-    // socket.on("privateChat", function (targetSocket, chat: Chat) {
-    //   setPrivChat([...privChat, chat]);
-    // });
   }, []);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,64 +28,41 @@ const ChatBox = () => {
   const ChatMessage = () => {
     return (
       <div className={useStyle().chatMsg}>
-        {chatMode ? (
-          <div>
-            {pubChat?.map((chat, index) => {
-              return (
-                <div key={index}>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <span style={{ fontSize: 12, color: "#9e9e9e" }}>
-                      {moment(chat.time).format("h:mm:ss a")}
-                    </span>
-                  </div>
-                  <span
-                    style={{
-                      fontWeight: "bold",
-                      marginRight: 4,
-                      color: "#455a64",
-                    }}
-                  >
-                    {chat.name}:
+        <div>
+          {pubChat?.map((chat, index) => {
+            return (
+              <div key={index}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                  }}
+                >
+                  <span style={{ fontSize: 12, color: "#9e9e9e" }}>
+                    {moment(chat.time).format("h:mm:ss a")}
                   </span>
-                  <span>{chat?.message}</span>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div>
-            {privChat?.map((chat, index) => {
-              return (
-                <div key={index}>
-                  <div>
-                    <p>{chat.name}</p>
-                    <p>{chat?.time.toLocaleString()}</p>
-                  </div>
-                  <p>{chat?.message}</p>
-                </div>
-              );
-            })}
-          </div>
-        )}
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    marginRight: 4,
+                    color: "#455a64",
+                  }}
+                >
+                  {chat.name}:
+                </span>
+                <span>{chat?.message}</span>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
 
   const handleButtonClick = () => {
     if (user && message !== "" && socket) {
-      if (chatMode === true) publicChat(user, message);
-      else {
-        // socket.emit("privateChat", {
-        //   name: user?.name,
-        //   time: new Date(),
-        //   message: message,
-        // });
-      }
+      publicChat(user, message);
       setMessage("");
     }
   };
@@ -107,19 +78,14 @@ const ChatBox = () => {
             alignItems: "center",
           }}
         >
-          <span style={{ fontSize: 24, fontWeight: "bold" }}>
-            {chatMode ? "Public Chat" : "Private Chat"}
-          </span>
-          <Switch onChange={() => setChatMode(!chatMode)} />
+          <span style={{ fontSize: 24, fontWeight: "bold" }}>Chat</span>
         </div>
         <div className={useStyle().chatBox}>
           <ChatMessage />
         </div>
         <div>
           <Input
-            placeholder={
-              chatMode ? "Public chat message" : "Private chat message"
-            }
+            placeholder="Enter Chat Message!"
             onChange={handleTextChange}
             value={message}
             style={{ width: "100%" }}
@@ -139,7 +105,7 @@ const ChatBox = () => {
 
 export default ChatBox;
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles({
   container: {
     flex: 1,
     width: "23%",
@@ -153,6 +119,7 @@ const useStyle = makeStyles((theme) => ({
     height: "60vh",
     marginBottom: "1em",
     backgroundColor: "#fff",
+    paddingLeft: 4,
   },
   button: {
     width: "100%",
@@ -164,4 +131,4 @@ const useStyle = makeStyles((theme) => ({
     borderRadius: 6,
     backgroundColor: "#fff",
   },
-}));
+});
