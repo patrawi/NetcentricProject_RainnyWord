@@ -16,44 +16,6 @@ import { AppContext } from "../context/AppContext";
 import { SocketContext } from "../context/SocketContext";
 
 import rain from "../asset/image/rain.png";
-const useStyles = makeStyles((theme) => ({
-  title: {
-    fontSize: "5em",
-    fontWeight: "bold",
-  },
-  inputBox: {
-    backgroundColor: "#ffb300",
-    margin: "0 auto",
-    padding: "1em",
-    marginBottom: "2em",
-    borderRadius: "30px",
-  },
-  button: {
-    borderRadius: "30px",
-  },
-  activeBtn: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  textfield: {
-    borderRadius: "30px",
-  },
-
-  rain: {
-    opacity: 0.8,
-    backgroundImage: `url(${rain})`,
-    animation: `$rain .9s linear infinite`,
-  },
-  "@keyframes rain": {
-    "0%": {
-      backgroundPosition: "0% 0%",
-    },
-    "100%": {
-      backgroundPosition: "20% 100%",
-    },
-  },
-}));
 
 const Homepage = () => {
   const classes = useStyles();
@@ -61,8 +23,7 @@ const Homepage = () => {
   const [name, setName] = useState<string>("");
   const [openHowToPlay, setOpenHowToPlay] = useState(false);
   const [helperText, setHelperText] = useState("");
-  const [usedName, setUsedName] = useState<string[]>([]);
-  const { setUser, setPlayers, players } = useContext(AppContext);
+  const { setUser, players } = useContext(AppContext);
   let history = useHistory();
 
   useEffect(() => {
@@ -79,11 +40,11 @@ const Homepage = () => {
     if (!name) {
       setHelperText("Please enter your name");
     } else if (name.length > 12) {
-      setHelperText("Please enter a shorter name (max length is 12).");
+      setHelperText("Please enter a shorter name (max length is 12)");
     } else if (players.find((player) => player.name === name)) {
-      setHelperText("Please select other name.");
+      setHelperText("Please select other name");
     } else if (players.length === 20) {
-      setHelperText("Game is full, sorry.");
+      setHelperText("The game is full!");
     } else {
       if (socket) {
         setHelperText("");
@@ -110,7 +71,7 @@ const Homepage = () => {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            minHeight="90vh"
+            minHeight="80vh"
           >
             <Box>
               <Box>
@@ -196,3 +157,42 @@ const Homepage = () => {
 };
 
 export default Homepage;
+
+const useStyles = makeStyles({
+  title: {
+    fontSize: "5em",
+    fontWeight: "bold",
+  },
+  inputBox: {
+    backgroundColor: "#ffb300",
+    margin: "0 auto",
+    padding: "1em",
+    marginBottom: "2em",
+    borderRadius: "30px",
+  },
+  button: {
+    borderRadius: "30px",
+  },
+  activeBtn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  textfield: {
+    borderRadius: "30px",
+  },
+
+  rain: {
+    opacity: 0.8,
+    backgroundImage: `url(${rain})`,
+    animation: `$rain .9s linear infinite`,
+  },
+  "@keyframes rain": {
+    "0%": {
+      backgroundPosition: "0% 0%",
+    },
+    "100%": {
+      backgroundPosition: "20% 100%",
+    },
+  },
+});
