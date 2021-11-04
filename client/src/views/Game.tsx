@@ -33,7 +33,7 @@ const Gamepage = () => {
   const { randWords } = location.state;
   const TIME = {
     initialMinute: 0,
-    initialSeconds: 120,
+    initialSeconds: 90,
   };
   const [timeout, setTimeout] = useState(false);
   const { updateLeaderboard } = useContext(SocketContext);
@@ -96,9 +96,9 @@ const Gamepage = () => {
 
   return (
     <>
-      {/* {timeout ? (
+      {timeout ? (
         handleRedirect()
-      ) : ( */}
+      ) : (
         <Container>
           <Box
             display="flex"
@@ -123,8 +123,7 @@ const Gamepage = () => {
             handleDecreaseScore={decreasePoint}
           />
         </Container>
-      {/* )}
-      ; */}
+      )}
     </>
   );
 };

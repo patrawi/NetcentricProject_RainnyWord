@@ -16,7 +16,7 @@ export interface AdminProp {
 }
 
 const Adminpage: React.FC<AdminProp> = () => {
-  const baseURL: string = "http://localhost:8000";
+  const baseURL: string = "https://rainywords-server.herokuapp.com";
   const [login, setLogin] = useState<any>({ status: "", token: "" });
   const [auth, setAuth] = useState<any>({ message: "", status: "" });
   const [start, setStart] = useState<any>({ message: "", status: "" });
