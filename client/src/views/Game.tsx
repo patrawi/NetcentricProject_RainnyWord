@@ -96,9 +96,9 @@ const Gamepage = () => {
 
   return (
     <>
-      {/* {timeout ? (
+      {timeout ? (
         handleRedirect()
-      ) : ( */}
+      ) : (
         <Container>
           <Box
             display="flex"
@@ -123,8 +123,7 @@ const Gamepage = () => {
             handleDecreaseScore={decreasePoint}
           />
         </Container>
-      {/* )}
-      ; */}
+      )}
     </>
   );
 };
