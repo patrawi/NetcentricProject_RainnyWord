@@ -1,0 +1,70 @@
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+  let timeLeft = 10;
+  let gameStart = false;
+
+  socket.on("connect", function () {
+    document.getElementById("myId").innerHTML = `Id: ${socket.id}`;
+  });
+  // Test function for startWaitingRoomTimer
+  socket.on("startWaitingRoomTimer", function (isGameStart) {
+    const timer = setInterval(() => {
+      document.getElementById("gameStart").innerHTML =
+        "gameStart: " + gameStart;
+      timeLeft--;
+      document.getElementById("timer").innerHTML = timeLeft;
+
+      if (timeLeft <= 0) {
+        gameStart = true;
+        socket.emit("gameStart", gameStart);
+        document.getElementById("gameStart").innerHTML =
+          "gameStart: " + gameStart;
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    timeLeft = 10;
+  });
+
+  socket.on("words", function (words) {
+    document.getElementById("words").innerHTML = JSON.stringify(words);
+  });
+
+  socket.on("updatePlayerList", function (players) {
+    document.getElementById("players").innerHTML = JSON.stringify(players);
+  });
+
+  function onAddPlayer() {
+    const name = document.getElementById("onAddPlayer").value;
+    socket.emit("onAddPlayer", name);
+  }
+
+  function onRemovePLayer() {
+    const id = document.getElementById("onRemovePlayer").value;
+    socket.emit("onRemovePlayer", id);
+  }
+
+  function updateScoreById() {
+    const id = document.getElementById("updateScoreTarget").value;
+    const score = parseInt(document.getElementById("scoreAmount").value);
+    socket.emit("updateLeaderboard", { id: id, score: score });
+  }
+</script>
+
+<h1 id="myId">ID:</h1>
+<h1 id="timer">Timer</h1>
+<h1 id="gameStart"></h1>
+
+<p id="players">Players</p>
+<p id="words"></p>
+<input id="onAddPlayer" placeholder="Add new Player" />
+<button onclick="onAddPlayer()">Add player</button>
+<input id="onRemovePlayer" placeholder="Remove Player with id" />
+<button onclick="onRemovePLayer()">Remove player by id</button>
+
+<h1>Leader Board</h1>
+<p id="players">Players</p>
+<input id="updateScoreTarget" placeholder="Target ID" />
+<input id="scoreAmount" type="number" placeholder="Score" />
+<button onclick="updateScoreById()">Update player's score by ID</button>

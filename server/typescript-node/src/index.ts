@@ -16,7 +16,7 @@ const bodyParser = require("body-parser");
 const http = require("http").Server(app);
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "*",
     methods: ["GET", "POST"],
     allowedHeaders: ["rainy-word"],
     credentials: true,
@@ -31,11 +31,14 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   next();
 });
-const MAX_PLAYERS = 20;
+const MAX_PLAYERS = 2;
+let LOBBY_TIME = 20;
+let GAME_TIME = 180;
 let players: Player[] = [];
 const pubChats: Chat[] = [];
 
 app.get("/", (req: Request, res: Response) => {
+  // res.status(200).send("Hello Rainy Words!");
   res.sendFile(__dirname + "/index.html");
 });
 
@@ -86,6 +89,8 @@ app.post("/reset", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       players = [];
+      LOBBY_TIME = 20;
+      GAME_TIME = 180;
       return res.status(200).send({ status: "success", message: players });
     }
   } catch (err) {
@@ -128,8 +133,33 @@ app.post("/startgame", (req: Request, res: Response) => {
   }
 });
 
+function lobbyTimer() {
+  if (LOBBY_TIME >= 0) {
+    io.emit("getLobbyCountdown", LOBBY_TIME);
+    LOBBY_TIME--;
+  } else clearInterval();
+}
+
+function gameTimer() {
+  if (GAME_TIME >= 0) {
+    io.emit("getGameCountdown", GAME_TIME);
+    LOBBY_TIME--;
+  } else clearInterval();
+}
+
 io.on("connection", (socket: Socket) => {
   console.log(`${socket.id} connected`);
+
+  // --------------------- ADMINS FUNCTION -------------------------------
+  socket.on("startLobbyCountdown", function () {
+    setInterval(lobbyTimer, 1000);
+  });
+
+  socket.on("startGameCountdown", function () {
+    setInterval(gameTimer, 1000);
+  });
+
+  // --------------------- PLAYERS FUNCTION -------------------------------
 
   // Send players to client once client connects
   socket.on("onRetrievePlayers", function () {
@@ -165,12 +195,6 @@ io.on("connection", (socket: Socket) => {
     io.emit("onUpdatePublicChat", pubChats);
   });
 
-  socket.on("privateChat", function (socketDestId, data: Chat) {
-    // Save in front-end, backend will only send the message.
-    // Emit, then setState in Front-end.
-    socket.to(socketDestId).emit("privateChat", socket.id, data);
-  });
-
   socket.on("disconnect", function () {
     console.log(`${socket.id} disconnected`);
     players = removePlayers(players, socket.id);
@@ -179,6 +203,7 @@ io.on("connection", (socket: Socket) => {
   });
 });
 
-http.listen(process.env.PORT, () => {
+const port = process.env.PORT || 3000;
+http.listen(port, () => {
   console.log(`Listening to port ${process.env.PORT}`);
 });
