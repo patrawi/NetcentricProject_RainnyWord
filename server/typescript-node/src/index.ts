@@ -143,7 +143,7 @@ function lobbyTimer() {
 function gameTimer() {
   if (GAME_TIME >= 0) {
     io.emit("getGameCountdown", GAME_TIME);
-    LOBBY_TIME--;
+    GAME_TIME--;
   } else clearInterval();
 }
 
