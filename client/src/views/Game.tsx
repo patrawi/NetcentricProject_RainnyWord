@@ -31,7 +31,7 @@ const Gamepage = () => {
   const { user, setUser, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
   const [timeout, setTimeout] = useState(false);
-  const { updateLeaderboard ,gameTime} = useContext(SocketContext);
+  const { updateLeaderboard } = useContext(SocketContext);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
@@ -100,12 +100,7 @@ const Gamepage = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <TimerPage
-             
-              initialSeconds={gameTime}
-              handleTimeout={handleTimeout}
-              isGame={true}
-            />
+            <TimerPage isGame={true} />
             <Typography align="center">
               {user.name}: {user.score}
             </Typography>
