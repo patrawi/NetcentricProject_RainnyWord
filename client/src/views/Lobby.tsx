@@ -21,10 +21,10 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
   const [randWords, setRandWords] = useState<wordRand[]>([]);
   const { user, players, onBgm } = useContext(AppContext);
-  const [redirectNow, setRedirectNow] = useState(false);
-  const { updatePlayerList, socket, lobbyTime, updateLobbyTime } =
-    useContext(SocketContext);
+  
+  const { updatePlayerList,  socket, lobbyTime} = useContext(SocketContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
+
 
   const countdownTimer = () => {
     if (socket) {
@@ -32,18 +32,21 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         setRandWords(words);
       });
     }
-
-    return <TimerPage isGame={false} />;
+    return (
+      <TimerPage
+        isGame={false}
+      />
+    );
   };
   useEffect(() => {
-    if (lobbyTime === 0) {
+    if (lobbyTime === 0 && socket) {
       stop();
-      setRedirectNow(true);
+      socket.emit("startGameCountdown");      
+      
+    
     }
   }, [lobbyTime]);
-
   useEffect(() => {
-    updateLobbyTime();
     updatePlayerList();
     if (socket) {
       socket.on("startWaitingRoomTimer", function (isGameStart) {
@@ -60,7 +63,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row" }}>
-        {redirectNow ? (
+        {lobbyTime === 0 ? (
           <Redirect
             to={{
               pathname: "/Game",

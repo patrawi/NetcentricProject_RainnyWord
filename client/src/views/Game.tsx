@@ -30,8 +30,8 @@ const Gamepage = () => {
   }>();
   const { user, setUser, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
-  const [timeout, setTimeout] = useState(false);
-  const { updateLeaderboard } = useContext(SocketContext);
+
+  const { updateLeaderboard, gameTime } = useContext(SocketContext);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
@@ -71,9 +71,7 @@ const Gamepage = () => {
     if (onSfx) playBoom();
     setUser({ ...user, score: user.score - length * 100 });
   };
-  const handleTimeout = () => {
-    setTimeout(true);
-  };
+
 
   const handleRedirect = () => {
     return (
@@ -91,7 +89,7 @@ const Gamepage = () => {
 
   return (
     <>
-      {timeout ? (
+      {gameTime === 0 ? (
         handleRedirect()
       ) : (
         <Container>
