@@ -27,13 +27,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Endpage = () => {
-  const { updatePlayerList } = useContext(SocketContext);
+  const { updatePlayerList,socket } = useContext(SocketContext);
   const { players, onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(CongratulationSfx);
   const classes = useStyles();
 
   useEffect(() => {
     updatePlayerList();
+    // if(socket) {
+    //   ("getGameCountdown")
+    // }
   }, []);
   useEffect(() => {
     if (onBgm) play();

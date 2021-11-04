@@ -15,6 +15,7 @@ import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 //@ts-ignore
 import LobbyBgm from "../asset/bgm/bgm_game.mp3";
+import Countdown from "../components/Countdown";
 
 export type Time = {
   initialSeconds: number;
@@ -31,9 +32,10 @@ const Gamepage = () => {
   const { user, setUser, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
 
-  const { updateLeaderboard, gameTime } = useContext(SocketContext);
+  const { updateLeaderboard, socket } = useContext(SocketContext);
   const [correctPitch, setCorrectPitch] = useState(0.8);
-  const { onBgm } = useContext(AppContext);
+  const [gameTime, setGameTime] = useState<number>(30);
+    const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
   const [playBoom] = useSound(BoomSfx);
   const [playCombo] = useSound(CorrectSfx, {
@@ -45,6 +47,9 @@ const Gamepage = () => {
   });
 
   useEffect(() => {
+    if(socket) {
+      socket.off("startWaitingRoomTimer")
+    }
     if (user) {
       updateLeaderboard(user);
     }
@@ -66,7 +71,9 @@ const Gamepage = () => {
     setUser({ ...user, score: user.score + length * 100 });
     setCorrectPitch(correctPitch + 0.1);
   };
-
+  const handleTime = () => {
+    setGameTime(gameTime-1);
+  }
   const decreasePoint = (length: number) => {
     if (onSfx) playBoom();
     setUser({ ...user, score: user.score - length * 100 });
@@ -98,17 +105,17 @@ const Gamepage = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <TimerPage isGame={true} />
+            <Countdown handleTime = {handleTime} gameTime = {gameTime} />
             <Typography align="center">
               {user.name}: {user.score}
             </Typography>
           </Box>
 
-          <Rainpage
+          {/* <Rainpage
             handleScore={increasePoint}
             randomWords={randWords}
             handleDecreaseScore={decreasePoint}
-          />
+          /> */}
         </Container>
       )}
     </>

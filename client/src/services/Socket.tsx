@@ -21,6 +21,7 @@ const Socket: React.FC<SocketProp> = ({ children }: any) => {
             setPlayers(players);
           }
         });
+       
       }
       socket.on("connection", function () {
         console.log("Connected!");

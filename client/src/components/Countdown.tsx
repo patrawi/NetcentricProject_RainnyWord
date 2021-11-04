@@ -4,40 +4,43 @@ import { Typography } from "@material-ui/core";
 import React from "react";
 import { SocketContext } from "../context/SocketContext";
 
-export interface TimerProp {
-  isGame: boolean;
-
+export interface CountdownProp {
+ 
+  handleTime : () => void;
+  gameTime : number;
 }
 
-const TimerPage: React.FC<TimerProp> = ({ isGame}) => {
+const Countdown: React.FC<CountdownProp> = ({ handleTime, gameTime}) => {
   const classes = useStyles();
-  const { socket,lobbyTime,  updateLobbyTime,  } =
-    useContext(SocketContext);
+
 
     useEffect(() => {
-  
-      if(lobbyTime === 0 && socket) {
-        socket.off("getLobbyCountdown")
+      let interval = setInterval(() => {
+        if(gameTime > 0) {
+          handleTime();
+        }
+      }, 1000)
+      return () => {
+        clearInterval(interval);
       }
-      updateLobbyTime();
-
       
-    }, [lobbyTime]);
+    }, [gameTime]);
 
 
 
   return (
     <Box className={classes.center}>
-
+    
         <Typography align="center" variant="h5">
-          The game will start in {lobbyTime} seconds.
+          The game will end in {gameTime} seconds.
         </Typography>
+    
 
     </Box>
   );
 };
 
-export default TimerPage;
+export default Countdown;
 
 const useStyles = makeStyles<Theme>({
   root: {},
