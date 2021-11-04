@@ -53,7 +53,7 @@ const SocketContextProvider = ({ ...props }) => {
   const updateGameTime = () => {
     if (socket) {
       socket.on("getGameCountdown", (time: number) => {
-        console.log(time);
+
         setGameTime(time);
       });
     }
@@ -62,7 +62,6 @@ const SocketContextProvider = ({ ...props }) => {
   const updateLobbyTime = () => {
     if (socket) {
       socket.on("getLobbyCountdown", (time: number) => {
-        console.log(time);
         setLobbyTime(time);
       });
     }

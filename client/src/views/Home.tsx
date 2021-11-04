@@ -37,7 +37,7 @@ const Homepage = () => {
       setHelperText("Please enter a shorter name (max length is 12)");
     } else if (players.find((player) => player.name === name)) {
       setHelperText("Please select other name");
-    } else if (players.length === 20) {
+    } else if (players.length === 2) {
       setHelperText("The game is full!");
     } else {
       if (socket) {

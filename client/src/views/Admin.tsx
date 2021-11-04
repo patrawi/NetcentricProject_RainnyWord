@@ -23,7 +23,7 @@ const Adminpage: React.FC<AdminProp> = () => {
   const [start, setStart] = useState<any>({ message: "", status: "" });
   const [reset, setReset] = useState<any>({ message: "", status: "" });
   const classes = useStyles();
-  const {lobbyTime, socket, updateLobbyTime} = useContext(SocketContext)
+  const { socket, } = useContext(SocketContext)
   const adminUser = {
     username: "admin",
     password: "admin123",

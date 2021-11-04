@@ -38,7 +38,7 @@ export const LeaderBoard = ({ players }: LeaderBoardProps) => {
   return (
     <Container className={styles.container}>
       {players.map((player) => {
-        return <PlayerCard player={player} />;
+        return <PlayerCard player={player} key = {player.id} />;
       })}
     </Container>
   );

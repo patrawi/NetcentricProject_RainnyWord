@@ -53,7 +53,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         setCheck(true);
       });
     }
-  }, [players]);
+  }, []);
 
   useEffect(() => {
     if (onBgm) play();
