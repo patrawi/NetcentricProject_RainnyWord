@@ -17,7 +17,6 @@ import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 import LobbyBgm from "../asset/bgm/bgm_game.mp3";
 
 export type Time = {
-  initialMinute: number;
   initialSeconds: number;
 };
 export type word = {
@@ -31,12 +30,8 @@ const Gamepage = () => {
   }>();
   const { user, setUser, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
-  const TIME = {
-    initialMinute: 0,
-    initialSeconds: 90,
-  };
   const [timeout, setTimeout] = useState(false);
-  const { updateLeaderboard } = useContext(SocketContext);
+  const { updateLeaderboard ,gameTime} = useContext(SocketContext);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
@@ -106,8 +101,8 @@ const Gamepage = () => {
             alignItems="center"
           >
             <TimerPage
-              initialMinute={TIME.initialMinute}
-              initialSeconds={TIME.initialSeconds}
+             
+              initialSeconds={gameTime}
               handleTimeout={handleTimeout}
               isGame={true}
             />
@@ -117,7 +112,6 @@ const Gamepage = () => {
           </Box>
 
           <Rainpage
-            time={TIME}
             handleScore={increasePoint}
             randomWords={randWords}
             handleDecreaseScore={decreasePoint}

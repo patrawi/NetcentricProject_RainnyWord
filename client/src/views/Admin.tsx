@@ -7,8 +7,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import LoginForm from "../components/LoginForm";
+import { SocketContext } from "../context/SocketContext";
 import { form } from "../types/type";
 export interface AdminProp {
   Login: (details: form) => void;
@@ -16,13 +17,13 @@ export interface AdminProp {
 }
 
 const Adminpage: React.FC<AdminProp> = () => {
-  const baseURL: string = "https://rainywords-server.herokuapp.com";
+  const baseURL: string = "http://localhost:8000";
   const [login, setLogin] = useState<any>({ status: "", token: "" });
   const [auth, setAuth] = useState<any>({ message: "", status: "" });
   const [start, setStart] = useState<any>({ message: "", status: "" });
   const [reset, setReset] = useState<any>({ message: "", status: "" });
   const classes = useStyles();
-
+  const {lobbyTime, socket, updateLobbyTime} = useContext(SocketContext)
   const adminUser = {
     username: "admin",
     password: "admin123",
@@ -90,15 +91,21 @@ const Adminpage: React.FC<AdminProp> = () => {
       });
   };
 
-  const Start = () => {
+  const Start =  () => {
     axios
       .post(
         baseURL + "/startgame",
         {},
         { headers: { Authorization: `Bearer ${login.token}` } }
       )
-      .then((res) => {
+      .then( (res) => {
         setStart(res.data);
+
+
+        if(socket) {
+        socket.emit("startLobbyCountdown");    
+
+        }
         alert(start.message);
       });
   };
@@ -178,3 +185,4 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+

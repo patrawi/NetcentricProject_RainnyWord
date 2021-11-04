@@ -8,7 +8,6 @@ import { useSound } from "use-sound";
 //@ts-ignore
 import PopSfx from "../asset/sfx/sfx_pop.mp3";
 interface RainProp {
-  time: Time;
   handleScore: (length: number) => void;
   randomWords: word[];
   handleDecreaseScore: (length: number) => void;

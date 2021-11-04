@@ -11,11 +11,16 @@ export interface SocketConstruct {
   updateLeaderboard: (user: User) => void;
   publicChat: (user: User, message: string) => void;
   updatePlayerList: () => void;
+  lobbyTime : number | undefined
+  gameTime: number | undefined;
+  updateLobbyTime : () => void;
 }
 export const SocketContext = createContext({} as SocketConstruct);
 
 const SocketContextProvider = ({ ...props }) => {
   const [socket, setSocket] = useState<Socket>();
+  const [lobbyTime, setLobbyTime] = useState();
+  const [gameTime, setGameTime] = useState<number>();
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
   const { setPlayers } = useContext(AppContext);
 
@@ -44,7 +49,28 @@ const SocketContextProvider = ({ ...props }) => {
         message: message,
       });
   };
+  const updateGameTime = () => {
+    if(socket) {
+      socket.on("getGameCountdown", (time : number) => {
+        
+        if (time != undefined) {
+          console.log(time)
+          setGameTime(time)
+        }
+      })
+    }
+  }
 
+  const updateLobbyTime = () => {
+    if(socket) {
+      socket.on("getLobbyCountdown", (time : number) => {
+        console.log(time)
+        if (time != undefined) {
+          setGameTime(time)
+        }
+      })
+    }
+  }
   const value = {
     socket,
     setSocket,
@@ -53,6 +79,9 @@ const SocketContextProvider = ({ ...props }) => {
     updateLeaderboard,
     publicChat,
     updatePlayerList,
+    lobbyTime,
+    updateLobbyTime,
+    gameTime,
   };
   return <SocketContext.Provider value={value} {...props} />;
 };
