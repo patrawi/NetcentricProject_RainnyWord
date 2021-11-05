@@ -99,7 +99,7 @@ const Rainpage: React.FC<RainProp> = ({
   return (
     <>
       <Box>
-        {wordToRender.map(({ word, location, key, destroyed, dangerWord }) => {
+        {randomWords.map(({ word, location, key, destroyed, dangerWord }) => {
           console.log(key);
           const handleWordToRender = () => {
             setWordToRender(wordToRender => wordToRender.filter((word) => word.key !== key))
