@@ -42,16 +42,16 @@ const Gamepage = () => {
   useEffect(() => {
     if(socket) {
       socket.off("startWaitingRoomTimer")
+      updateLeaderboard(user);
+      
     }
-    // if (user) {
-    //   updateLeaderboard(user);
-    // }
-  }, [user, updateLeaderboard]);
 
-  // useEffect(() => {
-  //   if (onBgm) play();
-  //   else stop();
-  // }, [onBgm, play, stop]);
+  }, [user]);
+
+  useEffect(() => {
+    if (onBgm) play();
+    else stop();
+  }, [onBgm, play, stop]);
 
   const HandleRedirect = () => {
     stop();
