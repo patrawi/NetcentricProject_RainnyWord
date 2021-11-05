@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { Socket } from "socket.io-client";
 import { User } from "../interfaces/User";
 import { AppContext } from "./AppContext";
-import { wordRand } from "../types/type";
+import {  wordToRender } from "../types/type";
 export interface SocketConstruct {
   socket: Socket | undefined;
   setSocket: (value: Socket | undefined) => void;
@@ -13,7 +13,7 @@ export interface SocketConstruct {
   updatePlayerList: () => void;
   updateLobbyTime: () => void;
   lobbyTime: number | undefined;
-  words : wordRand[];
+  words : wordToRender[];
   fetchWord : () => void;
 
 }
@@ -23,7 +23,7 @@ const SocketContextProvider = ({ ...props }) => {
   const [socket, setSocket] = useState<Socket>();
   const [lobbyTime, setLobbyTime] = useState<number>();
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
-  const [words, setWords] = useState<wordRand[]>([]);
+  const [words, setWords] = useState<wordToRender[]>([]);
   const { setPlayers } = useContext(AppContext);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const SocketContextProvider = ({ ...props }) => {
 
   const fetchWord = () => {
     if(socket) {
-      socket.on("words", (randomwords : wordRand[]) => {
+      socket.on("words", (randomwords : wordToRender[]) => {
         console.log(randomwords)
         setWords(randomwords)
      

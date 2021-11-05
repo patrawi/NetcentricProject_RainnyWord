@@ -19,10 +19,6 @@ import Countdown from "../components/Countdown";
 export type Time = {
   initialSeconds: number;
 };
-export type word = {
-  word: string;
-  key: number;
-};
 
 const Gamepage = () => {
 
@@ -52,10 +48,10 @@ const Gamepage = () => {
     }
   }, [user, updateLeaderboard]);
 
-  useEffect(() => {
-    if (onBgm) play();
-    else stop();
-  }, [onBgm, play, stop]);
+  // useEffect(() => {
+  //   if (onBgm) play();
+  //   else stop();
+  // }, [onBgm, play, stop]);
 
   const HandleRedirect = () => {
     return (
@@ -97,9 +93,9 @@ const Gamepage = () => {
 
   return (
     <>
-      {isRedirected ? (
+      {/* {isRedirected ? (
         <HandleRedirect />
-      ) : (
+      ) : ( */}
         <Container>
           <Box
             display="flex"
@@ -109,15 +105,15 @@ const Gamepage = () => {
             <Typography align="center">
               {user.name}: {user.score}
             </Typography>
-          </Box>
-
+          </Box>  
+    
           <Rainpage
             handleScore={increasePoint}
             randomWords={words}
             handleDecreaseScore={decreasePoint}
           />
         </Container>
-      )}
+      {/* )} */}
     </>
   );
 };
