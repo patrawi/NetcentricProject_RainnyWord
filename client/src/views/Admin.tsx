@@ -23,7 +23,7 @@ const Adminpage: React.FC<AdminProp> = () => {
   const [start, setStart] = useState<any>({ message: "", status: "" });
   const [reset, setReset] = useState<any>({ message: "", status: "" });
   const classes = useStyles();
-  const { socket, } = useContext(SocketContext)
+  const { socket } = useContext(SocketContext);
   const adminUser = {
     username: "admin",
     password: "admin123",
@@ -91,21 +91,16 @@ const Adminpage: React.FC<AdminProp> = () => {
       });
   };
 
-  const Start =  () => {
+  const Start = () => {
     axios
       .post(
         baseURL + "/startgame",
         {},
         { headers: { Authorization: `Bearer ${login.token}` } }
       )
-      .then( (res) => {
+      .then((res) => {
         setStart(res.data);
-
-
-        if(socket) {
-        socket.emit("startLobbyCountdown");    
-
-        }
+        if (socket) socket.emit("startLobbyCountdown");
         alert(start.message);
       });
   };
@@ -185,4 +180,3 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
-

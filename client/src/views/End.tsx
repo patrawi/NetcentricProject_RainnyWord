@@ -14,6 +14,7 @@ import PlayerCard from "../components/PlayerCard";
 import { useSound } from "use-sound";
 //@ts-ignore
 import CongratulationSfx from "../asset/sfx/sfx_congratulation.mp3";
+import { useHistory, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -27,18 +28,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Endpage = () => {
-  const { updatePlayerList } = useContext(SocketContext);
+  const { updatePlayerList, socket } = useContext(SocketContext);
   const { players, onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(CongratulationSfx);
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     updatePlayerList();
+    if (socket) {
+      socket.on("onReset", () => {
+        history.push("/");
+      });
+    }
   }, []);
   useEffect(() => {
     if (onBgm) play();
     else stop();
   }, [onBgm, play, stop]);
+
   return (
     <React.Fragment>
       <Container maxWidth="md" className={classes.container}>

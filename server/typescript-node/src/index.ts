@@ -32,8 +32,8 @@ app.use((req, res, next) => {
   next();
 });
 const MAX_PLAYERS = 2;
-let LOBBY_TIME = 20;
-let GAME_TIME = 180;
+let LOBBY_TIME = 5;
+let GAME_TIME = 30;
 let players: Player[] = [];
 const pubChats: Chat[] = [];
 
@@ -75,7 +75,7 @@ app.post("/adminauth", (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Admin: Reset the game
-// For development only!
+// TODO: Change LOBBY_TIME, GAME_TIME
 app.post("/reset", (req: Request, res: Response) => {
   const header = req.headers.authorization;
   const token = header && header.split(" ")[1];
@@ -89,8 +89,10 @@ app.post("/reset", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       players = [];
-      LOBBY_TIME = 20;
-      GAME_TIME = 180;
+      LOBBY_TIME = 5;
+      GAME_TIME = 30;
+      io.emit("onReset");
+      io.emit("getLobbyCountdown", LOBBY_TIME);
       return res.status(200).send({ status: "success", message: players });
     }
   } catch (err) {
@@ -137,14 +139,18 @@ function lobbyTimer() {
   if (LOBBY_TIME >= 0) {
     io.emit("getLobbyCountdown", LOBBY_TIME);
     LOBBY_TIME--;
-  } else clearInterval();
+  } else {
+    clearInterval();
+  }
 }
 
 function gameTimer() {
-  if (GAME_TIME >= 0) {
-    io.emit("getGameCountdown", GAME_TIME);
+  if (GAME_TIME === 0) {
+    io.emit("stopGame");
+    clearInterval();
+  } else {
     GAME_TIME--;
-  } else clearInterval();
+  }
 }
 
 io.on("connection", (socket: Socket) => {

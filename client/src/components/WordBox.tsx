@@ -1,5 +1,4 @@
 import { makeStyles, Theme, Typography } from "@material-ui/core";
-
 import React, { useEffect, useRef } from "react";
 
 interface WordBoxProp {
@@ -17,14 +16,14 @@ const useStyles = makeStyles<Theme>({
     top: "10vh",
     animation: `$fall 4s linear`,
     color: "black",
-    zIndex : -100,
+    zIndex: -100,
   },
   dangerWord: {
     position: "fixed",
     top: "10vh",
     animation: `$fall 4s linear`,
     color: "red",
-    zIndex : -100,
+    zIndex: -100,
   },
   "@keyframes fall": {
     from: {

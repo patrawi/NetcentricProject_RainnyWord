@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, makeStyles, TextField } from "@material-ui/core";
 import WordBox from "./WordBox";
-import { word, Time } from "../views/Game";
+import { word } from "../views/Game";
 import { wordToRender } from "../types/type";
 import { AppContext } from "../context/AppContext";
 import { useSound } from "use-sound";
@@ -13,19 +13,15 @@ interface RainProp {
   handleDecreaseScore: (length: number) => void;
 }
 const useStyles = makeStyles(() => ({
-  root : {
-    
+  root: {},
+  content: {
+    top: "auto",
+    bottom: "10vh",
+    left: 0,
+    position: "fixed",
+    zIndex: 1,
   },
-  content : {
-    top : 'auto',
-    bottom : '10vh',
-    left : 0,
-    position : 'fixed',
-    zIndex : 1,
-  
-  }
-  
-}))
+}));
 const Rainpage: React.FC<RainProp> = ({
   handleScore,
   randomWords,
@@ -127,7 +123,7 @@ const Rainpage: React.FC<RainProp> = ({
         })}
       </Box>
 
-      <form >
+      <form>
         <TextField
           type="text"
           value={answer}
@@ -136,15 +132,12 @@ const Rainpage: React.FC<RainProp> = ({
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             handleAnswerChange(e);
           }}
-          className = {classes.content}
+          className={classes.content}
           onKeyPress={(e) => handleKeyboardPress(e)}
           fullWidth
-         
           autoFocus
         />
       </form>
-   
-
     </>
   );
 };
