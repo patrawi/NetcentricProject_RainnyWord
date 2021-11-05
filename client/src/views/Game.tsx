@@ -56,6 +56,7 @@ const Gamepage = () => {
   }, [onBgm, play, stop]);
 
   const HandleRedirect = () => {
+    stop();
     return (
       <Redirect
         to={{

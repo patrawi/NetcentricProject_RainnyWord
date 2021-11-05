@@ -75,7 +75,7 @@ app.post("/adminauth", (req: Request, res: Response, next: NextFunction) => {
 });
 
 // Admin: Reset the game
-// For development only!
+// TODO: Change LOBBY_TIME, GAME_TIME
 app.post("/reset", (req: Request, res: Response) => {
   const header = req.headers.authorization;
   const token = header && header.split(" ")[1];
@@ -89,8 +89,10 @@ app.post("/reset", (req: Request, res: Response) => {
     const isAdmin = authenticateToken(token);
     if (isAdmin) {
       players = [];
-      LOBBY_TIME = 20;
-      GAME_TIME = 180;
+      LOBBY_TIME = 5;
+      GAME_TIME = 30;
+      io.emit("onReset");
+      io.emit("getLobbyCountdown", LOBBY_TIME);
       return res.status(200).send({ status: "success", message: players });
     }
   } catch (err) {
