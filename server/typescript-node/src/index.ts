@@ -32,8 +32,8 @@ app.use((req, res, next) => {
   next();
 });
 const MAX_PLAYERS = 2;
-let LOBBY_TIME = 20;
-let GAME_TIME = 180;
+let LOBBY_TIME = 5;
+let GAME_TIME = 30;
 let players: Player[] = [];
 const pubChats: Chat[] = [];
 
@@ -137,14 +137,18 @@ function lobbyTimer() {
   if (LOBBY_TIME >= 0) {
     io.emit("getLobbyCountdown", LOBBY_TIME);
     LOBBY_TIME--;
-  } else clearInterval();
+  } else {
+    clearInterval();
+  }
 }
 
 function gameTimer() {
-  if (GAME_TIME >= 0) {
-    io.emit("getGameCountdown", GAME_TIME);
+  if (GAME_TIME === 0) {
+    io.emit("stopGame");
+    clearInterval();
+  } else {
     GAME_TIME--;
-  } else clearInterval();
+  }
 }
 
 io.on("connection", (socket: Socket) => {
