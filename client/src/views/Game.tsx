@@ -46,7 +46,6 @@ const Gamepage = () => {
 
   useEffect(() => {
     if (user) {
-      console.log(user);
       updateLeaderboard(user);
     }
   }, [user]);
