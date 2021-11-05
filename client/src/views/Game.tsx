@@ -46,9 +46,10 @@ const Gamepage = () => {
 
   useEffect(() => {
     if (user) {
+      console.log(user);
       updateLeaderboard(user);
     }
-  }, [user, updateLeaderboard]);
+  }, [user]);
 
   useEffect(() => {
     if (onBgm) play();
