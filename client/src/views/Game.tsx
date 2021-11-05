@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Box, Container, Typography } from "@material-ui/core";
 import Rainpage from "../components/rain";
 import { AppContext } from "../context/AppContext";
-import { wordRand } from "../views/Lobby";
+import {wordRand} from '../types/type'
 import { Redirect, useLocation } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import useSound from "use-sound";
@@ -14,26 +14,21 @@ import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 //@ts-ignore
 import LobbyBgm from "../asset/bgm/bgm_game.mp3";
+import Countdown from "../components/Countdown";
 
 export type Time = {
   initialSeconds: number;
 };
-export type word = {
-  word: string;
-  key: number;
-};
 
 const Gamepage = () => {
-  const location = useLocation<{
-    randWords: wordRand[];
-  }>();
-  const { user, setUser, onSfx } = useContext(AppContext);
-  const { randWords } = location.state;
 
-  const { socket, updateLeaderboard } = useContext(SocketContext);
+  const { user, setUser, onSfx } = useContext(AppContext);
+
+  const { socket, updateLeaderboard, words } = useContext(SocketContext);
   const [isRedirected, setIsRedirected] = useState(false);
   const [correctPitch, setCorrectPitch] = useState(0.8);
-  const { onBgm } = useContext(AppContext);
+  const [gameTime, setGameTime] = useState<number>(30);
+    const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
   const [playBoom] = useSound(BoomSfx);
   const [playCombo] = useSound(CorrectSfx, {
@@ -45,15 +40,18 @@ const Gamepage = () => {
   });
 
   useEffect(() => {
+    if(socket) {
+      socket.off("startWaitingRoomTimer")
+    }
     if (user) {
       updateLeaderboard(user);
     }
   }, [user]);
 
-  useEffect(() => {
-    if (onBgm) play();
-    else stop();
-  }, [onBgm, play, stop]);
+  // useEffect(() => {
+  //   if (onBgm) play();
+  //   else stop();
+  // }, [onBgm, play, stop]);
 
   const HandleRedirect = () => {
     stop();
@@ -112,11 +110,11 @@ const Gamepage = () => {
 
           <Rainpage
             handleScore={increasePoint}
-            randomWords={randWords}
+            randomWords={words}
             handleDecreaseScore={decreasePoint}
           />
         </Container>
-      )}
+      )} 
     </>
   );
 };

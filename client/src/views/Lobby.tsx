@@ -12,30 +12,26 @@ import { LeaderBoard } from "../components/LeaderBoard";
 
 interface LobbyProp {}
 
-export type wordRand = {
-  word: string;
-  key: number;
-};
+
 
 const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
-  const [randWords, setRandWords] = useState<wordRand[]>([]);
   const { user, players, onBgm } = useContext(AppContext);
 
-  const { updatePlayerList, socket, lobbyTime } = useContext(SocketContext);
+  const { updatePlayerList, socket, lobbyTime, fetchWord, words } = useContext(SocketContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
 
   const countdownTimer = () => {
-    if (socket) {
-      socket.on("words", (words) => {
-        setRandWords(words);
-      });
-    }
     return <TimerPage />;
   };
 
   useEffect(() => {
     if (lobbyTime === 0 && socket) {
+      
+        // socket.off("words")
+        // socket.off("getLobbyCountdown")
+        // socket.off("retrievePlayers")
+        // socket.off("onUpdatePublicChat")
       stop();
       socket.emit("startGameCountdown");
     }
@@ -43,17 +39,20 @@ const Lobbypage: React.FC<LobbyProp> = () => {
 
   useEffect(() => {
     updatePlayerList();
+    fetchWord();
+    console.log(words);
     if (socket) {
       socket.on("startWaitingRoomTimer", function (isGameStart) {
         setCheck(true);
       });
     }
+
   }, []);
 
-  useEffect(() => {
-    if (onBgm) play();
-    else stop();
-  }, [onBgm, play, stop]);
+  // useEffect(() => {
+  //   if (onBgm) play();
+  //   else stop();
+  // }, [onBgm, play, stop]);
 
   return (
     <>
@@ -62,9 +61,6 @@ const Lobbypage: React.FC<LobbyProp> = () => {
           <Redirect
             to={{
               pathname: "/Game",
-              state: {
-                randWords,
-              },
             }}
           />
         ) : (

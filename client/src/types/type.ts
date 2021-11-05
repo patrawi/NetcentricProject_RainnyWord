@@ -1,5 +1,5 @@
 export type wordToRender = {
-    id: number;
+    key: number;
     word: string;
     location: string;
     destroyed: boolean;
@@ -10,3 +10,8 @@ export type wordToRender = {
     username: string;
     password: string;
 }
+
+export type wordRand = {
+  word: string;
+  key: number;
+};

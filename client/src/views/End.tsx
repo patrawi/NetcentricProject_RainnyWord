@@ -85,7 +85,7 @@ const Endpage = () => {
             </Paper>
           </Grid>
         </Grid>
-        {players.map((player, index) => {
+        {players.map((player , index) => {
           let colors = ["#EDAE49", "#D1495B", "#00798C", "#30638E", "#003D5B"];
           const number = index % colors.length;
           return (

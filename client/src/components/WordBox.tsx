@@ -49,10 +49,11 @@ const WordBoxPage: React.FC<WordBoxProp> = ({
   const classes = useStyles();
   const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    setTimeout(() => {
+   const time = setInterval(() => {
       onDropped();
     }, 4000);
-  }, []);
+    return () => clearInterval(time);
+  }, [word]);
 
   if (dangerWord) {
     return (
