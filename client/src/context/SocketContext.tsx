@@ -42,6 +42,7 @@ const SocketContextProvider = ({ ...props }) => {
   };
 
   const updateLeaderboard = (user: User) => {
+    console.log(user);
     if (socket) socket.emit("updateLeaderboard", user);
   };
 
