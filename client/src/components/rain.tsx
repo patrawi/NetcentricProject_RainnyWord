@@ -27,8 +27,9 @@ const Rainpage: React.FC<RainProp> = ({
   randomWords,
   handleDecreaseScore,
 }) => {
+  const [words, setWords] = useState<wordToRender[]>(randomWords);
   const [wordToRender, setWordToRender] = useState<wordToRender[]>([
-    { id: 0, word: "", location: "", destroyed: true, dangerWord: false },
+    { key: 0, word: "", location: "", destroyed: true, dangerWord: false },
   ]);
   const [answer, setAnswer] = useState("");
   const { onSfx } = useContext(AppContext);
@@ -71,13 +72,13 @@ const Rainpage: React.FC<RainProp> = ({
 
   useEffect(() => {
   
-        const size = randomWords.length;
+        const size = words.length;
 
         const loop = setInterval(() => {
      
             const n = counter++;
             setWordToRender(old => [
-              ...old, randomWords[n%size]
+              ...old, words[n]
               
           ]);
         }, 800); // Spam Rate
@@ -98,10 +99,10 @@ const Rainpage: React.FC<RainProp> = ({
   return (
     <>
       <Box>
-        {wordToRender.map(({ word, location, id, destroyed, dangerWord }) => {
-         
+        {wordToRender.map(({ word, location, key, destroyed, dangerWord }) => {
+          console.log(key);
           const handleWordToRender = () => {
-            setWordToRender(wordToRender => wordToRender.filter((word) => word.id !== id))
+            setWordToRender(wordToRender => wordToRender.filter((word) => word.key !== key))
           }
             
     
@@ -109,7 +110,7 @@ const Rainpage: React.FC<RainProp> = ({
                   <WordBox
                     word={word}
                     location={location}
-                    key={id}
+                    key={key}
                     destroyed={destroyed}
                     onDropped={handleWordToRender}
                     dangerWord={dangerWord}

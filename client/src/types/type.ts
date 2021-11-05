@@ -1,5 +1,5 @@
 export type wordToRender = {
-    id: number;
+    key: number;
     word: string;
     location: string;
     destroyed: boolean;
