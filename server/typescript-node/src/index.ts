@@ -118,7 +118,7 @@ app.post("/startgame", (req: Request, res: Response) => {
       io.emit("startWaitingRoomTimer", true);
       console.log("Countdown starts...");
       let words: WordObject[] = [];
-      words = randomWordsPerRound(200);
+      words = randomWordsPerRound(50);
       io.emit("words", words);
 
       return res.status(200).send({
