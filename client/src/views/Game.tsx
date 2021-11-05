@@ -43,9 +43,9 @@ const Gamepage = () => {
     if(socket) {
       socket.off("startWaitingRoomTimer")
     }
-    if (user) {
-      updateLeaderboard(user);
-    }
+    // if (user) {
+    //   updateLeaderboard(user);
+    // }
   }, [user, updateLeaderboard]);
 
   // useEffect(() => {
