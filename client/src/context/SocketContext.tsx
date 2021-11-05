@@ -13,15 +13,12 @@ export interface SocketConstruct {
   updatePlayerList: () => void;
   updateLobbyTime: () => void;
   lobbyTime: number | undefined;
-  updateGameTime: () => void;
-  gameTime: number | undefined;
 }
 export const SocketContext = createContext({} as SocketConstruct);
 
 const SocketContextProvider = ({ ...props }) => {
   const [socket, setSocket] = useState<Socket>();
   const [lobbyTime, setLobbyTime] = useState<number>();
-  const [gameTime, setGameTime] = useState<number>();
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
   const { setPlayers } = useContext(AppContext);
 
@@ -50,14 +47,6 @@ const SocketContextProvider = ({ ...props }) => {
         message: message,
       });
   };
-  const updateGameTime = () => {
-    if (socket) {
-      socket.on("getGameCountdown", (time: number) => {
-
-        setGameTime(time);
-      });
-    }
-  };
 
   const updateLobbyTime = () => {
     if (socket) {
@@ -76,8 +65,6 @@ const SocketContextProvider = ({ ...props }) => {
     updatePlayerList,
     updateLobbyTime,
     lobbyTime,
-    updateGameTime,
-    gameTime,
   };
   return <SocketContext.Provider value={value} {...props} />;
 };

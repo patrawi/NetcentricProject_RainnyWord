@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Box, Container, Typography } from "@material-ui/core";
 import Rainpage from "../components/rain";
-import TimerPage from "../components/TimerPage";
 import { AppContext } from "../context/AppContext";
 import { wordRand } from "../views/Lobby";
 import { Redirect, useLocation } from "react-router-dom";
@@ -31,7 +30,8 @@ const Gamepage = () => {
   const { user, setUser, onSfx } = useContext(AppContext);
   const { randWords } = location.state;
 
-  const { updateLeaderboard, gameTime } = useContext(SocketContext);
+  const { socket, updateLeaderboard } = useContext(SocketContext);
+  const [isRedirected, setIsRedirected] = useState(false);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const { onBgm } = useContext(AppContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.1 });
@@ -55,25 +55,7 @@ const Gamepage = () => {
     else stop();
   }, [onBgm, play, stop]);
 
-  const increasePoint = (length: number) => {
-    if (onSfx) {
-      if (correctPitch < 1.3) {
-        playCombo();
-      } else {
-        playStreak();
-      }
-    }
-    setUser({ ...user, score: user.score + length * 100 });
-    setCorrectPitch(correctPitch + 0.1);
-  };
-
-  const decreasePoint = (length: number) => {
-    if (onSfx) playBoom();
-    setUser({ ...user, score: user.score - length * 100 });
-  };
-
-
-  const handleRedirect = () => {
+  const HandleRedirect = () => {
     return (
       <Redirect
         to={{
@@ -87,10 +69,34 @@ const Gamepage = () => {
     );
   };
 
+  useEffect(() => {
+    if (socket) {
+      socket.on("stopGame", () => {
+        // console.log("I got stopGame!");
+        setIsRedirected(true);
+      });
+    }
+  }, [socket]);
+
+  const increasePoint = (length: number) => {
+    if (onSfx) {
+      if (correctPitch < 1.3) playCombo();
+      else playStreak();
+    }
+    setUser({ ...user, score: user.score + length * 100 });
+    setCorrectPitch(correctPitch + 0.1);
+  };
+
+  const decreasePoint = (length: number) => {
+    if (onSfx) playBoom();
+    setCorrectPitch(0.8);
+    setUser({ ...user, score: user.score - length * 100 });
+  };
+
   return (
     <>
-      {gameTime === 0 ? (
-        handleRedirect()
+      {isRedirected ? (
+        <HandleRedirect />
       ) : (
         <Container>
           <Box
@@ -98,12 +104,10 @@ const Gamepage = () => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <TimerPage isGame={true} />
             <Typography align="center">
               {user.name}: {user.score}
             </Typography>
           </Box>
-
           <Rainpage
             handleScore={increasePoint}
             randomWords={randWords}
