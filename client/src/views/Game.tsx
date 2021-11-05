@@ -54,6 +54,7 @@ const Gamepage = () => {
   // }, [onBgm, play, stop]);
 
   const HandleRedirect = () => {
+    stop();
     return (
       <Redirect
         to={{
@@ -93,9 +94,9 @@ const Gamepage = () => {
 
   return (
     <>
-      {/* {isRedirected ? (
+      {isRedirected ? (
         <HandleRedirect />
-      ) : ( */}
+      ) : (
         <Container>
           <Box
             display="flex"
@@ -105,15 +106,15 @@ const Gamepage = () => {
             <Typography align="center">
               {user.name}: {user.score}
             </Typography>
-          </Box>  
-    
+          </Box>
+
           <Rainpage
             handleScore={increasePoint}
             randomWords={words}
             handleDecreaseScore={decreasePoint}
           />
         </Container>
-      {/* )} */}
+      )} 
     </>
   );
 };

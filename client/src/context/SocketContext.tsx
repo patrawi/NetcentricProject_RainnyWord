@@ -59,6 +59,7 @@ const SocketContextProvider = ({ ...props }) => {
       socket.on("getLobbyCountdown", (time: number) => {
         console.log(time);
         setLobbyTime(time);
+        console.log(lobbyTime);
       });
     }
   };
