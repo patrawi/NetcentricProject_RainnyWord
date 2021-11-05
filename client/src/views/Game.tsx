@@ -108,6 +108,7 @@ const Gamepage = () => {
               {user.name}: {user.score}
             </Typography>
           </Box>
+
           <Rainpage
             handleScore={increasePoint}
             randomWords={randWords}
