@@ -10,3 +10,8 @@ export type wordToRender = {
     username: string;
     password: string;
 }
+
+export type wordRand = {
+  word: string;
+  key: number;
+};

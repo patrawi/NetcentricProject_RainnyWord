@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { Socket } from "socket.io-client";
 import { User } from "../interfaces/User";
 import { AppContext } from "./AppContext";
-
+import { wordRand } from "../types/type";
 export interface SocketConstruct {
   socket: Socket | undefined;
   setSocket: (value: Socket | undefined) => void;
@@ -13,6 +13,9 @@ export interface SocketConstruct {
   updatePlayerList: () => void;
   updateLobbyTime: () => void;
   lobbyTime: number | undefined;
+  words : wordRand[];
+  fetchWord : () => void;
+
 }
 export const SocketContext = createContext({} as SocketConstruct);
 
@@ -20,11 +23,14 @@ const SocketContextProvider = ({ ...props }) => {
   const [socket, setSocket] = useState<Socket>();
   const [lobbyTime, setLobbyTime] = useState<number>();
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
+  const [words, setWords] = useState<wordRand[]>([]);
   const { setPlayers } = useContext(AppContext);
 
   useEffect(() => {
+
     updatePlayerList();
   }, []);
+
 
   const updatePlayerList = () => {
     if (socket) {
@@ -51,10 +57,21 @@ const SocketContextProvider = ({ ...props }) => {
   const updateLobbyTime = () => {
     if (socket) {
       socket.on("getLobbyCountdown", (time: number) => {
+        console.log(time);
         setLobbyTime(time);
       });
     }
   };
+
+  const fetchWord = () => {
+    if(socket) {
+      socket.on("words", (randomwords : wordRand[]) => {
+        console.log(randomwords)
+        setWords(randomwords)
+     
+      })
+    }
+  }
   const value = {
     socket,
     setSocket,
@@ -65,6 +82,8 @@ const SocketContextProvider = ({ ...props }) => {
     updatePlayerList,
     updateLobbyTime,
     lobbyTime,
+    words,
+    fetchWord,
   };
   return <SocketContext.Provider value={value} {...props} />;
 };

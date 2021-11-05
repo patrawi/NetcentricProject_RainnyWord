@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Box, Container, Typography } from "@material-ui/core";
 import Rainpage from "../components/rain";
 import { AppContext } from "../context/AppContext";
-import { wordRand } from "../views/Lobby";
+import {wordRand} from '../types/type'
 import { Redirect, useLocation } from "react-router-dom";
 import { SocketContext } from "../context/SocketContext";
 import useSound from "use-sound";
@@ -25,13 +25,10 @@ export type word = {
 };
 
 const Gamepage = () => {
-  const location = useLocation<{
-    randWords: wordRand[];
-  }>();
-  const { user, setUser, onSfx } = useContext(AppContext);
-  const { randWords } = location.state;
 
-  const { socket, updateLeaderboard } = useContext(SocketContext);
+  const { user, setUser, onSfx } = useContext(AppContext);
+
+  const { socket, updateLeaderboard, words } = useContext(SocketContext);
   const [isRedirected, setIsRedirected] = useState(false);
   const [correctPitch, setCorrectPitch] = useState(0.8);
   const [gameTime, setGameTime] = useState<number>(30);
@@ -116,7 +113,7 @@ const Gamepage = () => {
 
           <Rainpage
             handleScore={increasePoint}
-            randomWords={randWords}
+            randomWords={words}
             handleDecreaseScore={decreasePoint}
           />
         </Container>
