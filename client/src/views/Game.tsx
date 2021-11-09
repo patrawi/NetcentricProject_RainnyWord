@@ -14,7 +14,7 @@ import CorrectSfx from "../asset/sfx/sfx_correct.mp3";
 import StreakSfx from "../asset/sfx/sfx_streak.mp3";
 //@ts-ignore
 import LobbyBgm from "../asset/bgm/bgm_game.mp3";
-import Countdown from "../components/Countdown";
+
 
 export type Time = {
   initialSeconds: number;
