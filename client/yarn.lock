@@ -16499,11 +16499,6 @@ use@^3.1.0:
   resolved "https://registry.npmjs.org/use/-/use-3.1.1.tgz"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
 
-usehooks-ts@^1.0.14:
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/usehooks-ts/-/usehooks-ts-1.0.14.tgz#d2abaf3b9779a04b49a1139a7466f89c669017b3"
-  integrity sha512-i5IyYngmjd0eSrnT7PMfNhFmpEMmAuk4hEVianWSgrd1foi+yJ0CMArNtJ+vvomNkIoAb1QJPm9t5nUvJ+DZRQ==
-
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"
