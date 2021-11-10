@@ -37,11 +37,13 @@ const Endpage = () => {
   useEffect(() => {
     updatePlayerList();
     if (socket) {
-      
+      socket.off("getLobbyCountdown")
       socket.on("onReset", () => {
+        
         history.push("/");
+        window.location.reload();
       });
-      socket.disconnect();
+      
     }
   }, []);
   useEffect(() => {

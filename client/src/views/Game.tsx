@@ -40,10 +40,12 @@ const Gamepage = () => {
   });
 
   useEffect(() => {
+  
     updateLeaderboard(user);
     if(socket) {
       socket.off("startWaitingRoomTimer")
     }
+  
 
   }, [user]);
 
