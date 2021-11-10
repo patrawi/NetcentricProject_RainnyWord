@@ -28,10 +28,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   useEffect(() => {
     if (lobbyTime === 0 && socket) {
       
-        // socket.off("words")
-        // socket.off("getLobbyCountdown")
-        // socket.off("retrievePlayers")
-        // socket.off("onUpdatePublicChat")
+  
       stop();
       socket.emit("startGameCountdown");
     }
@@ -49,10 +46,10 @@ const Lobbypage: React.FC<LobbyProp> = () => {
 
   }, []);
 
-  // useEffect(() => {
-  //   if (onBgm) play();
-  //   else stop();
-  // }, [onBgm, play, stop]);
+  useEffect(() => {
+    if (onBgm) play();
+    else stop();
+  }, [onBgm, play, stop]);
 
   return (
     <>

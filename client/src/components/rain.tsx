@@ -6,7 +6,7 @@ import { AppContext } from "../context/AppContext";
 import { useSound } from "use-sound";
 //@ts-ignore
 import PopSfx from "../asset/sfx/sfx_pop.mp3";
-import {useInterval} from 'usehooks-ts'
+
 interface RainProp {
   handleScore: (length: number) => void;
   randomWords: wordToRender[];
