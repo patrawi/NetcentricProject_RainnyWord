@@ -12,13 +12,12 @@ import { LeaderBoard } from "../components/LeaderBoard";
 
 interface LobbyProp {}
 
-
-
 const Lobbypage: React.FC<LobbyProp> = () => {
   const [check, setCheck] = useState(false);
   const { user, players, onBgm } = useContext(AppContext);
 
-  const { updatePlayerList, socket, lobbyTime, fetchWord, words } = useContext(SocketContext);
+  const { updatePlayerList, socket, lobbyTime, fetchWord, words } =
+    useContext(SocketContext);
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
 
   const countdownTimer = () => {
@@ -27,10 +26,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
 
   useEffect(() => {
     if (lobbyTime === 0 && socket) {
-      
-  
       stop();
-      socket.emit("startGameCountdown");
     }
   }, [lobbyTime]);
 
@@ -43,7 +39,6 @@ const Lobbypage: React.FC<LobbyProp> = () => {
         setCheck(true);
       });
     }
-
   }, []);
 
   useEffect(() => {

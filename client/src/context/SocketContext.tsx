@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { Socket } from "socket.io-client";
 import { User } from "../interfaces/User";
 import { AppContext } from "./AppContext";
-import {  wordToRender } from "../types/type";
+import { wordToRender } from "../types/type";
 export interface SocketConstruct {
   socket: Socket | undefined;
   setSocket: (value: Socket | undefined) => void;
@@ -13,9 +13,8 @@ export interface SocketConstruct {
   updatePlayerList: () => void;
   updateLobbyTime: () => void;
   lobbyTime: number | undefined;
-  words : wordToRender[];
-  fetchWord : () => void;
-
+  words: wordToRender[];
+  fetchWord: () => void;
 }
 export const SocketContext = createContext({} as SocketConstruct);
 
@@ -27,10 +26,8 @@ const SocketContextProvider = ({ ...props }) => {
   const { setPlayers } = useContext(AppContext);
 
   useEffect(() => {
-
     updatePlayerList();
   }, []);
-
 
   const updatePlayerList = () => {
     if (socket) {
@@ -58,21 +55,20 @@ const SocketContextProvider = ({ ...props }) => {
   const updateLobbyTime = () => {
     if (socket) {
       socket.on("getLobbyCountdown", (time: number) => {
-
+        console.log(time);
         setLobbyTime(time);
       });
     }
   };
 
   const fetchWord = () => {
-    if(socket) {
-      socket.on("words", (randomwords : wordToRender[]) => {
-        console.log(randomwords)
-        setWords(randomwords)
-     
-      })
+    if (socket) {
+      socket.on("words", (randomwords: wordToRender[]) => {
+        console.log(randomwords);
+        setWords(randomwords);
+      });
     }
-  }
+  };
   const value = {
     socket,
     setSocket,

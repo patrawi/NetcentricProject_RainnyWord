@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import LoginForm from "../components/LoginForm";
 import { SocketContext } from "../context/SocketContext";
 import { form } from "../types/type";
@@ -23,7 +23,8 @@ const Adminpage: React.FC<AdminProp> = () => {
   const [start, setStart] = useState<any>({ message: "", status: "" });
   const [reset, setReset] = useState<any>({ message: "", status: "" });
   const classes = useStyles();
-  const { socket } = useContext(SocketContext);
+  const { socket, lobbyTime } = useContext(SocketContext);
+
   const adminUser = {
     username: "admin",
     password: "admin123",
@@ -100,7 +101,10 @@ const Adminpage: React.FC<AdminProp> = () => {
       )
       .then((res) => {
         setStart(res.data);
-        if (socket) socket.emit("startLobbyCountdown");
+        if (socket) {
+          socket.emit("startLobbyCountdown");
+          socket.emit("startGameCountdown");
+        }
         alert(start.message);
       });
   };
