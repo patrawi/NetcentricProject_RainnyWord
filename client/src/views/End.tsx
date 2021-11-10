@@ -37,9 +37,11 @@ const Endpage = () => {
   useEffect(() => {
     updatePlayerList();
     if (socket) {
+      
       socket.on("onReset", () => {
         history.push("/");
       });
+      socket.disconnect();
     }
   }, []);
   useEffect(() => {
