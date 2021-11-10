@@ -11,7 +11,7 @@ const Socket: React.FC<SocketProp> = ({ children }: any) => {
   const { setPlayers } = useContext(AppContext);
   useEffect(() => {
     if (!socket) {
-      const newSocket = socketIOClient("http://localhost:8000");
+      const newSocket = socketIOClient('https://rainywords-server.herokuapp.com');
       setSocket(newSocket);
     } else {
       if (socket) {
