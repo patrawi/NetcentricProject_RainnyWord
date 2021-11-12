@@ -164,6 +164,7 @@ io.on("connection", (socket: Socket) => {
         clearInterval(timer);
       } else {
         GAME_TIME--;
+        io.emit("gameTime", GAME_TIME);
       }
     }
   });
@@ -178,10 +179,10 @@ io.on("connection", (socket: Socket) => {
   // Update players, send updated players to client and the client info.
   socket.on("onAddPlayer", function (player: Player) {
     if (players.length < MAX_PLAYERS) {
+      players.push(player);
       console.log(
         `${player.name} is connected. Total number of players is ${players.length}`
       );
-      players.push(player);
       io.emit("updatePlayerList", players);
     }
   });
