@@ -1,7 +1,7 @@
 Welcome to our Netcentric Architecture project from group 10, Rainywords! 🌧🌧🌧
 _____________________________________________________________________________________________
 The game is made by: 
-6238150221 Pirawat Wareetanyarat
+Pirawat Wareetanyarat 6238150221
 Peerawit Chariyawongsiri 6238151921
 Setthanan Leesuwan 6238226321
 Ekaroot Ruengworadakul 6238247521
