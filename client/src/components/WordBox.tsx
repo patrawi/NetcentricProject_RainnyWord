@@ -15,7 +15,6 @@ const useStyles = makeStyles<Theme>({
     position: "fixed",
     top: "10vh",
     animation: `$fall 4s linear`,
-    color: "black",
     zIndex: -100,
   },
   dangerWord: {
@@ -75,7 +74,7 @@ const WordBoxPage: React.FC<WordBoxProp> = ({
         className={!destroyed ? classes.rain : classes.hidden}
         style={{ left: location }}
       >
-        <Typography variant="h6">{word}</Typography>
+        <Typography variant="h6" >{word}</Typography>
       </div>
     </>
   );

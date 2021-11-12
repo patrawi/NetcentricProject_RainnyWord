@@ -74,7 +74,7 @@ const Homepage = () => {
                   variant="h1"
                   align="center"
                 >
-                  Rainy Word
+                  Rainy Words
                 </Typography>
                 <Box m={2} />
                 <Typography variant="h6" align="center">
@@ -180,6 +180,7 @@ const useStyles = makeStyles({
     opacity: 0.8,
     backgroundImage: `url(${rain})`,
     animation: `$rain .9s linear infinite`,
+    minHeight : '100vh'
   },
   "@keyframes rain": {
     "0%": {

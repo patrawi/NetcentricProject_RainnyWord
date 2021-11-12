@@ -21,7 +21,7 @@ const Lobbypage: React.FC<LobbyProp> = () => {
   const [play, { stop }] = useSound(LobbyBgm, { volume: 0.3 });
 
   const countdownTimer = () => {
-    return <TimerPage />;
+    return <TimerPage isGame = {false} />;
   };
 
   useEffect(() => {

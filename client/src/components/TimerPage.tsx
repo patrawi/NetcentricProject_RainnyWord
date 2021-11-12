@@ -4,19 +4,29 @@ import { Box, makeStyles, Theme } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
 import { SocketContext } from "../context/SocketContext";
 
-const TimerPage = () => {
+interface TimeProp {
+    isGame : boolean
+}
+
+const TimerPage : React.FC<TimeProp> = ({isGame}) => {
   const classes = useStyles();
-  const { lobbyTime, updateLobbyTime } = useContext(SocketContext);
+  const { lobbyTime, updateLobbyTime, updateGameTime, gameTime } = useContext(SocketContext);
 
   useEffect(() => {
     updateLobbyTime();
-  }, [lobbyTime, updateLobbyTime]);
+    updateGameTime();
+  }, [lobbyTime, updateLobbyTime, updateGameTime, gameTime]);
 
   return (
     <Box className={classes.center}>
-      <Typography align="center" variant="h5">
+      {!isGame ?  <Typography align="center" variant="h5">
         The game will start in {lobbyTime} seconds.
-      </Typography>
+      </Typography> : 
+       <Typography align="center" variant="h5">
+       countdown time : {gameTime}
+     </Typography>
+      }
+     
     </Box>
   );
 };

@@ -15,6 +15,8 @@ export interface SocketConstruct {
   lobbyTime: number | undefined;
   words: wordToRender[];
   fetchWord: () => void;
+  gameTime : number | undefined;
+  updateGameTime : () => void;
 }
 export const SocketContext = createContext({} as SocketConstruct);
 
@@ -24,6 +26,7 @@ const SocketContextProvider = ({ ...props }) => {
   const [socketOpen, setSocketOpen] = useState<boolean>(false);
   const [words, setWords] = useState<wordToRender[]>([]);
   const { setPlayers } = useContext(AppContext);
+  const [gameTime, setGameTime] = useState<number>();
 
   useEffect(() => {
     updatePlayerList();
@@ -55,12 +58,19 @@ const SocketContextProvider = ({ ...props }) => {
   const updateLobbyTime = () => {
     if (socket) {
       socket.on("getLobbyCountdown", (time: number) => {
-        console.log(time);
+
         setLobbyTime(time);
       });
     }
   };
-
+  const updateGameTime = () => {
+    if(socket) {
+      socket.on("gameTime",(time : number) => {
+        console.log(time);
+        setGameTime(time);
+      })
+    }
+  }
   const fetchWord = () => {
     if (socket) {
       socket.on("words", (randomwords: wordToRender[]) => {
@@ -78,8 +88,10 @@ const SocketContextProvider = ({ ...props }) => {
     publicChat,
     updatePlayerList,
     updateLobbyTime,
+    updateGameTime,
     lobbyTime,
     words,
+    gameTime,
     fetchWord,
   };
   return <SocketContext.Provider value={value} {...props} />;
